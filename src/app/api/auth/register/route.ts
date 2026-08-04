@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 
 import { prisma } from "@/lib/prisma";
 import { registerSchema } from "@/lib/validation";
+import { sendNewStudentNotification } from "@/lib/email";
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
@@ -32,6 +33,8 @@ export async function POST(request: Request) {
   await prisma.user.create({
     data: { name, email, passwordHash, role: "STUDENT" },
   });
+
+  await sendNewStudentNotification({ name, email });
 
   return NextResponse.json({ ok: true });
 }

@@ -55,6 +55,8 @@ AUTH_SECRET="<generate below>"
 ADMIN_EMAIL="careerprofmarketing@gmail.com"
 ADMIN_PASSWORD="<pick a real password>"
 ADMIN_NAME="Percentile Lab MBA Admin"
+RESEND_API_KEY="<from resend.com/api-keys>"
+ADMIN_NOTIFICATION_EMAIL="satyaraj735278@gmail.com"
 ```
 
 Generate a fresh `AUTH_SECRET`:
@@ -63,8 +65,16 @@ Generate a fresh `AUTH_SECRET`:
 node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 ```
 
-Then run the same five variables into **Vercel → Project → Settings →
+Then run the same variables into **Vercel → Project → Settings →
 Environment Variables** before your first deploy.
+
+`RESEND_API_KEY` and `ADMIN_NOTIFICATION_EMAIL` power the "new student
+registered" email sent to the admin on every signup. Sign up free at
+resend.com, grab an API key — no domain verification needed to start,
+since the app sends from Resend's shared `onboarding@resend.dev` address
+by default. Leave `RESEND_API_KEY` blank to disable the email entirely
+(registration still works fine either way). To send from your own domain
+later, verify it in Resend and set `RESEND_FROM_EMAIL`.
 
 ## 4. Create the schema on Supabase and seed the admin account
 
