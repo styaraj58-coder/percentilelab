@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Role is a plain string ("ADMIN" | "STUDENT") instead of a native enum so the
+// schema ports cleanly to Postgres later without touching this file.
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  passwordHash String
+  role         String        @default("STUDENT")
+  createdAt    DateTime      @default(now())
+  testsCreated Test[]        @relation("TestCreatedBy")
+  attempts     TestAttempt[]
+}
+
+model Test {
+  id              String        @id @default(cuid())
+  title           String
+  description     String?
+  durationMinutes Int
+  published       Boolean       @default(false)
+  createdById     String
+  createdBy       User          @relation("TestCreatedBy", fields: [createdById], references: [id])
+  sections        Section[]
+  attempts        TestAttempt[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Section {
+  id        String     @id @default(cuid())
+  testId    String
+  test      Test       @relation(fields: [testId], references: [id], onDelete: Cascade)
+  name      String
+  order     Int
+  questions Question[]
+}
+
+model Question {
+  id          String   @id @default(cuid())
+  sectionId   String
+  section     Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  order       Int
+  text        String
+  explanation String?
+  marks       Int      @default(1)
+  options     Option[]
+  answers     Answer[]
+}
+
+model Option {
+  id         String     @id @default(cuid())
+  questionId String
+  question   Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  text       String
+  isCorrect  Boolean    @default(false)
+  order      Int
+  answers    Answer[]   @relation("SelectedOption")
+}
+
+model TestAttempt {
+  id          String    @id @default(cuid())
+  testId      String
+  test        Test      @relation(fields: [testId], references: [id], onDelete: Cascade)
+  studentId   String
+  student     User      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  startedAt   DateTime  @default(now())
+  submittedAt DateTime?
+  score       Int?
+  totalMarks  Int?
+  answers     Answer[]
+
+  @@index([testId])
+  @@index([studentId])
+}
+
+model Answer {
+  id               String      @id @default(cuid())
+  attemptId        String
+  attempt          TestAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  questionId       String
+  question         Question    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  selectedOptionId String?
+  selectedOption   Option?     @relation("SelectedOption", fields: [selectedOptionId], references: [id])
+  timeSpentSeconds Int         @default(0)
+
+  @@unique([attemptId, questionId])
+}

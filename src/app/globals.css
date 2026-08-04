@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #14151a;
+
+  /* Percentile Lab MBA brand palette */
+  --color-navy: #14224b;
+  --color-navy-light: #1f3268;
+  --color-gold: #c9972e;
+  --color-gold-light: #e0b654;
+  --color-ink: #14151a;
+  --color-cream: #fdfbf6;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand-navy: var(--color-navy);
+  --color-brand-navy-light: var(--color-navy-light);
+  --color-brand-gold: var(--color-gold);
+  --color-brand-gold-light: var(--color-gold-light);
+  --color-brand-ink: var(--color-ink);
+  --color-brand-cream: var(--color-cream);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}

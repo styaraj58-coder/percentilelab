@@ -1,0 +1,83 @@
+import { notFound, redirect } from "next/navigation";
+
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
+
+import { submitAttempt } from "./actions";
+import { ExamRunner, type ExamData } from "./exam-runner";
+
+export default async function ExamPage({
+  params,
+}: {
+  params: Promise<{ attemptId: string }>;
+}) {
+  const { attemptId } = await params;
+  const session = await auth();
+  if (!session?.user) redirect("/login");
+
+  const attempt = await prisma.testAttempt.findUnique({
+    where: { id: attemptId },
+  });
+
+  if (!attempt || attempt.studentId !== session.user.id) {
+    notFound();
+  }
+
+  if (attempt.submittedAt) {
+    redirect(`/student/attempts/${attemptId}/results`);
+  }
+
+  const test = await prisma.test.findUnique({
+    where: { id: attempt.testId },
+    select: {
+      title: true,
+      durationMinutes: true,
+      sections: {
+        orderBy: { order: "asc" },
+        select: {
+          id: true,
+          name: true,
+          questions: {
+            orderBy: { order: "asc" },
+            select: {
+              id: true,
+              text: true,
+              marks: true,
+              options: {
+                orderBy: { order: "asc" },
+                select: { id: true, text: true },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!test) notFound();
+
+  const deadline = attempt.startedAt.getTime() + test.durationMinutes * 60_000;
+  if (Date.now() > deadline) {
+    await submitAttempt(attemptId);
+  }
+
+  const existingAnswers = await prisma.answer.findMany({
+    where: { attemptId },
+    select: { questionId: true, selectedOptionId: true },
+  });
+
+  const examData: ExamData = {
+    attemptId,
+    testTitle: test.title,
+    durationMinutes: test.durationMinutes,
+    startedAtMs: attempt.startedAt.getTime(),
+    sections: test.sections,
+    initialAnswers: Object.fromEntries(
+      existingAnswers
+        .filter((a) => a.selectedOptionId)
+        .map((a) => [a.questionId, a.selectedOptionId as string])
+    ),
+  };
+
+  return <ExamRunner data={examData} />;
+}
