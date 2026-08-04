@@ -1,18 +1,26 @@
-# Deploying Percentile Lab MBA
+# Deploying Percentile Lab MBA (Vercel + Supabase)
 
 Local development uses SQLite (a file on disk), which does not work on
 serverless hosts like Vercel because the filesystem isn't persistent between
-requests. Before going live you need a real Postgres database.
+requests. This guide switches the app to your Supabase Postgres database and
+deploys to Vercel.
 
-## 1. Get a production Postgres database
+## 1. Get your Supabase connection strings
 
-Any managed Postgres works. Two free options that pair well with Vercel:
+In your Supabase project: **Project Settings → Database → Connection string**.
 
-- **Neon** (neon.tech) — serverless Postgres, generous free tier
-- **Supabase** (supabase.com) — Postgres + extras, generous free tier
+Supabase gives you two different connection strings — Prisma needs both when
+running on a serverless host like Vercel:
 
-Create a project and copy its connection string (looks like
-`postgresql://user:password@host/dbname?sslmode=require`).
+- **Connection pooling** (port `6543`, includes `pgbouncer=true`) — used by
+  the running app, since serverless functions open many short-lived
+  connections and Postgres itself can't handle that many directly.
+- **Direct connection** (port `5432`) — used only for running migrations,
+  which need a non-pooled connection.
+
+Copy both — you'll paste them into `.env` (for one-off migration/seed runs
+from your machine) and into Vercel's environment variables (for the deployed
+app).
 
 ## 2. Switch Prisma to Postgres
 
@@ -29,29 +37,25 @@ to:
 
 ```prisma
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 ```
 
-Then regenerate the migration history against Postgres (run this locally with
-`DATABASE_URL` pointed at your new Postgres database):
+## 3. Set environment variables
 
-```bash
-npx prisma migrate dev --name init_postgres
+Locally, update `.env` (already gitignored) with your Supabase values so you
+can run migrations and the seed script from your machine:
+
 ```
-
-## 3. Environment variables
-
-Set these on your hosting platform (never commit real secrets):
-
-| Variable        | Value                                                        |
-| --------------- | ------------------------------------------------------------- |
-| `DATABASE_URL`  | Your Postgres connection string                               |
-| `AUTH_SECRET`   | Random secret — generate with the command below                |
-| `ADMIN_EMAIL`   | Email for the seeded admin account                             |
-| `ADMIN_PASSWORD`| Password for the seeded admin account (change after first login)|
-| `ADMIN_NAME`    | Display name for the admin account                             |
+DATABASE_URL="<Supabase pooled connection string, port 6543>"
+DIRECT_URL="<Supabase direct connection string, port 5432>"
+AUTH_SECRET="<generate below>"
+ADMIN_EMAIL="careerprofmarketing@gmail.com"
+ADMIN_PASSWORD="<pick a real password>"
+ADMIN_NAME="Percentile Lab MBA Admin"
+```
 
 Generate a fresh `AUTH_SECRET`:
 
@@ -59,27 +63,29 @@ Generate a fresh `AUTH_SECRET`:
 node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 ```
 
-## 4. Seed the admin account
+Then run the same five variables into **Vercel → Project → Settings →
+Environment Variables** before your first deploy.
 
-After the database is migrated and env vars are set on the host, run once:
+## 4. Create the schema on Supabase and seed the admin account
+
+Run locally, pointed at Supabase via the `.env` values above:
 
 ```bash
+npx prisma migrate dev --name init_postgres
 npm run db:seed
 ```
 
-(Or run it locally with `DATABASE_URL` pointed at production — it's a safe,
-idempotent upsert.)
+`db:seed` is a safe, idempotent upsert — running it again later won't create
+duplicates.
 
-## 5. Deploy
+## 5. Deploy to Vercel
 
-**Vercel** (recommended, works well with Next.js):
-
-1. Push this repo to GitHub.
+1. Push this repo to GitHub (ask me to do this once you have a repo URL, or
+   run `git remote add origin <url> && git push -u origin master` yourself).
 2. Import the repo at vercel.com/new.
-3. Add the environment variables from step 3 in the Vercel project settings.
-4. Deploy.
-
-Vercel auto-detects Next.js — no build command changes needed.
+3. Confirm the 5 environment variables from step 3 are set in the Vercel
+   project.
+4. Deploy — Vercel auto-detects Next.js, no build command changes needed.
 
 ## Notes
 
