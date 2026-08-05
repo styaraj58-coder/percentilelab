@@ -59,10 +59,7 @@ export default function HomePage() {
       <section className="relative overflow-hidden bg-brand-cream">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 md:grid-cols-2 md:py-24">
           <div>
-            <p className="inline-block rounded-full bg-brand-navy/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-navy">
-              MBA CET Mock Tests
-            </p>
-            <h1 className="mt-4 text-4xl font-bold leading-tight text-brand-navy sm:text-5xl">
+            <h1 className="text-4xl font-bold leading-tight text-brand-navy sm:text-5xl">
               Practice like it&apos;s exam day. <br />
               Know your <span className="text-brand-gold">percentile</span>{" "}
               before you walk in.
