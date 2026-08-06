@@ -36,11 +36,13 @@ export const registerSchema = z.object({
 
 export const optionSchema = z.object({
   text: z.string().trim().min(1, "Option text is required"),
+  imageUrl: z.string().trim().optional(),
   isCorrect: z.boolean(),
 });
 
 export const questionSchema = z.object({
   text: z.string().trim().min(1, "Question text is required"),
+  imageUrl: z.string().trim().optional(),
   explanation: z.string().trim().optional(),
   marks: z.coerce.number().int().min(1).max(100),
   options: z

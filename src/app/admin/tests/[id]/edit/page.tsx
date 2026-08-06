@@ -51,11 +51,13 @@ export default async function EditTestPage({
         const questionState = {
           id: question.id,
           text: question.text,
+          imageUrl: question.imageUrl ?? "",
           explanation: question.explanation ?? "",
           marks: question.marks,
           options: question.options.map((option) => ({
             id: option.id,
             text: option.text,
+            imageUrl: option.imageUrl ?? "",
             isCorrect: option.isCorrect,
           })),
         };

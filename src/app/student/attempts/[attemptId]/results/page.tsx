@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { MathText } from "@/components/math-text";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = { title: "Test results | Percentile Lab MBA" };
@@ -242,16 +243,26 @@ export default async function AttemptResultsPage({
                           {question.passage.title}
                         </p>
                       )}
-                      <p className="whitespace-pre-line text-sm text-brand-ink/80">
-                        {question.passage.text}
-                      </p>
+                      <MathText
+                        text={question.passage.text}
+                        className="text-sm text-brand-ink/80"
+                      />
                     </div>
                   )}
                   <div className="rounded-xl border border-black/5 bg-white p-5">
                 <div className="flex items-start justify-between gap-4">
-                  <p className="text-sm font-medium text-brand-ink">
-                    Q{index + 1}. {question.text}
-                  </p>
+                  <div className="text-sm font-medium text-brand-ink">
+                    <span>Q{index + 1}. </span>
+                    <MathText text={question.text} />
+                    {question.imageUrl && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={question.imageUrl}
+                        alt="Question illustration"
+                        className="mt-2 max-h-72 rounded-md border border-black/10 object-contain"
+                      />
+                    )}
+                  </div>
                   <span
                     className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${
                       isSkipped
@@ -283,7 +294,17 @@ export default async function AttemptResultsPage({
                         <span className="text-brand-ink/50">
                           {String.fromCharCode(65 + oIndex)}.
                         </span>
-                        <span>{option.text}</span>
+                        <span className="flex-1">
+                          <MathText text={option.text} />
+                          {option.imageUrl && (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={option.imageUrl}
+                              alt="Option illustration"
+                              className="mt-2 max-h-40 rounded-md border border-black/10 object-contain"
+                            />
+                          )}
+                        </span>
                         {isTheCorrectOne && (
                           <span className="ml-auto text-xs font-semibold text-green-700">
                             Correct answer
@@ -304,7 +325,7 @@ export default async function AttemptResultsPage({
                     <span className="font-semibold text-brand-navy">
                       Explanation:{" "}
                     </span>
-                    {question.explanation}
+                    <MathText text={question.explanation} />
                   </p>
                 )}
                   </div>

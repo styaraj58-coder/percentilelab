@@ -1,16 +1,18 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 
+import { uploadImage } from "@/lib/upload-image";
 import type { TestInput } from "@/lib/validation";
 
 import { createTest, updateTest } from "./actions";
 
-type OptionState = { id: string; text: string; isCorrect: boolean };
+type OptionState = { id: string; text: string; imageUrl: string; isCorrect: boolean };
 type QuestionState = {
   id: string;
   text: string;
+  imageUrl: string;
   explanation: string;
   marks: number;
   options: OptionState[];
@@ -29,13 +31,14 @@ function newId() {
 }
 
 function newOption(): OptionState {
-  return { id: newId(), text: "", isCorrect: false };
+  return { id: newId(), text: "", imageUrl: "", isCorrect: false };
 }
 
 function newQuestion(): QuestionState {
   return {
     id: newId(),
     text: "",
+    imageUrl: "",
     explanation: "",
     marks: 1,
     options: [newOption(), newOption()],
@@ -67,6 +70,75 @@ export type InitialTestData = {
 
 const inputClass =
   "mt-1 w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy";
+
+function ImageField({
+  imageUrl,
+  onChange,
+  size = "md",
+}: {
+  imageUrl: string;
+  onChange: (url: string) => void;
+  size?: "sm" | "md";
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const thumbClass = size === "sm" ? "h-10 w-10" : "h-24 w-24";
+
+  async function handleFile(file: File | undefined) {
+    if (!file) return;
+    setError(null);
+    setUploading(true);
+    try {
+      const url = await uploadImage(file);
+      onChange(url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploading(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/png,image/jpeg,image/webp,image/gif"
+        className="hidden"
+        onChange={(e) => handleFile(e.target.files?.[0])}
+      />
+      {imageUrl ? (
+        <div className="flex items-center gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imageUrl}
+            alt=""
+            className={`${thumbClass} rounded-md border border-black/10 object-cover`}
+          />
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="text-xs text-red-700 hover:underline"
+          >
+            Remove image
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={uploading}
+          className="rounded-md border border-dashed border-black/20 px-2.5 py-1.5 text-xs font-medium text-brand-navy hover:bg-black/5 disabled:opacity-50"
+        >
+          {uploading ? "Uploading..." : "+ Add image"}
+        </button>
+      )}
+      {error && <span className="text-xs text-red-700">{error}</span>}
+    </div>
+  );
+}
 
 function QuestionEditor({
   question,
@@ -106,17 +178,27 @@ function QuestionEditor({
         )}
       </div>
 
-      <textarea
-        value={question.text}
-        onChange={(e) => onUpdate({ text: e.target.value })}
-        placeholder="Question text"
-        rows={2}
-        className={inputClass}
+      <div>
+        <textarea
+          value={question.text}
+          onChange={(e) => onUpdate({ text: e.target.value })}
+          placeholder="Question text"
+          rows={2}
+          className={inputClass}
+        />
+        <p className="mt-1 text-xs text-brand-ink/40">
+          Wrap math in $...$ for rendering, e.g. $x^2 + 3x = 0$
+        </p>
+      </div>
+
+      <ImageField
+        imageUrl={question.imageUrl}
+        onChange={(imageUrl) => onUpdate({ imageUrl })}
       />
 
       <div className="space-y-2">
         {question.options.map((option, oIndex) => (
-          <div key={option.id} className="flex items-center gap-2">
+          <div key={option.id} className="flex flex-wrap items-center gap-2">
             <input
               type="radio"
               name={`correct-${question.id}`}
@@ -130,6 +212,11 @@ function QuestionEditor({
               onChange={(e) => onUpdateOption(option.id, { text: e.target.value })}
               placeholder={`Option ${oIndex + 1}`}
               className="flex-1 rounded-md border border-black/10 bg-white px-3 py-1.5 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+            />
+            <ImageField
+              imageUrl={option.imageUrl}
+              onChange={(imageUrl) => onUpdateOption(option.id, { imageUrl })}
+              size="sm"
             />
             {question.options.length > 2 && (
               <button
@@ -291,9 +378,14 @@ export function TestBuilder({
         blocks: s.blocks.map((b) => {
           const mapQ = (q: QuestionState) => ({
             text: q.text,
+            imageUrl: q.imageUrl,
             explanation: q.explanation,
             marks: q.marks,
-            options: q.options.map((o) => ({ text: o.text, isCorrect: o.isCorrect })),
+            options: q.options.map((o) => ({
+              text: o.text,
+              imageUrl: o.imageUrl,
+              isCorrect: o.isCorrect,
+            })),
           });
           return b.passage
             ? {

@@ -88,13 +88,32 @@ npm run db:seed
 `db:seed` is a safe, idempotent upsert — running it again later won't create
 duplicates.
 
-## 5. Deploy to Vercel
+## 5. Switch question/option images to Supabase Storage
+
+Admin-uploaded question/option images currently save to
+`public/uploads/` on disk (`src/app/api/admin/upload/route.ts`). That works
+locally but **does not persist on Vercel** — its filesystem is read-only
+and ephemeral per request, so uploaded images would vanish. Before
+deploying with real image content, switch that route to Supabase Storage:
+
+1. In Supabase: **Storage → New bucket** (e.g. `question-images`), set it
+   public.
+2. Add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (Project Settings →
+   API) to `.env` and Vercel's environment variables.
+3. Update `src/app/api/admin/upload/route.ts` to upload the file to that
+   bucket via `@supabase/supabase-js` instead of `writeFile`, and return the
+   bucket's public URL instead of `/uploads/...`.
+
+Ask me to make this swap once your Supabase project exists — it's a small,
+contained change to one file.
+
+## 6. Deploy to Vercel
 
 1. Push this repo to GitHub (ask me to do this once you have a repo URL, or
    run `git remote add origin <url> && git push -u origin master` yourself).
 2. Import the repo at vercel.com/new.
-3. Confirm the 5 environment variables from step 3 are set in the Vercel
-   project.
+3. Confirm the environment variables from step 3 (and Supabase Storage
+   variables from step 5, if applicable) are set in the Vercel project.
 4. Deploy — Vercel auto-detects Next.js, no build command changes needed.
 
 ## Notes

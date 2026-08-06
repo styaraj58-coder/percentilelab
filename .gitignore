@@ -44,6 +44,11 @@ yarn-error.log*
 /prisma/dev.db
 /prisma/dev.db-journal
 
+# locally-uploaded question/option images (dev only — doesn't persist on
+# Vercel; production uses Supabase Storage instead, see DEPLOYMENT.md)
+/public/uploads/*
+!/public/uploads/.gitkeep
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

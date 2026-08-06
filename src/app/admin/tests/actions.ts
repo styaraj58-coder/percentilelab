@@ -71,6 +71,7 @@ async function persistTest(
             passageId,
             order,
             text: question.text,
+            imageUrl: question.imageUrl || null,
             explanation: question.explanation || null,
             marks: question.marks,
           },
@@ -81,6 +82,7 @@ async function persistTest(
             data: {
               questionId: createdQuestion.id,
               text: option.text,
+              imageUrl: option.imageUrl || null,
               isCorrect: option.isCorrect,
               order: optionIndex,
             },

@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 
+import { MathText } from "@/components/math-text";
+
 import { saveAnswer, submitAttempt } from "./actions";
 
 export type ExamData = {
@@ -16,9 +18,10 @@ export type ExamData = {
     questions: {
       id: string;
       text: string;
+      imageUrl: string | null;
       marks: number;
       passage: { id: string; title: string | null; text: string } | null;
-      options: { id: string; text: string }[];
+      options: { id: string; text: string; imageUrl: string | null }[];
     }[];
   }[];
   initialAnswers: Record<string, string>;
@@ -375,11 +378,19 @@ export function ExamRunner({ data }: { data: ExamData }) {
                   {currentQuestion.passage.title}
                 </p>
               )}
-              <p className="whitespace-pre-line leading-relaxed">{passageText}</p>
+              <MathText text={passageText} className="leading-relaxed" />
             </div>
           )}
 
-          <p className="whitespace-pre-line text-base text-brand-ink">{questionText}</p>
+          <MathText text={questionText} className="text-base text-brand-ink" />
+          {currentQuestion.imageUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={currentQuestion.imageUrl}
+              alt="Question illustration"
+              className="mt-4 max-h-96 rounded-md border border-black/10 object-contain"
+            />
+          )}
 
           <div className="mt-6 space-y-3">
             {currentQuestion.options.map((option) => {
@@ -400,7 +411,17 @@ export function ExamRunner({ data }: { data: ExamData }) {
                     onChange={() => selectOption(option.id)}
                     className="h-4 w-4 accent-brand-navy"
                   />
-                  <span>{option.text}</span>
+                  <span className="flex-1">
+                    <MathText text={option.text} />
+                    {option.imageUrl && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={option.imageUrl}
+                        alt="Option illustration"
+                        className="mt-2 max-h-48 rounded-md border border-black/10 object-contain"
+                      />
+                    )}
+                  </span>
                 </label>
               );
             })}

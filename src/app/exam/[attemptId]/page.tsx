@@ -42,11 +42,12 @@ export default async function ExamPage({
             select: {
               id: true,
               text: true,
+              imageUrl: true,
               marks: true,
               passage: { select: { id: true, title: true, text: true } },
               options: {
                 orderBy: { order: "asc" },
-                select: { id: true, text: true },
+                select: { id: true, text: true, imageUrl: true },
               },
             },
           },
