@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { TakingTestIllustration, ThinkingIllustration } from "@/components/illustrations";
+
 const features = [
   {
     title: "Full-length MBA CET mocks",
@@ -124,6 +126,31 @@ export default function HomePage() {
               </p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <div className="grid gap-10 sm:grid-cols-2">
+          <div className="rounded-2xl bg-brand-cream p-6">
+            <TakingTestIllustration className="mx-auto w-full max-w-xs" />
+            <h3 className="mt-2 text-center text-lg font-semibold text-brand-navy">
+              Real exam pressure, right at home
+            </h3>
+            <p className="mt-1 text-center text-sm text-brand-ink/70">
+              One running clock, no pausing — practice the way you&apos;ll
+              actually be tested.
+            </p>
+          </div>
+          <div className="rounded-2xl bg-brand-cream p-6">
+            <ThinkingIllustration className="mx-auto w-full max-w-xs" />
+            <h3 className="mt-2 text-center text-lg font-semibold text-brand-navy">
+              Think it through, then check yourself
+            </h3>
+            <p className="mt-1 text-center text-sm text-brand-ink/70">
+              Every question gets a full explanation afterward — not just a
+              right or wrong.
+            </p>
+          </div>
         </div>
       </section>
 
