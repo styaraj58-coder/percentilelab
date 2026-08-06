@@ -7,20 +7,33 @@ deploys to Vercel.
 
 ## 1. Get your Supabase connection strings
 
-In your Supabase project: **Project Settings → Database → Connection string**.
+In your Supabase project, click **Connect** (top of the dashboard) and look
+for the **pooler** connection strings — not "Direct connection". Supabase's
+direct host (`db.<ref>.supabase.co`) is IPv6-only and was unreachable from
+this machine; the pooler host (`aws-<n>-<region>.pooler.supabase.com`)
+resolves to IPv4 and works everywhere.
 
-Supabase gives you two different connection strings — Prisma needs both when
-running on a serverless host like Vercel:
+The pooler offers two modes, both using the same host but different ports —
+you need both:
 
-- **Connection pooling** (port `6543`, includes `pgbouncer=true`) — used by
-  the running app, since serverless functions open many short-lived
-  connections and Postgres itself can't handle that many directly.
-- **Direct connection** (port `5432`) — used only for running migrations,
-  which need a non-pooled connection.
+- **Transaction mode** (port `6543`, `?pgbouncer=true`) — used by the
+  **running app**. This is `DATABASE_URL`.
+- **Session mode** (port `5432`, no `pgbouncer` flag) — used for
+  **migrations**. This is `DIRECT_URL`.
 
-Copy both — you'll paste them into `.env` (for one-off migration/seed runs
-from your machine) and into Vercel's environment variables (for the deployed
-app).
+Both use username `postgres.<project-ref>` (not just `postgres`) — e.g.:
+
+```
+DATABASE_URL="postgresql://postgres.<ref>:<password>@aws-<n>-<region>.pooler.supabase.com:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres.<ref>:<password>@aws-<n>-<region>.pooler.supabase.com:5432/postgres"
+```
+
+**Important gotcha**: running `prisma migrate dev/deploy` while `DATABASE_URL`
+points at Transaction mode (6543) hangs indefinitely — Transaction mode
+doesn't support the session-level advisory lock Prisma's migration engine
+needs. When running a migration, temporarily set `DATABASE_URL` to the same
+Session-mode (5432) value as `DIRECT_URL`, run the migration, then switch
+`DATABASE_URL` back to 6543 before starting the app.
 
 ## 2. Switch Prisma to Postgres
 
@@ -78,15 +91,23 @@ later, verify it in Resend and set `RESEND_FROM_EMAIL`.
 
 ## 4. Create the schema on Supabase and seed the admin account
 
-Run locally, pointed at Supabase via the `.env` values above:
+With `DATABASE_URL` temporarily set to the Session-mode (5432) value (see the
+gotcha above):
 
 ```bash
 npx prisma migrate dev --name init_postgres
+```
+
+Then switch `DATABASE_URL` back to Transaction mode (6543) and seed:
+
+```bash
 npm run db:seed
 ```
 
 `db:seed` is a safe, idempotent upsert — running it again later won't create
-duplicates.
+duplicates. Regular queries (seeding, the running app) work fine over
+Transaction mode — it's specifically `prisma migrate` that needs Session
+mode.
 
 ## 5. Switch question/option images to Supabase Storage
 
