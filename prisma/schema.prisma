@@ -19,6 +19,12 @@ model User {
   email        String        @unique
   passwordHash String
   role         String        @default("STUDENT")
+  // Student profile fields — required at signup for STUDENT accounts
+  // (enforced in app validation), left null for seeded ADMIN accounts.
+  phone        String?
+  college      String?
+  course       String?
+  targetExam   String?
   createdAt    DateTime      @default(now())
   testsCreated Test[]        @relation("TestCreatedBy")
   attempts     TestAttempt[]

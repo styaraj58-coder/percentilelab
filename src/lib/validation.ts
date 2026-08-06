@@ -5,10 +5,33 @@ export const loginSchema = z.object({
   password: z.string().min(1),
 });
 
+export const MBA_ENTRANCE_EXAMS = [
+  "MH-CET (MBA)",
+  "CAT",
+  "XAT",
+  "CMAT",
+  "MAT",
+  "NMAT",
+  "SNAP",
+  "ATMA",
+  "Other",
+] as const;
+
 export const registerSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),
   email: z.string().email(),
   password: z.string().min(8, "Password must be at least 8 characters"),
+  phone: z
+    .string()
+    .trim()
+    .min(10, "Enter a valid contact number")
+    .max(15, "Enter a valid contact number")
+    .regex(/^[0-9+\-\s]+$/, "Enter a valid contact number"),
+  college: z.string().trim().min(2, "College name is required"),
+  course: z.string().trim().min(2, "Course is required"),
+  targetExam: z.enum(MBA_ENTRANCE_EXAMS, {
+    message: "Select an MBA entrance exam",
+  }),
 });
 
 export const optionSchema = z.object({

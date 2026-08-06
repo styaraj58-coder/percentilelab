@@ -7,6 +7,10 @@ const resend = process.env.RESEND_API_KEY
 export async function sendNewStudentNotification(student: {
   name: string;
   email: string;
+  phone: string;
+  college: string;
+  course: string;
+  targetExam: string;
 }) {
   const notifyEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
   if (!resend || !notifyEmail) {
@@ -22,7 +26,17 @@ export async function sendNewStudentNotification(student: {
       from: process.env.RESEND_FROM_EMAIL || "Percentile Lab MBA <onboarding@resend.dev>",
       to: notifyEmail,
       subject: `New student enrolled: ${student.name}`,
-      text: `A new student just created an account.\n\nName: ${student.name}\nEmail: ${student.email}\nSigned up: ${new Date().toLocaleString()}`,
+      text: [
+        "A new student just created an account.",
+        "",
+        `Name: ${student.name}`,
+        `Email: ${student.email}`,
+        `Phone: ${student.phone}`,
+        `College: ${student.college}`,
+        `Course: ${student.course}`,
+        `Target exam: ${student.targetExam}`,
+        `Signed up: ${new Date().toLocaleString()}`,
+      ].join("\n"),
     });
   } catch (error) {
     // A failed notification email should never block a real user's signup.

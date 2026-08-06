@@ -16,7 +16,8 @@ export async function POST(request: Request) {
     );
   }
 
-  const { name, email, password } = parsed.data;
+  const { name, email, password, phone, college, course, targetExam } =
+    parsed.data;
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
@@ -31,10 +32,19 @@ export async function POST(request: Request) {
   // Public registration always creates a STUDENT account — admin accounts are
   // seeded separately (`npm run db:seed`) and never created via this endpoint.
   await prisma.user.create({
-    data: { name, email, passwordHash, role: "STUDENT" },
+    data: {
+      name,
+      email,
+      passwordHash,
+      role: "STUDENT",
+      phone,
+      college,
+      course,
+      targetExam,
+    },
   });
 
-  await sendNewStudentNotification({ name, email });
+  await sendNewStudentNotification({ name, email, phone, college, course, targetExam });
 
   return NextResponse.json({ ok: true });
 }
