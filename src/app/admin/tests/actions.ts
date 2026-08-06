@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { testSchema, type TestInput } from "@/lib/validation";
+import { testSchema, type QuestionInput, type TestInput } from "@/lib/validation";
 
 export type SaveTestState = { error?: string } | undefined;
 
@@ -60,11 +60,16 @@ async function persistTest(
         data: { testId: id, name: section.name, order: sectionIndex },
       });
 
-      for (const [questionIndex, question] of section.questions.entries()) {
+      async function createQuestion(
+        question: QuestionInput,
+        order: number,
+        passageId: string | null
+      ) {
         const createdQuestion = await tx.question.create({
           data: {
             sectionId: createdSection.id,
-            order: questionIndex,
+            passageId,
+            order,
             text: question.text,
             explanation: question.explanation || null,
             marks: question.marks,
@@ -80,6 +85,26 @@ async function persistTest(
               order: optionIndex,
             },
           });
+        }
+      }
+
+      let order = 0;
+      for (const block of section.blocks) {
+        if (block.kind === "question") {
+          await createQuestion(block.question, order, null);
+          order += 1;
+        } else {
+          const createdPassage = await tx.passage.create({
+            data: {
+              sectionId: createdSection.id,
+              title: block.passage.passageTitle || null,
+              text: block.passage.passageText,
+            },
+          });
+          for (const question of block.passage.questions) {
+            await createQuestion(question, order, createdPassage.id);
+            order += 1;
+          }
         }
       }
     }

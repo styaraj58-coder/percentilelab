@@ -43,6 +43,7 @@ export default async function ExamPage({
               id: true,
               text: true,
               marks: true,
+              passage: { select: { id: true, title: true, text: true } },
               options: {
                 orderBy: { order: "asc" },
                 select: { id: true, text: true },
@@ -63,12 +64,13 @@ export default async function ExamPage({
 
   const existingAnswers = await prisma.answer.findMany({
     where: { attemptId },
-    select: { questionId: true, selectedOptionId: true },
+    select: { questionId: true, selectedOptionId: true, timeSpentSeconds: true },
   });
 
   const examData: ExamData = {
     attemptId,
     testTitle: test.title,
+    studentName: session.user.name ?? "Student",
     durationMinutes: test.durationMinutes,
     startedAtMs: attempt.startedAt.getTime(),
     sections: test.sections,
@@ -76,6 +78,9 @@ export default async function ExamPage({
       existingAnswers
         .filter((a) => a.selectedOptionId)
         .map((a) => [a.questionId, a.selectedOptionId as string])
+    ),
+    initialTimeSpent: Object.fromEntries(
+      existingAnswers.map((a) => [a.questionId, a.timeSpentSeconds])
     ),
   };
 

@@ -21,7 +21,7 @@ async function requireOwnedAttempt(attemptId: string) {
 export async function saveAnswer(
   attemptId: string,
   questionId: string,
-  selectedOptionId: string | undefined,
+  selectedOptionId: string | null | undefined,
   timeDeltaSeconds: number
 ) {
   const attempt = await requireOwnedAttempt(attemptId);

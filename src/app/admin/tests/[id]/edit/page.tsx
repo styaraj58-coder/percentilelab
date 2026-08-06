@@ -25,7 +25,10 @@ export default async function EditTestPage({
         include: {
           questions: {
             orderBy: { order: "asc" },
-            include: { options: { orderBy: { order: "asc" } } },
+            include: {
+              options: { orderBy: { order: "asc" } },
+              passage: { select: { id: true, title: true, text: true } },
+            },
           },
         },
       },
@@ -40,21 +43,47 @@ export default async function EditTestPage({
     title: test.title,
     description: test.description ?? "",
     durationMinutes: test.durationMinutes,
-    sections: test.sections.map((section) => ({
-      id: section.id,
-      name: section.name,
-      questions: section.questions.map((question) => ({
-        id: question.id,
-        text: question.text,
-        explanation: question.explanation ?? "",
-        marks: question.marks,
-        options: question.options.map((option) => ({
-          id: option.id,
-          text: option.text,
-          isCorrect: option.isCorrect,
-        })),
-      })),
-    })),
+    sections: test.sections.map((section) => {
+      const blocks: InitialTestData["sections"][number]["blocks"] = [];
+      let openPassageId: string | null = null;
+
+      for (const question of section.questions) {
+        const questionState = {
+          id: question.id,
+          text: question.text,
+          explanation: question.explanation ?? "",
+          marks: question.marks,
+          options: question.options.map((option) => ({
+            id: option.id,
+            text: option.text,
+            isCorrect: option.isCorrect,
+          })),
+        };
+
+        const last = blocks[blocks.length - 1];
+        if (question.passage && question.passage.id === openPassageId && last?.passage) {
+          last.questions.push(questionState);
+          continue;
+        }
+
+        if (question.passage) {
+          blocks.push({
+            id: question.passage.id,
+            passage: {
+              title: question.passage.title ?? "",
+              text: question.passage.text,
+            },
+            questions: [questionState],
+          });
+          openPassageId = question.passage.id;
+        } else {
+          blocks.push({ id: question.id, passage: null, questions: [questionState] });
+          openPassageId = null;
+        }
+      }
+
+      return { id: section.id, name: section.name, blocks };
+    }),
   };
 
   return (

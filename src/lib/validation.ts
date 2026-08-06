@@ -52,9 +52,23 @@ export const questionSchema = z.object({
     }),
 });
 
+// A section's content is an ordered list of blocks — a standalone question,
+// or a passage shared by several sub-questions (e.g. a reading passage or a
+// cloze paragraph).
+export const passageGroupSchema = z.object({
+  passageTitle: z.string().trim().optional(),
+  passageText: z.string().trim().min(1, "Passage text is required"),
+  questions: z.array(questionSchema).min(1, "Add at least one question"),
+});
+
+export const sectionBlockSchema = z.discriminatedUnion("kind", [
+  z.object({ kind: z.literal("question"), question: questionSchema }),
+  z.object({ kind: z.literal("passage"), passage: passageGroupSchema }),
+]);
+
 export const sectionSchema = z.object({
   name: z.string().trim().min(1, "Section name is required"),
-  questions: z.array(questionSchema).min(1, "Add at least one question"),
+  blocks: z.array(sectionBlockSchema).min(1, "Add at least one question"),
 });
 
 export const testSchema = z.object({
@@ -65,3 +79,4 @@ export const testSchema = z.object({
 });
 
 export type TestInput = z.infer<typeof testSchema>;
+export type QuestionInput = z.infer<typeof questionSchema>;

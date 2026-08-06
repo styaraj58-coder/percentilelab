@@ -36,7 +36,10 @@ export default async function AttemptResultsPage({
         include: {
           questions: {
             orderBy: { order: "asc" },
-            include: { options: { orderBy: { order: "asc" } } },
+            include: {
+              options: { orderBy: { order: "asc" } },
+              passage: { select: { id: true, title: true, text: true } },
+            },
           },
         },
       },
@@ -217,19 +220,34 @@ export default async function AttemptResultsPage({
       <section className="mt-10">
         <h2 className="text-lg font-semibold text-brand-navy">Answer review</h2>
         <div className="mt-4 space-y-4">
-          {allQuestions.map((question, index) => {
-            const answer = answerByQuestion.get(question.id);
-            const correctOption = question.options.find((o) => o.isCorrect);
-            const isCorrect =
-              !!answer?.selectedOptionId &&
-              answer.selectedOptionId === correctOption?.id;
-            const isSkipped = !answer?.selectedOptionId;
+          {(() => {
+            let lastPassageId: string | null = null;
+            return allQuestions.map((question, index) => {
+              const answer = answerByQuestion.get(question.id);
+              const correctOption = question.options.find((o) => o.isCorrect);
+              const isCorrect =
+                !!answer?.selectedOptionId &&
+                answer.selectedOptionId === correctOption?.id;
+              const isSkipped = !answer?.selectedOptionId;
+              const showPassage =
+                question.passage && question.passage.id !== lastPassageId;
+              lastPassageId = question.passage?.id ?? null;
 
-            return (
-              <div
-                key={question.id}
-                className="rounded-xl border border-black/5 bg-white p-5"
-              >
+              return (
+                <div key={question.id}>
+                  {showPassage && question.passage && (
+                    <div className="mb-3 rounded-xl border border-brand-gold/30 bg-brand-cream/40 p-4">
+                      {question.passage.title && (
+                        <p className="mb-1 font-semibold text-brand-navy">
+                          {question.passage.title}
+                        </p>
+                      )}
+                      <p className="whitespace-pre-line text-sm text-brand-ink/80">
+                        {question.passage.text}
+                      </p>
+                    </div>
+                  )}
+                  <div className="rounded-xl border border-black/5 bg-white p-5">
                 <div className="flex items-start justify-between gap-4">
                   <p className="text-sm font-medium text-brand-ink">
                     Q{index + 1}. {question.text}
@@ -289,9 +307,11 @@ export default async function AttemptResultsPage({
                     {question.explanation}
                   </p>
                 )}
-              </div>
-            );
-          })}
+                  </div>
+                </div>
+              );
+            });
+          })()}
         </div>
       </section>
     </div>

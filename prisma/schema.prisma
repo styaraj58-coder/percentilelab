@@ -51,12 +51,27 @@ model Section {
   name      String
   order     Int
   questions Question[]
+  passages  Passage[]
+}
+
+// A passage (or shared instructions/data) that several consecutive questions
+// in a section refer back to — e.g. a reading passage with 5 sub-questions,
+// or a cloze paragraph with one blank per question.
+model Passage {
+  id        String     @id @default(cuid())
+  sectionId String
+  section   Section    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  title     String?
+  text      String
+  questions Question[]
 }
 
 model Question {
   id          String   @id @default(cuid())
   sectionId   String
   section     Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  passageId   String?
+  passage     Passage? @relation(fields: [passageId], references: [id], onDelete: SetNull)
   order       Int
   text        String
   explanation String?

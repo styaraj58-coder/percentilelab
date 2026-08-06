@@ -15,7 +15,12 @@ type QuestionState = {
   marks: number;
   options: OptionState[];
 };
-type SectionState = { id: string; name: string; questions: QuestionState[] };
+type BlockState = {
+  id: string;
+  passage: { title: string; text: string } | null;
+  questions: QuestionState[];
+};
+type SectionState = { id: string; name: string; blocks: BlockState[] };
 
 function newId() {
   return typeof crypto !== "undefined" && crypto.randomUUID
@@ -37,8 +42,20 @@ function newQuestion(): QuestionState {
   };
 }
 
+function newStandaloneBlock(): BlockState {
+  return { id: newId(), passage: null, questions: [newQuestion()] };
+}
+
+function newPassageBlock(): BlockState {
+  return {
+    id: newId(),
+    passage: { title: "", text: "" },
+    questions: [newQuestion(), newQuestion()],
+  };
+}
+
 function newSection(name: string): SectionState {
-  return { id: newId(), name, questions: [newQuestion()] };
+  return { id: newId(), name, blocks: [newStandaloneBlock()] };
 }
 
 export type InitialTestData = {
@@ -47,6 +64,123 @@ export type InitialTestData = {
   durationMinutes: number;
   sections: SectionState[];
 };
+
+const inputClass =
+  "mt-1 w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy";
+
+function QuestionEditor({
+  question,
+  index,
+  canRemove,
+  onRemove,
+  onUpdate,
+  onAddOption,
+  onRemoveOption,
+  onUpdateOption,
+  onSetCorrect,
+}: {
+  question: QuestionState;
+  index: number;
+  canRemove: boolean;
+  onRemove: () => void;
+  onUpdate: (patch: Partial<QuestionState>) => void;
+  onAddOption: () => void;
+  onRemoveOption: (optionId: string) => void;
+  onUpdateOption: (optionId: string, patch: Partial<OptionState>) => void;
+  onSetCorrect: (optionId: string) => void;
+}) {
+  return (
+    <div className="rounded-lg border border-black/10 bg-white p-4 space-y-4">
+      <div className="flex items-center justify-between gap-4">
+        <span className="text-sm font-semibold text-brand-ink/70">
+          Question {index + 1}
+        </span>
+        {canRemove && (
+          <button
+            type="button"
+            onClick={onRemove}
+            className="text-xs text-red-700 hover:underline"
+          >
+            Remove question
+          </button>
+        )}
+      </div>
+
+      <textarea
+        value={question.text}
+        onChange={(e) => onUpdate({ text: e.target.value })}
+        placeholder="Question text"
+        rows={2}
+        className={inputClass}
+      />
+
+      <div className="space-y-2">
+        {question.options.map((option, oIndex) => (
+          <div key={option.id} className="flex items-center gap-2">
+            <input
+              type="radio"
+              name={`correct-${question.id}`}
+              checked={option.isCorrect}
+              onChange={() => onSetCorrect(option.id)}
+              className="h-4 w-4 accent-brand-navy"
+              aria-label={`Mark option ${oIndex + 1} correct`}
+            />
+            <input
+              value={option.text}
+              onChange={(e) => onUpdateOption(option.id, { text: e.target.value })}
+              placeholder={`Option ${oIndex + 1}`}
+              className="flex-1 rounded-md border border-black/10 bg-white px-3 py-1.5 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+            />
+            {question.options.length > 2 && (
+              <button
+                type="button"
+                onClick={() => onRemoveOption(option.id)}
+                className="text-xs text-red-700 hover:underline"
+              >
+                Remove
+              </button>
+            )}
+          </div>
+        ))}
+        {question.options.length < 6 && (
+          <button
+            type="button"
+            onClick={onAddOption}
+            className="text-xs font-medium text-brand-navy hover:underline"
+          >
+            + Add option
+          </button>
+        )}
+      </div>
+
+      <div className="flex flex-wrap items-end gap-4">
+        <div>
+          <label className="block text-xs font-medium text-brand-ink/70">
+            Marks
+          </label>
+          <input
+            type="number"
+            min={1}
+            max={100}
+            value={question.marks}
+            onChange={(e) => onUpdate({ marks: Number(e.target.value) })}
+            className="mt-1 w-20 rounded-md border border-black/10 bg-white px-3 py-1.5 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+          />
+        </div>
+        <div className="min-w-[240px] flex-1">
+          <label className="block text-xs font-medium text-brand-ink/70">
+            Explanation (shown after submission)
+          </label>
+          <input
+            value={question.explanation}
+            onChange={(e) => onUpdate({ explanation: e.target.value })}
+            className="mt-1 w-full rounded-md border border-black/10 bg-white px-3 py-1.5 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function TestBuilder({
   testId,
@@ -67,10 +201,31 @@ export function TestBuilder({
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  function updateSection(sectionId: string, patch: Partial<SectionState>) {
-    setSections((prev) =>
-      prev.map((s) => (s.id === sectionId ? { ...s, ...patch } : s))
-    );
+  function updateSectionState(sectionId: string, fn: (s: SectionState) => SectionState) {
+    setSections((prev) => prev.map((s) => (s.id === sectionId ? fn(s) : s)));
+  }
+
+  function updateBlock(sectionId: string, blockId: string, fn: (b: BlockState) => BlockState) {
+    updateSectionState(sectionId, (s) => ({
+      ...s,
+      blocks: s.blocks.map((b) => (b.id === blockId ? fn(b) : b)),
+    }));
+  }
+
+  function updateQuestionIn(
+    sectionId: string,
+    blockId: string,
+    questionId: string,
+    fn: (q: QuestionState) => QuestionState
+  ) {
+    updateBlock(sectionId, blockId, (b) => ({
+      ...b,
+      questions: b.questions.map((q) => (q.id === questionId ? fn(q) : q)),
+    }));
+  }
+
+  function updateSectionName(sectionId: string, name: string) {
+    updateSectionState(sectionId, (s) => ({ ...s, name }));
   }
 
   function addSection() {
@@ -81,127 +236,49 @@ export function TestBuilder({
     setSections((prev) => prev.filter((s) => s.id !== sectionId));
   }
 
-  function addQuestion(sectionId: string) {
-    setSections((prev) =>
-      prev.map((s) =>
-        s.id === sectionId
-          ? { ...s, questions: [...s.questions, newQuestion()] }
-          : s
-      )
-    );
+  function addStandaloneQuestion(sectionId: string) {
+    updateSectionState(sectionId, (s) => ({
+      ...s,
+      blocks: [...s.blocks, newStandaloneBlock()],
+    }));
   }
 
-  function removeQuestion(sectionId: string, questionId: string) {
-    setSections((prev) =>
-      prev.map((s) =>
-        s.id === sectionId
-          ? { ...s, questions: s.questions.filter((q) => q.id !== questionId) }
-          : s
-      )
-    );
+  function addPassage(sectionId: string) {
+    updateSectionState(sectionId, (s) => ({
+      ...s,
+      blocks: [...s.blocks, newPassageBlock()],
+    }));
   }
 
-  function updateQuestion(
+  function removeBlock(sectionId: string, blockId: string) {
+    updateSectionState(sectionId, (s) => ({
+      ...s,
+      blocks: s.blocks.filter((b) => b.id !== blockId),
+    }));
+  }
+
+  function updatePassage(
     sectionId: string,
-    questionId: string,
-    patch: Partial<QuestionState>
+    blockId: string,
+    patch: Partial<{ title: string; text: string }>
   ) {
-    setSections((prev) =>
-      prev.map((s) =>
-        s.id === sectionId
-          ? {
-              ...s,
-              questions: s.questions.map((q) =>
-                q.id === questionId ? { ...q, ...patch } : q
-              ),
-            }
-          : s
-      )
+    updateBlock(sectionId, blockId, (b) =>
+      b.passage ? { ...b, passage: { ...b.passage, ...patch } } : b
     );
   }
 
-  function addOption(sectionId: string, questionId: string) {
-    setSections((prev) =>
-      prev.map((s) =>
-        s.id === sectionId
-          ? {
-              ...s,
-              questions: s.questions.map((q) =>
-                q.id === questionId && q.options.length < 6
-                  ? { ...q, options: [...q.options, newOption()] }
-                  : q
-              ),
-            }
-          : s
-      )
-    );
+  function addQuestionToBlock(sectionId: string, blockId: string) {
+    updateBlock(sectionId, blockId, (b) => ({
+      ...b,
+      questions: [...b.questions, newQuestion()],
+    }));
   }
 
-  function removeOption(sectionId: string, questionId: string, optionId: string) {
-    setSections((prev) =>
-      prev.map((s) =>
-        s.id === sectionId
-          ? {
-              ...s,
-              questions: s.questions.map((q) =>
-                q.id === questionId && q.options.length > 2
-                  ? { ...q, options: q.options.filter((o) => o.id !== optionId) }
-                  : q
-              ),
-            }
-          : s
-      )
-    );
-  }
-
-  function updateOption(
-    sectionId: string,
-    questionId: string,
-    optionId: string,
-    patch: Partial<OptionState>
-  ) {
-    setSections((prev) =>
-      prev.map((s) =>
-        s.id === sectionId
-          ? {
-              ...s,
-              questions: s.questions.map((q) =>
-                q.id === questionId
-                  ? {
-                      ...q,
-                      options: q.options.map((o) =>
-                        o.id === optionId ? { ...o, ...patch } : o
-                      ),
-                    }
-                  : q
-              ),
-            }
-          : s
-      )
-    );
-  }
-
-  function setCorrectOption(sectionId: string, questionId: string, optionId: string) {
-    setSections((prev) =>
-      prev.map((s) =>
-        s.id === sectionId
-          ? {
-              ...s,
-              questions: s.questions.map((q) =>
-                q.id === questionId
-                  ? {
-                      ...q,
-                      options: q.options.map((o) => ({
-                        ...o,
-                        isCorrect: o.id === optionId,
-                      })),
-                    }
-                  : q
-              ),
-            }
-          : s
-      )
-    );
+  function removeQuestionFromBlock(sectionId: string, blockId: string, questionId: string) {
+    updateBlock(sectionId, blockId, (b) => ({
+      ...b,
+      questions: b.questions.filter((q) => q.id !== questionId),
+    }));
   }
 
   function buildPayload(): TestInput {
@@ -211,15 +288,24 @@ export function TestBuilder({
       durationMinutes,
       sections: sections.map((s) => ({
         name: s.name,
-        questions: s.questions.map((q) => ({
-          text: q.text,
-          explanation: q.explanation,
-          marks: q.marks,
-          options: q.options.map((o) => ({
-            text: o.text,
-            isCorrect: o.isCorrect,
-          })),
-        })),
+        blocks: s.blocks.map((b) => {
+          const mapQ = (q: QuestionState) => ({
+            text: q.text,
+            explanation: q.explanation,
+            marks: q.marks,
+            options: q.options.map((o) => ({ text: o.text, isCorrect: o.isCorrect })),
+          });
+          return b.passage
+            ? {
+                kind: "passage" as const,
+                passage: {
+                  passageTitle: b.passage.title,
+                  passageText: b.passage.text,
+                  questions: b.questions.map(mapQ),
+                },
+              }
+            : { kind: "question" as const, question: mapQ(b.questions[0]) };
+        }),
       })),
     };
   }
@@ -256,7 +342,7 @@ export function TestBuilder({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. MBA CET Full Mock 1"
-            className="mt-1 w-full rounded-md border border-black/10 px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+            className={inputClass}
           />
         </div>
 
@@ -268,7 +354,7 @@ export function TestBuilder({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={2}
-            className="mt-1 w-full rounded-md border border-black/10 px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+            className={inputClass}
           />
         </div>
 
@@ -287,153 +373,221 @@ export function TestBuilder({
         </div>
       </div>
 
-      {sections.map((section, sIndex) => (
-        <div
-          key={section.id}
-          className="rounded-xl border border-black/5 bg-white p-6 space-y-6"
-        >
-          <div className="flex items-center justify-between gap-4">
-            <input
-              value={section.name}
-              onChange={(e) => updateSection(section.id, { name: e.target.value })}
-              placeholder={`Section ${sIndex + 1} name`}
-              className="w-full max-w-sm rounded-md border border-black/10 px-3 py-2 text-sm font-semibold text-brand-navy focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
-            />
-            {sections.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeSection(section.id)}
-                className="text-sm text-red-700 hover:underline"
-              >
-                Remove section
-              </button>
-            )}
-          </div>
+      {sections.map((section, sIndex) => {
+        let questionCounter = 0;
 
-          <div className="space-y-6">
-            {section.questions.map((question, qIndex) => (
-              <div
-                key={question.id}
-                className="rounded-lg border border-black/10 bg-brand-cream/40 p-4 space-y-4"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm font-semibold text-brand-ink/70">
-                    Question {qIndex + 1}
-                  </span>
-                  {section.questions.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeQuestion(section.id, question.id)}
-                      className="text-xs text-red-700 hover:underline"
-                    >
-                      Remove question
-                    </button>
-                  )}
-                </div>
+        return (
+          <div
+            key={section.id}
+            className="rounded-xl border border-black/5 bg-white p-6 space-y-6"
+          >
+            <div className="flex items-center justify-between gap-4">
+              <input
+                value={section.name}
+                onChange={(e) => updateSectionName(section.id, e.target.value)}
+                placeholder={`Section ${sIndex + 1} name`}
+                className="w-full max-w-sm rounded-md border border-black/10 px-3 py-2 text-sm font-semibold text-brand-navy focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+              />
+              {sections.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeSection(section.id)}
+                  className="text-sm text-red-700 hover:underline"
+                >
+                  Remove section
+                </button>
+              )}
+            </div>
 
-                <textarea
-                  value={question.text}
-                  onChange={(e) =>
-                    updateQuestion(section.id, question.id, { text: e.target.value })
-                  }
-                  placeholder="Question text"
-                  rows={2}
-                  className="w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
-                />
+            <div className="space-y-6">
+              {section.blocks.map((block) => {
+                if (!block.passage) {
+                  const question = block.questions[0];
+                  const index = questionCounter;
+                  questionCounter += 1;
+                  return (
+                    <QuestionEditor
+                      key={block.id}
+                      question={question}
+                      index={index}
+                      canRemove={section.blocks.length > 1}
+                      onRemove={() => removeBlock(section.id, block.id)}
+                      onUpdate={(patch) =>
+                        updateQuestionIn(section.id, block.id, question.id, (q) => ({
+                          ...q,
+                          ...patch,
+                        }))
+                      }
+                      onAddOption={() =>
+                        updateQuestionIn(section.id, block.id, question.id, (q) =>
+                          q.options.length < 6
+                            ? { ...q, options: [...q.options, newOption()] }
+                            : q
+                        )
+                      }
+                      onRemoveOption={(optionId) =>
+                        updateQuestionIn(section.id, block.id, question.id, (q) =>
+                          q.options.length > 2
+                            ? { ...q, options: q.options.filter((o) => o.id !== optionId) }
+                            : q
+                        )
+                      }
+                      onUpdateOption={(optionId, patch) =>
+                        updateQuestionIn(section.id, block.id, question.id, (q) => ({
+                          ...q,
+                          options: q.options.map((o) =>
+                            o.id === optionId ? { ...o, ...patch } : o
+                          ),
+                        }))
+                      }
+                      onSetCorrect={(optionId) =>
+                        updateQuestionIn(section.id, block.id, question.id, (q) => ({
+                          ...q,
+                          options: q.options.map((o) => ({
+                            ...o,
+                            isCorrect: o.id === optionId,
+                          })),
+                        }))
+                      }
+                    />
+                  );
+                }
 
-                <div className="space-y-2">
-                  {question.options.map((option, oIndex) => (
-                    <div key={option.id} className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name={`correct-${question.id}`}
-                        checked={option.isCorrect}
-                        onChange={() =>
-                          setCorrectOption(section.id, question.id, option.id)
-                        }
-                        className="h-4 w-4 accent-brand-navy"
-                        aria-label={`Mark option ${oIndex + 1} correct`}
-                      />
-                      <input
-                        value={option.text}
-                        onChange={(e) =>
-                          updateOption(section.id, question.id, option.id, {
-                            text: e.target.value,
-                          })
-                        }
-                        placeholder={`Option ${oIndex + 1}`}
-                        className="flex-1 rounded-md border border-black/10 bg-white px-3 py-1.5 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
-                      />
-                      {question.options.length > 2 && (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            removeOption(section.id, question.id, option.id)
-                          }
-                          className="text-xs text-red-700 hover:underline"
-                        >
-                          Remove
-                        </button>
-                      )}
+                const startIndex = questionCounter;
+                questionCounter += block.questions.length;
+
+                return (
+                  <div
+                    key={block.id}
+                    className="rounded-xl border-2 border-brand-gold/30 bg-brand-cream/40 p-4 space-y-5"
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-xs font-semibold uppercase tracking-wide text-brand-gold">
+                        Shared passage
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => removeBlock(section.id, block.id)}
+                        className="text-xs text-red-700 hover:underline"
+                      >
+                        Remove passage &amp; all its questions
+                      </button>
                     </div>
-                  ))}
-                  {question.options.length < 6 && (
+
+                    <div>
+                      <label className="block text-xs font-medium text-brand-ink/70">
+                        Passage title (optional)
+                      </label>
+                      <input
+                        value={block.passage.title}
+                        onChange={(e) =>
+                          updatePassage(section.id, block.id, { title: e.target.value })
+                        }
+                        placeholder="e.g. Reading Comprehension Passage 1"
+                        className="mt-1 w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-brand-ink/70">
+                        Passage text
+                      </label>
+                      <textarea
+                        value={block.passage.text}
+                        onChange={(e) =>
+                          updatePassage(section.id, block.id, { text: e.target.value })
+                        }
+                        placeholder="Paste the full passage here — every question below will show it."
+                        rows={6}
+                        className="mt-1 w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+                      />
+                    </div>
+
+                    <div className="space-y-4 border-t border-brand-gold/20 pt-4">
+                      {block.questions.map((question, qIdx) => (
+                        <QuestionEditor
+                          key={question.id}
+                          question={question}
+                          index={startIndex + qIdx}
+                          canRemove={block.questions.length > 1}
+                          onRemove={() =>
+                            removeQuestionFromBlock(section.id, block.id, question.id)
+                          }
+                          onUpdate={(patch) =>
+                            updateQuestionIn(section.id, block.id, question.id, (q) => ({
+                              ...q,
+                              ...patch,
+                            }))
+                          }
+                          onAddOption={() =>
+                            updateQuestionIn(section.id, block.id, question.id, (q) =>
+                              q.options.length < 6
+                                ? { ...q, options: [...q.options, newOption()] }
+                                : q
+                            )
+                          }
+                          onRemoveOption={(optionId) =>
+                            updateQuestionIn(section.id, block.id, question.id, (q) =>
+                              q.options.length > 2
+                                ? {
+                                    ...q,
+                                    options: q.options.filter((o) => o.id !== optionId),
+                                  }
+                                : q
+                            )
+                          }
+                          onUpdateOption={(optionId, patch) =>
+                            updateQuestionIn(section.id, block.id, question.id, (q) => ({
+                              ...q,
+                              options: q.options.map((o) =>
+                                o.id === optionId ? { ...o, ...patch } : o
+                              ),
+                            }))
+                          }
+                          onSetCorrect={(optionId) =>
+                            updateQuestionIn(section.id, block.id, question.id, (q) => ({
+                              ...q,
+                              options: q.options.map((o) => ({
+                                ...o,
+                                isCorrect: o.id === optionId,
+                              })),
+                            }))
+                          }
+                        />
+                      ))}
+                    </div>
+
                     <button
                       type="button"
-                      onClick={() => addOption(section.id, question.id)}
+                      onClick={() => addQuestionToBlock(section.id, block.id)}
                       className="text-xs font-medium text-brand-navy hover:underline"
                     >
-                      + Add option
+                      + Add another question to this passage
                     </button>
-                  )}
-                </div>
+                  </div>
+                );
+              })}
+            </div>
 
-                <div className="flex flex-wrap items-end gap-4">
-                  <div>
-                    <label className="block text-xs font-medium text-brand-ink/70">
-                      Marks
-                    </label>
-                    <input
-                      type="number"
-                      min={1}
-                      max={100}
-                      value={question.marks}
-                      onChange={(e) =>
-                        updateQuestion(section.id, question.id, {
-                          marks: Number(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-20 rounded-md border border-black/10 bg-white px-3 py-1.5 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
-                    />
-                  </div>
-                  <div className="min-w-[240px] flex-1">
-                    <label className="block text-xs font-medium text-brand-ink/70">
-                      Explanation (shown after submission)
-                    </label>
-                    <input
-                      value={question.explanation}
-                      onChange={(e) =>
-                        updateQuestion(section.id, question.id, {
-                          explanation: e.target.value,
-                        })
-                      }
-                      className="mt-1 w-full rounded-md border border-black/10 bg-white px-3 py-1.5 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
+            <div className="flex flex-wrap gap-4">
+              <button
+                type="button"
+                onClick={() => addStandaloneQuestion(section.id)}
+                className="text-sm font-medium text-brand-navy hover:underline"
+              >
+                + Add question to this section
+              </button>
+              <button
+                type="button"
+                onClick={() => addPassage(section.id)}
+                className="text-sm font-medium text-brand-gold hover:underline"
+              >
+                + Add passage with sub-questions
+              </button>
+            </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() => addQuestion(section.id)}
-            className="text-sm font-medium text-brand-navy hover:underline"
-          >
-            + Add question to this section
-          </button>
-        </div>
-      ))}
+        );
+      })}
 
       <button
         type="button"
