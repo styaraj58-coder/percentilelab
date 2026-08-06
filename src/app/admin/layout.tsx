@@ -34,6 +34,12 @@ export default async function AdminLayout({
               >
                 New test
               </Link>
+              <Link
+                href="/admin/users"
+                className="text-sm font-medium text-brand-ink/80 hover:text-brand-navy"
+              >
+                Users
+              </Link>
             </nav>
           </div>
           <div className="flex items-center gap-4">
