@@ -65,7 +65,17 @@ export function SiteFooter() {
           <div>
             <p className="text-sm font-semibold text-white">Contact</p>
             <p className="mt-3 text-sm text-white/60">
-              careerprofmarketing@gmail.com
+              <a
+                href="mailto:percentilelab61@gmail.com"
+                className="hover:text-brand-gold"
+              >
+                percentilelab61@gmail.com
+              </a>
+            </p>
+            <p className="mt-1 text-sm text-white/60">
+              <a href="tel:+918053134016" className="hover:text-brand-gold">
+                +91 80531 34016
+              </a>
             </p>
           </div>
         </div>
