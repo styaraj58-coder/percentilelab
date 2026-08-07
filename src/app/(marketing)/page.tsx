@@ -86,15 +86,37 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="flex justify-center">
-            <Image
-              src="/logo.png"
-              alt="Percentile Lab"
-              width={320}
-              height={320}
-              className="h-56 w-56 object-contain sm:h-72 sm:w-72"
-              priority
-            />
+          <div className="relative mx-auto w-full max-w-md">
+            <div className="overflow-hidden rounded-3xl shadow-xl shadow-brand-navy/10">
+              <Image
+                src="/images/hero-banner.jpg"
+                alt="Student reviewing her mock test performance"
+                width={900}
+                height={1267}
+                className="h-auto w-full object-cover"
+                priority
+              />
+            </div>
+
+            <div className="absolute -left-6 top-8 hidden w-44 rounded-xl border border-black/5 bg-white p-3 shadow-lg sm:block">
+              <p className="text-[11px] font-medium text-brand-ink/50">
+                Your progress
+              </p>
+              <p className="mt-1 text-lg font-bold text-brand-navy">
+                92<span className="text-xs font-medium">th percentile</span>
+              </p>
+              <p className="text-[11px] font-medium text-green-600">
+                +18 in 30 days
+              </p>
+            </div>
+
+            <div className="absolute -bottom-6 -right-4 hidden w-40 rounded-xl border border-black/5 bg-white p-3 shadow-lg sm:block">
+              <p className="text-[11px] font-medium text-brand-ink/50">
+                Mock test analysis
+              </p>
+              <p className="mt-1 text-lg font-bold text-brand-gold">78%</p>
+              <p className="text-[11px] text-brand-ink/60">accuracy score</p>
+            </div>
           </div>
         </div>
       </section>
