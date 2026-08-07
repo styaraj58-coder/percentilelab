@@ -55,7 +55,7 @@ export default function PricingPage() {
         {plans.map((plan) => (
           <div
             key={plan.name}
-            className={`rounded-2xl border p-8 ${
+            className={`flex flex-col rounded-2xl border p-8 ${
               plan.highlight
                 ? "border-brand-gold bg-brand-navy text-white"
                 : "border-black/10 bg-white"
@@ -88,7 +88,7 @@ export default function PricingPage() {
               {plan.description}
             </p>
 
-            <ul className="mt-6 space-y-3 text-sm">
+            <ul className="mt-6 flex-1 space-y-3 text-sm">
               {plan.features.map((feature) => (
                 <li key={feature} className="flex items-start gap-2">
                   <span
