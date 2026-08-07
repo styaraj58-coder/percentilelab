@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
 import { startAttempt } from "./actions";
+import { StartTestButton } from "./start-test-button";
 
 export default async function StudentDashboardPage() {
   const session = await auth();
@@ -64,12 +65,9 @@ export default async function StudentDashboardPage() {
                   </div>
 
                   <form action={startAttempt.bind(null, test.id)}>
-                    <button
-                      type="submit"
-                      className="rounded-md bg-brand-navy px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
-                    >
-                      {inProgress ? "Resume test" : "Start test"}
-                    </button>
+                    <StartTestButton
+                      label={inProgress ? "Resume test" : "Start test"}
+                    />
                   </form>
                 </div>
 
