@@ -13,17 +13,27 @@ export function RegisterForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
-    setPending(true);
 
     const formData = new FormData(event.currentTarget);
+    const password = formData.get("password");
+    const confirmPassword = formData.get("confirmPassword");
+
+    if (password !== confirmPassword) {
+      setError("Passwords don't match.");
+      return;
+    }
+
+    setPending(true);
+
     const payload = {
       name: formData.get("name"),
       email: formData.get("email"),
-      password: formData.get("password"),
+      password,
       phone: formData.get("phone"),
       college: formData.get("college"),
       course: formData.get("course"),
@@ -148,16 +158,52 @@ export function RegisterForm() {
         <label htmlFor="password" className="block text-sm font-medium text-brand-ink">
           Password
         </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          minLength={8}
-          autoComplete="new-password"
-          className={inputClass}
-        />
+        <div className="relative">
+          <input
+            id="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            required
+            minLength={8}
+            autoComplete="new-password"
+            className={`${inputClass} pr-16`}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((v) => !v)}
+            className="absolute inset-y-0 right-0 px-3 text-xs font-medium text-brand-navy hover:text-brand-gold"
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
         <p className="mt-1 text-xs text-brand-ink/50">At least 8 characters.</p>
+      </div>
+
+      <div>
+        <label
+          htmlFor="confirmPassword"
+          className="block text-sm font-medium text-brand-ink"
+        >
+          Confirm password
+        </label>
+        <div className="relative">
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type={showPassword ? "text" : "password"}
+            required
+            minLength={8}
+            autoComplete="new-password"
+            className={`${inputClass} pr-16`}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((v) => !v)}
+            className="absolute inset-y-0 right-0 px-3 text-xs font-medium text-brand-navy hover:text-brand-gold"
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
       </div>
 
       <button
