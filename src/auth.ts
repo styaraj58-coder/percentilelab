@@ -5,9 +5,10 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/lib/validation";
 
+import { authConfig } from "@/auth.config";
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  session: { strategy: "jwt" },
-  pages: { signIn: "/login" },
+  ...authConfig,
   providers: [
     Credentials({
       credentials: {
@@ -38,30 +39,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    jwt({ token, user }) {
-      if (user) {
-        token.id = user.id as string;
-        token.role = (user as { role: string }).role;
-      }
-      return token;
-    },
-    session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as string;
-      }
-      return session;
-    },
-    authorized({ auth, request }) {
-      const isLoggedIn = !!auth?.user;
-      const role = auth?.user?.role;
-      const { pathname } = request.nextUrl;
-
-      if (pathname.startsWith("/admin")) return isLoggedIn && role === "ADMIN";
-      if (pathname.startsWith("/student")) return isLoggedIn;
-      if (pathname.startsWith("/exam")) return isLoggedIn;
-      return true;
-    },
-  },
 });
