@@ -65,7 +65,7 @@ export default function HomePage() {
               before you walk in.
             </h1>
             <p className="mt-5 max-w-xl text-base text-brand-ink/70 sm:text-lg">
-              Percentile Lab MBA gives you timed MBA CET mock tests with
+              Percentile Lab gives you timed MBA CET mock tests with
               section-wise scoring, time-per-question analysis, and full
               answer reviews — so every practice test tells you exactly what
               to fix next.
@@ -89,7 +89,7 @@ export default function HomePage() {
           <div className="flex justify-center">
             <Image
               src="/logo.png"
-              alt="Percentile Lab MBA"
+              alt="Percentile Lab"
               width={320}
               height={320}
               className="h-56 w-56 object-contain sm:h-72 sm:w-72"

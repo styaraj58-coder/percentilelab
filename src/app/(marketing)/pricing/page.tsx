@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Pricing | Percentile Lab MBA" };
+export const metadata: Metadata = { title: "Pricing | Percentile Lab" };
 
 const plans = [
   {

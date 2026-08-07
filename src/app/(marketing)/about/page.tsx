@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "About | Percentile Lab MBA" };
+export const metadata: Metadata = { title: "About | Percentile Lab" };
 
 export default function AboutPage() {
   return (
@@ -15,7 +15,7 @@ export default function AboutPage() {
 
       <div className="mt-8 space-y-6 text-brand-ink/80">
         <p>
-          Percentile Lab MBA exists because generic mock tests don&apos;t tell
+          Percentile Lab exists because generic mock tests don&apos;t tell
           you what actually went wrong. A raw score out of 200 doesn&apos;t
           tell you whether you lost marks to a weak section, slow pacing, or
           silly mistakes on questions you already knew how to solve.

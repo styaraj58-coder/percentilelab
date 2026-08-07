@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Study Resources | Percentile Lab MBA" };
+export const metadata: Metadata = { title: "Study Resources | Percentile Lab" };
 
 const articles = [
   {

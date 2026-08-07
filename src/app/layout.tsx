@@ -8,9 +8,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Percentile Lab MBA | MBA CET Test Prep",
+  title: "Percentile Lab | MBA CET Test Prep",
   description:
-    "Practice MBA CET mock tests, take timed exams, and get detailed percentile and section-wise analysis with Percentile Lab MBA.",
+    "Practice MBA CET mock tests, take timed exams, and get detailed percentile and section-wise analysis with Percentile Lab.",
 };
 
 export default function RootLayout({

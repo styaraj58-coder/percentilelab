@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { LoginForm } from "./login-form";
 
-export const metadata: Metadata = { title: "Log in | Percentile Lab MBA" };
+export const metadata: Metadata = { title: "Log in | Percentile Lab" };
 
 export default async function LoginPage({
   searchParams,

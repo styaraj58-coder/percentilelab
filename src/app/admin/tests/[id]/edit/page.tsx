@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 
 import { TestBuilder, type InitialTestData } from "../../test-builder";
 
-export const metadata: Metadata = { title: "Edit test | Percentile Lab MBA" };
+export const metadata: Metadata = { title: "Edit test | Percentile Lab" };
 
 export default async function EditTestPage({
   params,

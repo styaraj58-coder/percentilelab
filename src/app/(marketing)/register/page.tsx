@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { RegisterForm } from "./register-form";
 
-export const metadata: Metadata = { title: "Create account | Percentile Lab MBA" };
+export const metadata: Metadata = { title: "Create account | Percentile Lab" };
 
 export default function RegisterPage() {
   return (

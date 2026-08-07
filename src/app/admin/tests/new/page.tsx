@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { TestBuilder } from "../test-builder";
 
-export const metadata: Metadata = { title: "New test | Percentile Lab MBA" };
+export const metadata: Metadata = { title: "New test | Percentile Lab" };
 
 export default function NewTestPage() {
   return (

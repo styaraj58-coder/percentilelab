@@ -7,7 +7,7 @@ export function SiteFooter() {
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
           <div>
             <p className="text-lg font-semibold text-white">
-              Percentile Lab <span className="text-brand-gold">MBA</span>
+              Percentile <span className="text-brand-gold">Lab</span>
             </p>
             <p className="mt-2 text-sm text-white/60">
               Focused MBA CET mock tests with detailed percentile and
@@ -66,7 +66,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-10 border-t border-white/10 pt-6 text-xs text-white/50">
-          © {new Date().getFullYear()} Percentile Lab MBA. All rights reserved.
+          © {new Date().getFullYear()} Percentile Lab. All rights reserved.
         </div>
       </div>
     </footer>

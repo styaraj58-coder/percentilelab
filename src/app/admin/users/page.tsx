@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 import { RoleToggle } from "./role-toggle";
 
-export const metadata: Metadata = { title: "Users | Percentile Lab MBA" };
+export const metadata: Metadata = { title: "Users | Percentile Lab" };
 
 export default async function AdminUsersPage() {
   const session = await auth();

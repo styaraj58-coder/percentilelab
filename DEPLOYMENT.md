@@ -1,4 +1,4 @@
-# Deploying Percentile Lab MBA (Vercel + Supabase)
+# Deploying Percentile Lab (Vercel + Supabase)
 
 Local development uses SQLite (a file on disk), which does not work on
 serverless hosts like Vercel because the filesystem isn't persistent between
@@ -67,7 +67,7 @@ DIRECT_URL="<Supabase direct connection string, port 5432>"
 AUTH_SECRET="<generate below>"
 ADMIN_EMAIL="careerprofmarketing@gmail.com"
 ADMIN_PASSWORD="<pick a real password>"
-ADMIN_NAME="Percentile Lab MBA Admin"
+ADMIN_NAME="Percentile Lab Admin"
 RESEND_API_KEY="<from resend.com/api-keys>"
 ADMIN_NOTIFICATION_EMAIL="satyaraj735278@gmail.com"
 ```

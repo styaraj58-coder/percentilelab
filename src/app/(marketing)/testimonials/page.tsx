@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Testimonials | Percentile Lab MBA" };
+export const metadata: Metadata = { title: "Testimonials | Percentile Lab" };
 
 // Add real student testimonials here once you have them — each entry renders
 // as a card below. Leave the array empty to show the "coming soon" state.
@@ -48,7 +48,7 @@ export default function TestimonialsPage() {
             We&apos;re just getting started
           </h2>
           <p className="mt-2 text-sm text-brand-ink/70">
-            Percentile Lab MBA is brand new — real student results and
+            Percentile Lab is brand new — real student results and
             success stories will show up here as they come in. Be one of the
             first.
           </p>

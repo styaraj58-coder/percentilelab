@@ -6,7 +6,7 @@ import { auth } from "@/auth";
 import { MathText } from "@/components/math-text";
 import { prisma } from "@/lib/prisma";
 
-export const metadata: Metadata = { title: "Test results | Percentile Lab MBA" };
+export const metadata: Metadata = { title: "Test results | Percentile Lab" };
 
 export default async function AttemptResultsPage({
   params,
