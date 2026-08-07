@@ -29,6 +29,7 @@ model User {
   createdAt    DateTime      @default(now())
   testsCreated Test[]        @relation("TestCreatedBy")
   attempts     TestAttempt[]
+  resourcesCreated Resource[] @relation("ResourceCreatedBy")
 }
 
 model Test {
@@ -107,6 +108,21 @@ model TestAttempt {
 
   @@index([testId])
   @@index([studentId])
+}
+
+// Admin-uploaded study resources shown on the public Resources page —
+// either a video link or a downloadable PDF.
+model Resource {
+  id          String   @id @default(cuid())
+  type        String   // "VIDEO" | "PDF"
+  title       String
+  description String?
+  url         String
+  createdById String
+  createdBy   User     @relation("ResourceCreatedBy", fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([type])
 }
 
 model Answer {

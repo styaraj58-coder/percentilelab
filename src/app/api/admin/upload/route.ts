@@ -11,9 +11,13 @@ const ALLOWED_TYPES: Record<string, string> = {
   "image/jpeg": "jpg",
   "image/webp": "webp",
   "image/gif": "gif",
+  "application/pdf": "pdf",
 };
 
-const MAX_SIZE_BYTES = 5 * 1024 * 1024;
+const MAX_SIZE_BYTES: Record<string, number> = {
+  "application/pdf": 20 * 1024 * 1024,
+};
+const DEFAULT_MAX_SIZE_BYTES = 5 * 1024 * 1024;
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -31,14 +35,15 @@ export async function POST(request: Request) {
   const extension = ALLOWED_TYPES[file.type];
   if (!extension) {
     return NextResponse.json(
-      { error: "Only PNG, JPEG, WEBP, or GIF images are allowed" },
+      { error: "Only PNG, JPEG, WEBP, GIF, or PDF files are allowed" },
       { status: 400 }
     );
   }
 
-  if (file.size > MAX_SIZE_BYTES) {
+  const maxSize = MAX_SIZE_BYTES[file.type] ?? DEFAULT_MAX_SIZE_BYTES;
+  if (file.size > maxSize) {
     return NextResponse.json(
-      { error: "Image must be smaller than 5MB" },
+      { error: `File must be smaller than ${Math.round(maxSize / (1024 * 1024))}MB` },
       { status: 400 }
     );
   }

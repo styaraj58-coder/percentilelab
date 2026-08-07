@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { prisma } from "@/lib/prisma";
+
+import { ResourceTabs } from "./resource-tabs";
+
 export const metadata: Metadata = { title: "Study Resources | Percentile Lab" };
+export const dynamic = "force-dynamic";
 
 const articles = [
   {
@@ -26,45 +31,68 @@ const articles = [
   },
 ];
 
-export default function ResourcesPage() {
+export default async function ResourcesPage() {
+  const resources = await prisma.resource.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+  const videos = resources.filter((r) => r.type === "VIDEO");
+  const materials = resources.filter((r) => r.type === "PDF");
+
   return (
-    <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+    <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
       <p className="text-xs font-semibold uppercase tracking-wide text-brand-gold">
         Study Resources
       </p>
       <h1 className="mt-2 text-3xl font-bold text-brand-navy sm:text-4xl">
-        MBA CET prep tips
+        Videos, PDFs, and prep tips in one place
       </h1>
-      <p className="mt-3 text-brand-ink/70">
-        Short, practical notes on how to prep smarter — not just longer.
+      <p className="mt-3 max-w-2xl text-brand-ink/70">
+        Free study material curated by the Percentile Lab team — pick a tab
+        below to browse.
       </p>
 
-      <div className="mt-10 space-y-8">
-        {articles.map((article) => (
-          <article
-            key={article.title}
-            className="rounded-xl border border-black/5 bg-white p-6 shadow-sm"
-          >
-            <h2 className="text-lg font-semibold text-brand-navy">
-              {article.title}
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-brand-ink/80">
-              {article.body}
-            </p>
-          </article>
-        ))}
+      <div className="mt-10">
+        <ResourceTabs videos={videos} materials={materials} />
       </div>
 
-      <div className="mt-12 rounded-xl bg-brand-cream p-6 text-center">
-        <p className="text-sm text-brand-ink/70">
-          Put these into practice on your next mock test.
+      <div className="mx-auto mt-20 max-w-3xl">
+        <p className="text-xs font-semibold uppercase tracking-wide text-brand-gold">
+          Prep tips
         </p>
-        <Link
-          href="/register"
-          className="mt-4 inline-block rounded-md bg-brand-navy px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
-        >
-          Take a mock test
-        </Link>
+        <h2 className="mt-2 text-2xl font-bold text-brand-navy">
+          MBA CET prep tips
+        </h2>
+        <p className="mt-3 text-brand-ink/70">
+          Short, practical notes on how to prep smarter — not just longer.
+        </p>
+
+        <div className="mt-8 space-y-8">
+          {articles.map((article) => (
+            <article
+              key={article.title}
+              className="rounded-xl border border-black/5 bg-white p-6 shadow-sm"
+            >
+              <h3 className="text-lg font-semibold text-brand-navy">
+                {article.title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-brand-ink/80">
+                {article.body}
+              </p>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-12 rounded-xl bg-brand-cream p-6 text-center">
+          <p className="text-sm text-brand-ink/70">
+            Put these into practice on your next mock test.
+          </p>
+          <Link
+            href="/register"
+            className="mt-4 inline-block rounded-md bg-brand-navy px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
+          >
+            Take a mock test
+          </Link>
+        </div>
       </div>
     </div>
   );

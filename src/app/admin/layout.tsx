@@ -40,6 +40,12 @@ export default async function AdminLayout({
               >
                 Users
               </Link>
+              <Link
+                href="/admin/resources"
+                className="text-sm font-medium text-brand-ink/80 hover:text-brand-navy"
+              >
+                Resources
+              </Link>
             </nav>
           </div>
           <div className="flex items-center gap-4">
