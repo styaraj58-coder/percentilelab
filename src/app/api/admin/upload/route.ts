@@ -1,10 +1,9 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
-import path from "node:path";
 
 import { NextResponse } from "next/server";
 
 import { auth } from "@/auth";
+import { getSupabaseAdmin, UPLOADS_BUCKET } from "@/lib/supabase-admin";
 
 const ALLOWED_TYPES: Record<string, string> = {
   "image/png": "png",
@@ -48,12 +47,22 @@ export async function POST(request: Request) {
     );
   }
 
-  const uploadsDir = path.join(process.cwd(), "public", "uploads");
-  await mkdir(uploadsDir, { recursive: true });
-
   const filename = `${randomUUID()}.${extension}`;
   const bytes = Buffer.from(await file.arrayBuffer());
-  await writeFile(path.join(uploadsDir, filename), bytes);
 
-  return NextResponse.json({ url: `/uploads/${filename}` });
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase.storage
+    .from(UPLOADS_BUCKET)
+    .upload(filename, bytes, { contentType: file.type });
+
+  if (error) {
+    return NextResponse.json(
+      { error: "Failed to store the uploaded file" },
+      { status: 500 }
+    );
+  }
+
+  const { data: pub } = supabase.storage.from(UPLOADS_BUCKET).getPublicUrl(filename);
+
+  return NextResponse.json({ url: pub.publicUrl });
 }
