@@ -10,27 +10,31 @@ export default function AboutPage() {
         About us
       </p>
       <h1 className="mt-2 text-3xl font-bold text-brand-navy sm:text-4xl">
-        Built for one goal: a higher CET percentile
+        Built for one goal: a higher percentile, on any MBA entrance exam
       </h1>
 
       <div className="mt-8 space-y-6 text-brand-ink/80">
         <p>
           Percentile Lab exists because generic mock tests don&apos;t tell
-          you what actually went wrong. A raw score out of 200 doesn&apos;t
-          tell you whether you lost marks to a weak section, slow pacing, or
-          silly mistakes on questions you already knew how to solve.
+          you what actually went wrong. A raw score doesn&apos;t tell you
+          whether you lost marks to a weak section, slow pacing, or silly
+          mistakes on questions you already knew how to solve — and every
+          MBA entrance exam scores you a little differently, so a mock that
+          isn&apos;t built around your exam&apos;s actual pattern isn&apos;t
+          telling you much at all.
         </p>
         <p>
-          Every test on this platform is built around the same structure as
-          the MBA CET — timed, sectional, and scored the way the real exam
-          scores you. But the part that actually moves your percentile
-          happens after you submit: a full breakdown of your accuracy by
-          section, how long you spent on every single question, and a
-          question-by-question review with the correct answer and
+          Every test on this platform is built around the structure of the
+          exam you&apos;re actually taking — CAT, XAT, MAH-CET, SNAP, NMAT,
+          CMAT, MAT, ATMA, and more — timed, sectional, and scored the way
+          the real exam scores you. But the part that actually moves your
+          percentile happens after you submit: a full breakdown of your
+          accuracy by section, how long you spent on every single question,
+          and a question-by-question review with the correct answer and
           explanation.
         </p>
         <p>
-          Whether you&apos;re just starting your CET prep or in the final
+          Whether you&apos;re just starting your prep or in the final
           stretch before exam day, the idea is the same — practice with
           intent, and let the data tell you exactly what to fix next.
         </p>
@@ -41,7 +45,7 @@ export default function AboutPage() {
           What you get with every test
         </h2>
         <ul className="mt-4 grid gap-3 text-sm text-brand-ink/80 sm:grid-cols-2">
-          <li>• Sectional MCQ format matching MBA CET</li>
+          <li>• Sectional MCQ format matching your target exam</li>
           <li>• Live countdown timer per test</li>
           <li>• Overall score and percentile</li>
           <li>• Section-wise accuracy breakdown</li>

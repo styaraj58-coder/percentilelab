@@ -3,9 +3,9 @@ import Link from "next/link";
 
 const features = [
   {
-    title: "Full-length MBA CET mocks",
+    title: "Full-length MBA entrance exam mocks",
     description:
-      "Sectional MCQ tests covering Quant, Verbal, Logical Reasoning, and General Awareness — built the way the real exam is structured.",
+      "Sectional MCQ tests covering Quant, Verbal, Logical Reasoning, and General Awareness — built the way CAT, XAT, MAH-CET, and every other MBA entrance exam is actually structured.",
   },
   {
     title: "Percentile-based scoring",
@@ -65,10 +65,10 @@ export default function HomePage() {
               before you walk in.
             </h1>
             <p className="mt-5 max-w-xl text-base text-brand-ink/70 sm:text-lg">
-              Percentile Lab gives you timed MBA CET mock tests with
-              section-wise scoring, time-per-question analysis, and full
-              answer reviews — so every practice test tells you exactly what
-              to fix next.
+              Percentile Lab gives you timed mock tests for every major MBA
+              entrance exam — CAT, XAT, MAH-CET, SNAP, NMAT, CMAT, MAT, and
+              ATMA — with section-wise scoring, time-per-question analysis,
+              and full answer reviews.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link

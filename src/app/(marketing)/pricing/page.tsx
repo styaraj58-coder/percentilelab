@@ -8,7 +8,7 @@ const plans = [
     name: "Free",
     price: "₹0",
     period: "forever",
-    description: "Everything you need to start practicing for MBA CET.",
+    description: "Everything you need to start practicing for your MBA entrance exam.",
     features: [
       "Access to published mock tests",
       "Timed, sectional test-taking",

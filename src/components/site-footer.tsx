@@ -10,8 +10,8 @@ export function SiteFooter() {
               Percentile <span className="text-brand-gold">Lab</span>
             </p>
             <p className="mt-2 text-sm text-white/60">
-              Focused MBA CET mock tests with detailed percentile and
-              section-wise analysis.
+              Focused MBA entrance exam mock tests with detailed percentile
+              and section-wise analysis.
             </p>
           </div>
 

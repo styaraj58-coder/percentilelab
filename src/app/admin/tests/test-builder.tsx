@@ -433,7 +433,7 @@ export function TestBuilder({
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. MBA CET Full Mock 1"
+            placeholder="e.g. CAT Full Mock 1"
             className={inputClass}
           />
         </div>

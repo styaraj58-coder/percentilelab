@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 const articles = [
   {
     title: "Why sectional cutoffs matter more than your overall score",
-    body: "MBA CET evaluates you section by section, not just on total marks. A strong Quant score can't make up for a section you clear by luck — many institutes apply a minimum cutoff per section. Use the section-wise breakdown on every mock to find your weakest section early, and weight your next week of practice toward it instead of drilling what you're already good at.",
+    body: "Most MBA entrance exams — CAT, XAT, MAH-CET, and others — evaluate you section by section, not just on total marks. A strong Quant score can't make up for a section you clear by luck — many institutes apply a minimum cutoff per section. Use the section-wise breakdown on every mock to find your weakest section early, and weight your next week of practice toward it instead of drilling what you're already good at.",
   },
   {
     title: "Time-box every section before you start",
@@ -27,7 +27,7 @@ const articles = [
   },
   {
     title: "Track percentile trend, not single-test score",
-    body: "One mock test score can swing a lot based on which questions you happened to know. What actually predicts your CET performance is your percentile trend across several tests. Take mocks consistently and watch the trend line, not any single result.",
+    body: "One mock test score can swing a lot based on which questions you happened to know. What actually predicts your performance on exam day is your percentile trend across several tests. Take mocks consistently and watch the trend line, not any single result.",
   },
 ];
 
@@ -60,7 +60,7 @@ export default async function ResourcesPage() {
           Prep tips
         </p>
         <h2 className="mt-2 text-2xl font-bold text-brand-navy">
-          MBA CET prep tips
+          MBA entrance exam prep tips
         </h2>
         <p className="mt-3 text-brand-ink/70">
           Short, practical notes on how to prep smarter — not just longer.
