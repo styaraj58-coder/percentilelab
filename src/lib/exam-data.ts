@@ -378,4 +378,53 @@ export const exams: ExamInfo[] = [
       },
     ],
   },
+  {
+    slug: "atma",
+    shortName: "ATMA",
+    fullName: "AIMS Test for Management Admissions",
+    conductedBy: "Association of Indian Management Schools (AIMS)",
+    about:
+      "ATMA is a national-level exam conducted several times a year and accepted by a wide network of AIMS-member B-schools. It follows a straightforward three-section format split into two equal halves, with a short break in between, and rewards balanced, all-round preparation over depth in any one area.",
+    pattern: {
+      mode: "Computer-based test (CBT)",
+      duration: "180 minutes (two parts of 90 minutes each, with a break)",
+      totalQuestions: "180 questions",
+      markingScheme: "+1 for correct, -0.25 for wrong answer",
+      sections: [
+        { name: "Analytical Reasoning Skills", questions: "60 questions" },
+        { name: "Verbal Skills", questions: "60 questions" },
+        { name: "Quantitative Skills", questions: "60 questions" },
+      ],
+    },
+    syllabus: [
+      {
+        category: "Analytical Reasoning Skills",
+        topics: [
+          "Puzzles and seating arrangements",
+          "Coding-decoding",
+          "Blood relations and direction sense",
+          "Syllogisms and critical reasoning",
+          "Series and pattern recognition",
+        ],
+      },
+      {
+        category: "Verbal Skills",
+        topics: [
+          "Reading comprehension",
+          "Grammar and sentence correction",
+          "Vocabulary (synonyms, antonyms, analogies)",
+          "Para jumbles and fill in the blanks",
+        ],
+      },
+      {
+        category: "Quantitative Skills",
+        topics: [
+          "Arithmetic (percentages, ratio, profit & loss, time-speed-distance)",
+          "Algebra and number systems",
+          "Geometry and mensuration",
+          "Data interpretation and data sufficiency",
+        ],
+      },
+    ],
+  },
 ];
