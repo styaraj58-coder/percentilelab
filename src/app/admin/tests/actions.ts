@@ -35,6 +35,7 @@ async function persistTest(
         data: {
           title: input.title,
           description: input.description || null,
+          targetExam: input.targetExam,
           durationMinutes: input.durationMinutes,
           published,
         },
@@ -47,6 +48,7 @@ async function persistTest(
         data: {
           title: input.title,
           description: input.description || null,
+          targetExam: input.targetExam,
           durationMinutes: input.durationMinutes,
           published,
           createdById,

@@ -76,6 +76,9 @@ export const sectionSchema = z.object({
 export const testSchema = z.object({
   title: z.string().trim().min(3, "Title must be at least 3 characters"),
   description: z.string().trim().optional(),
+  targetExam: z.enum(MBA_ENTRANCE_EXAMS, {
+    message: "Select which entrance exam this test is for",
+  }),
   durationMinutes: z.coerce.number().int().min(1).max(600),
   sections: z.array(sectionSchema).min(1, "Add at least one section"),
 });

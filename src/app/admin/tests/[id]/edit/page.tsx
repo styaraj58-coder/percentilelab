@@ -42,6 +42,7 @@ export default async function EditTestPage({
   const initialData: InitialTestData = {
     title: test.title,
     description: test.description ?? "",
+    targetExam: test.targetExam,
     durationMinutes: test.durationMinutes,
     sections: test.sections.map((section) => {
       const blocks: InitialTestData["sections"][number]["blocks"] = [];

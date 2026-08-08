@@ -50,9 +50,14 @@ export default async function StudentDashboardPage() {
               >
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
-                    <h2 className="text-lg font-semibold text-brand-navy">
-                      {test.title}
-                    </h2>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h2 className="text-lg font-semibold text-brand-navy">
+                        {test.title}
+                      </h2>
+                      <span className="rounded-full bg-brand-gold/15 px-2.5 py-0.5 text-xs font-semibold text-brand-gold">
+                        {test.targetExam}
+                      </span>
+                    </div>
                     {test.description && (
                       <p className="mt-1 text-sm text-brand-ink/70">
                         {test.description}

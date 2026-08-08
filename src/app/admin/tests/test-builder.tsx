@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
 
 import { uploadImage } from "@/lib/upload-image";
-import type { TestInput } from "@/lib/validation";
+import { MBA_ENTRANCE_EXAMS, type TestInput } from "@/lib/validation";
 
 import { createTest, updateTest } from "./actions";
 
@@ -64,6 +64,7 @@ function newSection(name: string): SectionState {
 export type InitialTestData = {
   title: string;
   description: string;
+  targetExam: string;
   durationMinutes: number;
   sections: SectionState[];
 };
@@ -272,13 +273,22 @@ function QuestionEditor({
 export function TestBuilder({
   testId,
   initialData,
+  initialExam,
 }: {
   testId?: string;
   initialData?: InitialTestData;
+  initialExam?: string;
 }) {
   const router = useRouter();
   const [title, setTitle] = useState(initialData?.title ?? "");
   const [description, setDescription] = useState(initialData?.description ?? "");
+  const [targetExam, setTargetExam] = useState<
+    (typeof MBA_ENTRANCE_EXAMS)[number]
+  >(
+    (initialData?.targetExam ??
+      initialExam ??
+      MBA_ENTRANCE_EXAMS[0]) as (typeof MBA_ENTRANCE_EXAMS)[number]
+  );
   const [durationMinutes, setDurationMinutes] = useState(
     initialData?.durationMinutes ?? 60
   );
@@ -372,6 +382,7 @@ export function TestBuilder({
     return {
       title,
       description,
+      targetExam,
       durationMinutes,
       sections: sections.map((s) => ({
         name: s.name,
@@ -436,6 +447,25 @@ export function TestBuilder({
             placeholder="e.g. CAT Full Mock 1"
             className={inputClass}
           />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-brand-ink">
+            Entrance exam
+          </label>
+          <select
+            value={targetExam}
+            onChange={(e) =>
+              setTargetExam(e.target.value as (typeof MBA_ENTRANCE_EXAMS)[number])
+            }
+            className={inputClass}
+          >
+            {MBA_ENTRANCE_EXAMS.map((exam) => (
+              <option key={exam} value={exam}>
+                {exam}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>
