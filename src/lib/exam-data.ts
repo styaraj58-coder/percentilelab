@@ -9,6 +9,11 @@ export type SyllabusGroup = {
   topics: string[];
 };
 
+export type TentativeDate = {
+  label: string;
+  window: string;
+};
+
 export type ExamInfo = {
   slug: string;
   shortName: string;
@@ -23,6 +28,8 @@ export type ExamInfo = {
     sections: ExamSection[];
   };
   syllabus: SyllabusGroup[];
+  topColleges: string[];
+  tentativeDates: TentativeDate[];
 };
 
 export const exams: ExamInfo[] = [
@@ -79,6 +86,24 @@ export const exams: ExamInfo[] = [
         ],
       },
     ],
+    topColleges: [
+      "Jamnalal Bajaj Institute of Management Studies (JBIMS), Mumbai",
+      "Sydenham Institute of Management Studies (SIMSREE), Mumbai",
+      "Department of Management Sciences (PUMBA), Pune",
+      "K J Somaiya Institute of Management, Mumbai",
+      "Welingkar Institute of Management (WeSchool), Mumbai",
+      "N L Dalmia Institute of Management Studies, Mumbai",
+      "Vishwakarma Institute of Management, Pune",
+      "IES Management College and Research Centre, Mumbai",
+      "SIES College of Management Studies, Mumbai",
+      "Government College of Engineering, Amravati (Dept. of Management)",
+    ],
+    tentativeDates: [
+      { label: "Registration opens", window: "Early January" },
+      { label: "Registration closes", window: "Mid-February" },
+      { label: "Exam day", window: "Mid-to-late March" },
+      { label: "Result", window: "April" },
+    ],
   },
   {
     slug: "cat",
@@ -130,6 +155,24 @@ export const exams: ExamInfo[] = [
           "Logarithms, indices, and surds",
         ],
       },
+    ],
+    topColleges: [
+      "IIM Ahmedabad",
+      "IIM Bangalore",
+      "IIM Calcutta",
+      "IIM Lucknow",
+      "IIM Kozhikode",
+      "IIM Indore",
+      "Faculty of Management Studies (FMS), Delhi",
+      "SP Jain Institute of Management and Research (SPJIMR), Mumbai",
+      "MDI Gurgaon",
+      "IIM Shillong",
+    ],
+    tentativeDates: [
+      { label: "Registration opens", window: "Early August" },
+      { label: "Registration closes", window: "Mid-September" },
+      { label: "Exam day", window: "Last Sunday of November" },
+      { label: "Result", window: "Early January" },
     ],
   },
   {
@@ -186,6 +229,24 @@ export const exams: ExamInfo[] = [
         ],
       },
     ],
+    topColleges: [
+      "XLRI Jamshedpur",
+      "XIM University, Bhubaneswar",
+      "Great Lakes Institute of Management, Chennai",
+      "IMT Ghaziabad",
+      "T A Pai Management Institute (TAPMI), Manipal",
+      "Goa Institute of Management (GIM)",
+      "Institute of Rural Management Anand (IRMA)",
+      "Fore School of Management, Delhi",
+      "Welingkar Institute of Management, Mumbai",
+      "Xavier Institute of Social Service (XISS), Ranchi",
+    ],
+    tentativeDates: [
+      { label: "Registration opens", window: "August" },
+      { label: "Registration closes", window: "Early December" },
+      { label: "Exam day", window: "First Sunday of January" },
+      { label: "Result", window: "Late January" },
+    ],
   },
   {
     slug: "snap",
@@ -234,6 +295,24 @@ export const exams: ExamInfo[] = [
         ],
       },
     ],
+    topColleges: [
+      "Symbiosis Institute of Business Management (SIBM), Pune",
+      "Symbiosis Centre for Management and HR Development (SCMHRD), Pune",
+      "Symbiosis Institute of International Business (SIIB), Pune",
+      "SIBM Bengaluru",
+      "SIBM Hyderabad",
+      "SIBM Nagpur",
+      "Symbiosis Institute of Operations Management (SIOM), Nashik",
+      "Symbiosis Institute of Management Studies (SIMS), Pune",
+      "Symbiosis School of Banking and Finance (SSBF), Pune",
+      "Symbiosis Institute of Digital and Telecom Management (SIDTM), Pune",
+    ],
+    tentativeDates: [
+      { label: "Registration opens", window: "August" },
+      { label: "Registration closes", window: "Late November" },
+      { label: "Exam day", window: "Mid-December (single-day, multiple slots)" },
+      { label: "Result", window: "January" },
+    ],
   },
   {
     slug: "nmat",
@@ -280,6 +359,24 @@ export const exams: ExamInfo[] = [
           "Syllogisms",
         ],
       },
+    ],
+    topColleges: [
+      "NMIMS School of Business Management, Mumbai",
+      "NMIMS Bangalore",
+      "NMIMS Hyderabad",
+      "VIT Business School, Vellore",
+      "ICFAI Business School (IBS), Hyderabad",
+      "Alliance University, Bangalore",
+      "BML Munjal University",
+      "Woxsen University, Hyderabad",
+      "Mahindra University School of Management",
+      "Amity Global Business School",
+    ],
+    tentativeDates: [
+      { label: "Registration opens", window: "August" },
+      { label: "Registration closes", window: "Early October" },
+      { label: "Exam window", window: "October to December (multiple attempts allowed)" },
+      { label: "Result", window: "January" },
     ],
   },
   {
@@ -334,6 +431,24 @@ export const exams: ExamInfo[] = [
         ],
       },
     ],
+    topColleges: [
+      "K J Somaiya Institute of Management, Mumbai",
+      "Jaipuria Institute of Management",
+      "Great Lakes Institute of Management, Chennai",
+      "Goa Institute of Management (GIM)",
+      "Xavier Institute of Social Service (XISS), Ranchi",
+      "Institute of Management Technology (IMT), Nagpur",
+      "Alliance University, Bangalore",
+      "IFIM Business School, Bangalore",
+      "Amity Business School",
+      "GITAM School of Business",
+    ],
+    tentativeDates: [
+      { label: "Registration opens", window: "November" },
+      { label: "Registration closes", window: "Early January" },
+      { label: "Exam day", window: "Last week of January" },
+      { label: "Result", window: "February" },
+    ],
   },
   {
     slug: "mat",
@@ -376,6 +491,23 @@ export const exams: ExamInfo[] = [
         category: "Indian & Global Environment",
         topics: ["Current affairs", "Static general knowledge", "Business and economy news"],
       },
+    ],
+    topColleges: [
+      "Institute of Management Technology (IMT), Ghaziabad",
+      "Xavier Institute of Management and Entrepreneurship (XIME)",
+      "Jaipuria Institute of Management",
+      "Balaji Institute of Modern Management (BIMM), Pune",
+      "Alliance University, Bangalore",
+      "ICFAI Business School (IBS)",
+      "Amity Business School",
+      "Fore School of Management, Delhi",
+      "Loyola Institute of Business Administration (LIBA), Chennai",
+      "Symbiosis Institute of Management Studies (SIMS), Pune",
+    ],
+    tentativeDates: [
+      { label: "Test windows", window: "Runs 4 times a year — February, May, September, December" },
+      { label: "Registration", window: "Closes ~1–2 weeks before each test window" },
+      { label: "Result", window: "~2–3 weeks after each test window" },
     ],
   },
   {
@@ -425,6 +557,23 @@ export const exams: ExamInfo[] = [
           "Data interpretation and data sufficiency",
         ],
       },
+    ],
+    topColleges: [
+      "Great Lakes Institute of Management, Chennai",
+      "Loyola Institute of Business Administration (LIBA), Chennai",
+      "Xavier Institute of Management and Entrepreneurship (XIME)",
+      "T A Pai Management Institute (TAPMI), Manipal",
+      "Alliance University, Bangalore",
+      "Christ University, Bangalore",
+      "IFIM Business School, Bangalore",
+      "Jaipuria Institute of Management",
+      "Fore School of Management, Delhi",
+      "K J Somaiya Institute of Management, Mumbai",
+    ],
+    tentativeDates: [
+      { label: "Test windows", window: "Runs ~6 times a year — roughly Feb, Apr, May, Jul, Sep, Dec" },
+      { label: "Registration", window: "Closes ~1–2 weeks before each test window" },
+      { label: "Result", window: "~1–2 weeks after each test window" },
     ],
   },
 ];
