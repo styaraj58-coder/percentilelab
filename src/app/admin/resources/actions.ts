@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
@@ -53,6 +53,7 @@ export async function createResource(input: {
 
   revalidatePath("/admin/resources");
   revalidatePath("/resources");
+  revalidateTag("resources");
 }
 
 export async function deleteResource(id: string) {
@@ -62,4 +63,5 @@ export async function deleteResource(id: string) {
 
   revalidatePath("/admin/resources");
   revalidatePath("/resources");
+  revalidateTag("resources");
 }

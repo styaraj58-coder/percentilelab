@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
@@ -129,6 +130,7 @@ export async function createTest(
   }
 
   await persistTest(parsed.data, published, admin.id);
+  revalidateTag("tests");
   redirect("/admin");
 }
 
@@ -149,6 +151,7 @@ export async function updateTest(
   } catch {
     return { error: "Could not update this test." };
   }
+  revalidateTag("tests");
   redirect("/admin");
 }
 
@@ -161,6 +164,7 @@ export async function setTestPublished(testId: string, published: boolean) {
   }
 
   await prisma.test.update({ where: { id: testId }, data: { published } });
+  revalidateTag("tests");
 }
 
 export async function deleteTest(testId: string) {
@@ -172,4 +176,5 @@ export async function deleteTest(testId: string) {
   }
 
   await prisma.test.delete({ where: { id: testId } });
+  revalidateTag("tests");
 }

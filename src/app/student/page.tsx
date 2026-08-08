@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { getPublishedTests } from "@/lib/tests-data";
 
 import { startAttempt } from "./actions";
 import { StartTestButton } from "./start-test-button";
@@ -10,11 +11,7 @@ export default async function StudentDashboardPage() {
   const session = await auth();
   const studentId = session!.user.id;
 
-  const tests = await prisma.test.findMany({
-    where: { published: true },
-    orderBy: { createdAt: "desc" },
-    include: { sections: { include: { questions: true } } },
-  });
+  const tests = await getPublishedTests();
 
   const attempts = await prisma.testAttempt.findMany({
     where: { studentId, testId: { in: tests.map((t) => t.id) } },
@@ -39,7 +36,7 @@ export default async function StudentDashboardPage() {
             const inProgress = testAttempts.find((a) => !a.submittedAt);
             const completed = testAttempts.filter((a) => a.submittedAt);
             const questionCount = test.sections.reduce(
-              (sum, s) => sum + s.questions.length,
+              (sum, s) => sum + s._count.questions,
               0
             );
 

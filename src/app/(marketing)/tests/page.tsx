@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
+import { getPublishedTests } from "@/lib/tests-data";
 
 import { TestsBrowser, type TestSummary } from "./tests-browser";
 
@@ -10,16 +10,10 @@ export const metadata: Metadata = {
   description:
     "Browse timed mock tests for CAT, XAT, MAH-CET, SNAP, NMAT, CMAT, MAT, ATMA, and more — filter by entrance exam and start practicing.",
 };
-export const dynamic = "force-dynamic";
-
 export default async function TestsPage() {
   const session = await auth();
 
-  const tests = await prisma.test.findMany({
-    where: { published: true },
-    orderBy: { createdAt: "desc" },
-    include: { sections: { include: { questions: true } } },
-  });
+  const tests = await getPublishedTests();
 
   const testSummaries: TestSummary[] = tests.map((test) => ({
     id: test.id,
@@ -27,7 +21,7 @@ export default async function TestsPage() {
     description: test.description,
     targetExam: test.targetExam,
     durationMinutes: test.durationMinutes,
-    questionCount: test.sections.reduce((sum, s) => sum + s.questions.length, 0),
+    questionCount: test.sections.reduce((sum, s) => sum + s._count.questions, 0),
     sectionCount: test.sections.length,
   }));
 

@@ -1,12 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { unstable_cache } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
 
 import { ResourceTabs } from "./resource-tabs";
 
+// Cached independently of the page's own dynamic rendering (the shared
+// header calls auth() on every marketing page, which already forces
+// per-request rendering) — this specifically skips the Postgres round-trip
+// on repeat visits. Invalidated on-demand via revalidateTag("resources")
+// in src/app/admin/resources/actions.ts.
+const getResources = unstable_cache(
+  async () => prisma.resource.findMany({ orderBy: { createdAt: "desc" } }),
+  ["published-resources"],
+  { revalidate: 60, tags: ["resources"] }
+);
+
 export const metadata: Metadata = { title: "Study Resources | Percentile Lab" };
-export const dynamic = "force-dynamic";
 
 const articles = [
   {
@@ -32,9 +43,7 @@ const articles = [
 ];
 
 export default async function ResourcesPage() {
-  const resources = await prisma.resource.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const resources = await getResources();
   const videos = resources.filter((r) => r.type === "VIDEO");
   const materials = resources.filter((r) => r.type === "PDF");
 

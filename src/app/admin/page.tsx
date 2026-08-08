@@ -10,7 +10,7 @@ export default async function AdminDashboardPage() {
     where: { createdById: session!.user.id },
     orderBy: { createdAt: "desc" },
     include: {
-      sections: { include: { questions: true } },
+      sections: { select: { _count: { select: { questions: true } } } },
       _count: { select: { attempts: true } },
     },
   });
@@ -21,7 +21,7 @@ export default async function AdminDashboardPage() {
     targetExam: test.targetExam,
     durationMinutes: test.durationMinutes,
     published: test.published,
-    questionCount: test.sections.reduce((sum, s) => sum + s.questions.length, 0),
+    questionCount: test.sections.reduce((sum, s) => sum + s._count.questions, 0),
     sectionCount: test.sections.length,
     attemptCount: test._count.attempts,
   }));
