@@ -98,7 +98,7 @@ export default function HomePage() {
   return (
     <div>
       <section className="relative overflow-hidden bg-brand-cream">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 pt-16 sm:px-6 md:grid-cols-2 md:items-stretch md:gap-12 md:pt-20">
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 pb-16 pt-16 sm:px-6 md:grid-cols-2 md:items-stretch md:gap-12 md:pb-20 md:pt-20">
           <div className="flex flex-col justify-center py-6">
             <h1 className="text-4xl font-bold leading-tight text-brand-navy sm:text-5xl">
               Practice like it&apos;s exam day. <br />
