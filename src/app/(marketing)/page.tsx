@@ -6,31 +6,66 @@ const features = [
     title: "Full-length MBA entrance exam mocks",
     description:
       "Sectional MCQ tests covering Quant, Verbal, Logical Reasoning, and General Awareness — built the way CAT, XAT, MAH-CET, and every other MBA entrance exam is actually structured.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 3.5h9l3 3v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1Z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 11h6M9 14.5h6M9 18h3.5" />
+      </svg>
+    ),
   },
   {
     title: "Percentile-based scoring",
     description:
       "See exactly where you stand against every other student who has taken the same test, not just a raw score.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 19V13M11 19V5M18 19v-7" />
+      </svg>
+    ),
   },
   {
     title: "Section-wise breakdown",
     description:
       "Know which section is pulling your score down — accuracy and marks broken out by section, every time.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v9l7.8 4.5" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M20.5 12a8.5 8.5 0 1 1-4.25-7.36" />
+      </svg>
+    ),
   },
   {
     title: "Time-per-question analysis",
     description:
       "Find out where you're losing time: questions you rushed, questions you got stuck on, and questions you left blank.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
+        <circle cx="12" cy="13" r="7.75" strokeLinecap="round" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4l3 1.75M9.5 2.5h5" />
+      </svg>
+    ),
   },
   {
     title: "Answer review with solutions",
     description:
       "Go back through every question after submitting, see the correct answer, and read the explanation.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
+        <circle cx="12" cy="12" r="8.5" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 12.25 2.5 2.5 5-5.25" />
+      </svg>
+    ),
   },
   {
     title: "Timed, exam-like conditions",
     description:
       "A single running clock per test keeps practice honest and builds real exam pressure and pacing.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8 2.75h8M9.5 21.25h5" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7 2.75c0 4 1.8 6 5 6s5-2 5-6M7 21.25c0-4 1.8-6 5-6s5 2 5 6" />
+      </svg>
+    ),
   },
 ];
 
@@ -234,7 +269,9 @@ export default function HomePage() {
               key={feature.title}
               className="rounded-xl border border-black/5 bg-white p-6 shadow-sm"
             >
-              <div className="mb-4 h-1.5 w-10 rounded-full bg-brand-gold" />
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-brand-gold/15 text-brand-gold">
+                {feature.icon}
+              </div>
               <h3 className="text-lg font-semibold text-brand-navy">
                 {feature.title}
               </h3>
