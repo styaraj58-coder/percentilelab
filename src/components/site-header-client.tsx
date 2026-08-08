@@ -9,6 +9,7 @@ import { signOutAction } from "@/lib/actions";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
+  { href: "/tests", label: "Tests" },
   { href: "/pricing", label: "Pricing" },
   { href: "/exams", label: "Exams" },
   { href: "/testimonials", label: "Testimonials" },
