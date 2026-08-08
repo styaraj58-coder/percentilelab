@@ -8,6 +8,68 @@ import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = { title: "Test results | Percentile Lab" };
 
+type ReviewRow = {
+  index: number;
+  id: string;
+  text: string;
+  difficulty: number | null;
+};
+
+function QuestionSummaryTable({
+  title,
+  badgeClass,
+  rows,
+  emptyMessage,
+}: {
+  title: string;
+  badgeClass: string;
+  rows: ReviewRow[];
+  emptyMessage: string;
+}) {
+  return (
+    <div>
+      <h3 className="flex items-center gap-2 text-sm font-semibold text-brand-navy">
+        {title}
+        <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${badgeClass}`}>
+          {rows.length}
+        </span>
+      </h3>
+      <div className="mt-3 overflow-x-auto rounded-xl border border-black/5 bg-white">
+        {rows.length === 0 ? (
+          <p className="p-4 text-sm text-brand-ink/50">{emptyMessage}</p>
+        ) : (
+          <table className="w-full min-w-[280px] text-left text-sm">
+            <thead className="border-b border-black/5 bg-brand-cream/60 text-xs uppercase tracking-wide text-brand-ink/50">
+              <tr>
+                <th className="px-4 py-2.5 font-medium">Q#</th>
+                <th className="px-4 py-2.5 font-medium">Question</th>
+                <th className="px-4 py-2.5 font-medium">Difficulty %</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row.id} className="border-b border-black/5 last:border-0">
+                  <td className="px-4 py-2.5 font-medium text-brand-navy">
+                    <a href={`#q-${row.id}`} className="hover:underline">
+                      Q{row.index + 1}
+                    </a>
+                  </td>
+                  <td className="max-w-[240px] truncate px-4 py-2.5 text-brand-ink/70">
+                    {row.text}
+                  </td>
+                  <td className="px-4 py-2.5 text-brand-ink/70">
+                    {row.difficulty === null ? "—" : `${row.difficulty}%`}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default async function AttemptResultsPage({
   params,
 }: {
@@ -101,6 +163,62 @@ export default async function AttemptResultsPage({
     timeEntries.length > 0
       ? timeEntries.reduce((sum, t) => sum + t.seconds, 0) / timeEntries.length
       : 0;
+
+  // Difficulty % per question, across every submitted attempt on this test
+  // (this attempt included): correct answers ÷ attempts that answered it.
+  const correctOptionIdByQuestion = new Map(
+    allQuestions.map((q) => [q.id, q.options.find((o) => o.isCorrect)?.id])
+  );
+  const allAnswersForTest = await prisma.answer.findMany({
+    where: {
+      questionId: { in: allQuestions.map((q) => q.id) },
+      selectedOptionId: { not: null },
+      attempt: { submittedAt: { not: null } },
+    },
+    select: { questionId: true, selectedOptionId: true },
+  });
+  const attemptedCountByQuestion = new Map<string, number>();
+  const correctCountByQuestion = new Map<string, number>();
+  for (const a of allAnswersForTest) {
+    attemptedCountByQuestion.set(
+      a.questionId,
+      (attemptedCountByQuestion.get(a.questionId) ?? 0) + 1
+    );
+    if (a.selectedOptionId === correctOptionIdByQuestion.get(a.questionId)) {
+      correctCountByQuestion.set(
+        a.questionId,
+        (correctCountByQuestion.get(a.questionId) ?? 0) + 1
+      );
+    }
+  }
+  const difficultyByQuestion = new Map<string, number | null>(
+    allQuestions.map((q) => {
+      const attempted = attemptedCountByQuestion.get(q.id) ?? 0;
+      const correct = correctCountByQuestion.get(q.id) ?? 0;
+      return [q.id, attempted > 0 ? Math.round((correct / attempted) * 100) : null];
+    })
+  );
+
+  const correctQuestions: ReviewRow[] = [];
+  const incorrectQuestions: ReviewRow[] = [];
+  const notAttemptedQuestions: ReviewRow[] = [];
+  allQuestions.forEach((question, index) => {
+    const answer = answerByQuestion.get(question.id);
+    const correctOption = question.options.find((o) => o.isCorrect);
+    const entry: ReviewRow = {
+      index,
+      id: question.id,
+      text: question.text,
+      difficulty: difficultyByQuestion.get(question.id) ?? null,
+    };
+    if (!answer?.selectedOptionId) {
+      notAttemptedQuestions.push(entry);
+    } else if (answer.selectedOptionId === correctOption?.id) {
+      correctQuestions.push(entry);
+    } else {
+      incorrectQuestions.push(entry);
+    }
+  });
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
@@ -217,6 +335,37 @@ export default async function AttemptResultsPage({
         </p>
       </section>
 
+      {/* Correct / Incorrect / Not attempted */}
+      <section className="mt-10">
+        <h2 className="text-lg font-semibold text-brand-navy">
+          Question breakdown
+        </h2>
+        <p className="mt-1 text-sm text-brand-ink/60">
+          Difficulty % = students who got it right ÷ students who attempted
+          it, across every submitted attempt on this test.
+        </p>
+        <div className="mt-4 grid gap-6 lg:grid-cols-3">
+          <QuestionSummaryTable
+            title="Correct"
+            badgeClass="bg-green-100 text-green-700"
+            rows={correctQuestions}
+            emptyMessage="No correct answers yet."
+          />
+          <QuestionSummaryTable
+            title="Incorrect"
+            badgeClass="bg-red-100 text-red-700"
+            rows={incorrectQuestions}
+            emptyMessage="No incorrect answers — nice."
+          />
+          <QuestionSummaryTable
+            title="Not attempted"
+            badgeClass="bg-black/5 text-brand-ink/60"
+            rows={notAttemptedQuestions}
+            emptyMessage="You attempted every question."
+          />
+        </div>
+      </section>
+
       {/* Answer review */}
       <section className="mt-10">
         <h2 className="text-lg font-semibold text-brand-navy">Answer review</h2>
@@ -249,7 +398,10 @@ export default async function AttemptResultsPage({
                       />
                     </div>
                   )}
-                  <div className="rounded-xl border border-black/5 bg-white p-5">
+                  <div
+                    id={`q-${question.id}`}
+                    className="scroll-mt-24 rounded-xl border border-black/5 bg-white p-5"
+                  >
                 <div className="flex items-start justify-between gap-4">
                   <div className="text-sm font-medium text-brand-ink">
                     <span>Q{index + 1}. </span>
@@ -263,17 +415,28 @@ export default async function AttemptResultsPage({
                       />
                     )}
                   </div>
-                  <span
-                    className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${
-                      isSkipped
-                        ? "bg-black/5 text-brand-ink/50"
-                        : isCorrect
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {isSkipped ? "Skipped" : isCorrect ? "Correct" : "Incorrect"}
-                  </span>
+                  <div className="flex shrink-0 flex-col items-end gap-1.5">
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                        isSkipped
+                          ? "bg-black/5 text-brand-ink/50"
+                          : isCorrect
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {isSkipped ? "Skipped" : isCorrect ? "Correct" : "Incorrect"}
+                    </span>
+                    <span className="text-xs text-brand-ink/50">
+                      Difficulty:{" "}
+                      {(() => {
+                        const difficulty = difficultyByQuestion.get(question.id);
+                        return difficulty === null || difficulty === undefined
+                          ? "—"
+                          : `${difficulty}%`;
+                      })()}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="mt-3 space-y-2">
