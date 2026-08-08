@@ -198,17 +198,17 @@ export default function HomePage() {
         </div>
 
         <div className="relative z-10 mx-auto -mt-8 max-w-5xl px-4 pb-14 sm:px-6 md:-mt-10">
-          <div className="grid grid-cols-2 gap-6 rounded-2xl border border-black/5 bg-white p-6 shadow-lg sm:grid-cols-4 sm:p-7">
+          <div className="grid grid-cols-2 gap-6 rounded-2xl bg-brand-navy p-6 shadow-lg sm:grid-cols-4 sm:p-7">
             {heroHighlights.map((item) => (
               <div key={item.title} className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-gold/15 text-brand-gold">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-brand-gold">
                   {item.icon}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-brand-navy">
+                  <p className="text-sm font-semibold text-white">
                     {item.title}
                   </p>
-                  <p className="mt-0.5 text-xs text-brand-ink/60">
+                  <p className="mt-0.5 text-xs text-white/60">
                     {item.description}
                   </p>
                 </div>
