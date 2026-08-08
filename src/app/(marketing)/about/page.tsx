@@ -18,15 +18,15 @@ export default function AboutPage() {
           Percentile Lab exists because generic mock tests don&apos;t tell
           you what actually went wrong. A raw score doesn&apos;t tell you
           whether you lost marks to a weak section, slow pacing, or silly
-          mistakes on questions you already knew how to solve — and every
+          mistakes on questions you already knew how to solve: and every
           MBA entrance exam scores you a little differently, so a mock that
           isn&apos;t built around your exam&apos;s actual pattern isn&apos;t
           telling you much at all.
         </p>
         <p>
           Every test on this platform is built around the structure of the
-          exam you&apos;re actually taking — CAT, XAT, MAH-CET, SNAP, NMAT,
-          CMAT, MAT, ATMA, and more — timed, sectional, and scored the way
+          exam you&apos;re actually taking: CAT, XAT, MAH-CET, SNAP, NMAT,
+          CMAT, MAT, ATMA, and more: timed, sectional, and scored the way
           the real exam scores you. But the part that actually moves your
           percentile happens after you submit: a full breakdown of your
           accuracy by section, how long you spent on every single question,
@@ -35,7 +35,7 @@ export default function AboutPage() {
         </p>
         <p>
           Whether you&apos;re just starting your prep or in the final
-          stretch before exam day, the idea is the same — practice with
+          stretch before exam day, the idea is the same: practice with
           intent, and let the data tell you exactly what to fix next.
         </p>
       </div>
