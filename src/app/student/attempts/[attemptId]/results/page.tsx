@@ -165,7 +165,8 @@ export default async function AttemptResultsPage({
       : 0;
 
   // Difficulty % per question, across every submitted attempt on this test
-  // (this attempt included): correct answers ÷ attempts that answered it.
+  // (this attempt included): wrong answers ÷ attempts that answered it —
+  // higher % means more students who tried it got it wrong.
   const correctOptionIdByQuestion = new Map(
     allQuestions.map((q) => [q.id, q.options.find((o) => o.isCorrect)?.id])
   );
@@ -195,7 +196,8 @@ export default async function AttemptResultsPage({
     allQuestions.map((q) => {
       const attempted = attemptedCountByQuestion.get(q.id) ?? 0;
       const correct = correctCountByQuestion.get(q.id) ?? 0;
-      return [q.id, attempted > 0 ? Math.round((correct / attempted) * 100) : null];
+      const incorrect = attempted - correct;
+      return [q.id, attempted > 0 ? Math.round((incorrect / attempted) * 100) : null];
     })
   );
 
@@ -341,7 +343,7 @@ export default async function AttemptResultsPage({
           Question breakdown
         </h2>
         <p className="mt-1 text-sm text-brand-ink/60">
-          Difficulty % = students who got it right ÷ students who attempted
+          Difficulty % = students who got it wrong ÷ students who attempted
           it, across every submitted attempt on this test.
         </p>
         <div className="mt-4 grid gap-6 lg:grid-cols-3">
