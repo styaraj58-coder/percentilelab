@@ -53,17 +53,59 @@ const steps = [
   },
 ];
 
+const heroHighlights = [
+  {
+    title: "Every major exam",
+    description: "CAT, XAT, MAH-CET, and more.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.25 4 9.5l8 3.25 8-3.25-8-3.25Z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 11v4.25c0 .9 2 2.25 4.5 2.25s4.5-1.35 4.5-2.25V11" />
+      </svg>
+    ),
+  },
+  {
+    title: "Timed mock tests",
+    description: "Real exam pressure and pacing.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
+        <circle cx="12" cy="13" r="7.25" strokeLinecap="round" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9.5V13l2.5 1.5M9.5 2.5h5" />
+      </svg>
+    ),
+  },
+  {
+    title: "Percentile analytics",
+    description: "Section-wise, question-by-question.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 19V10M12 19V5M19 19v-6" />
+      </svg>
+    ),
+  },
+  {
+    title: "Full answer review",
+    description: "Explanations after every test.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
+        <path strokeLinecap="round" strokeLinejoin="round" d="m5 12.5 4.5 4.5L19 7" />
+      </svg>
+    ),
+  },
+];
+
 export default function HomePage() {
   return (
     <div>
       <section className="relative overflow-hidden bg-brand-cream">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 md:grid-cols-2 md:py-24">
-          <div>
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 pt-16 sm:px-6 md:grid-cols-2 md:items-stretch md:gap-12 md:pt-20">
+          <div className="flex flex-col justify-center py-6">
             <h1 className="text-4xl font-bold leading-tight text-brand-navy sm:text-5xl">
               Practice like it&apos;s exam day. <br />
               Know your <span className="text-brand-gold">percentile</span>{" "}
               before you walk in.
             </h1>
+            <div className="mt-5 h-1.5 w-16 rounded-full bg-brand-gold" />
             <p className="mt-5 max-w-xl text-base text-brand-ink/70 sm:text-lg">
               Percentile Lab gives you timed mock tests for every major MBA
               entrance exam — CAT, XAT, MAH-CET, SNAP, NMAT, CMAT, MAT, and
@@ -73,50 +115,105 @@ export default function HomePage() {
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 href="/register"
-                className="rounded-md bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
+                className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
               >
                 Start practicing free
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
               </Link>
               <Link
                 href="/about"
-                className="rounded-md border border-brand-navy/20 px-6 py-3 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy/5"
+                className="inline-flex items-center gap-2 rounded-full border border-brand-navy/20 px-6 py-3.5 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy/5"
               >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-4 w-4">
+                  <circle cx="12" cy="12" r="8.5" />
+                  <path fill="currentColor" stroke="none" d="M10.5 9.2v5.6l4.7-2.8-4.7-2.8Z" />
+                </svg>
                 Learn more
               </Link>
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-md">
-            <div className="overflow-hidden rounded-3xl shadow-xl shadow-brand-navy/10">
+          <div className="relative py-6 md:py-10">
+            <div className="relative mx-auto h-[380px] w-full max-w-md overflow-hidden rounded-3xl shadow-xl shadow-brand-navy/10 md:h-full">
               <Image
                 src="/images/hero-banner.jpg"
                 alt="Student reviewing her mock test performance"
-                width={900}
-                height={1267}
-                className="h-auto w-full object-cover"
+                fill
+                sizes="(min-width: 768px) 40vw, 90vw"
+                className="object-cover"
                 priority
               />
             </div>
 
-            <div className="absolute -left-6 top-8 hidden w-44 rounded-xl border border-black/5 bg-white p-3 shadow-lg sm:block">
+            <div className="absolute -left-4 top-8 hidden w-48 rounded-xl border border-black/5 bg-white p-3.5 shadow-lg sm:block">
               <p className="text-[11px] font-medium text-brand-ink/50">
                 Your progress
               </p>
-              <p className="mt-1 text-lg font-bold text-brand-navy">
-                92<span className="text-xs font-medium">th percentile</span>
-              </p>
-              <p className="text-[11px] font-medium text-green-600">
+              <div className="mt-1.5 flex items-end justify-between gap-2">
+                <svg viewBox="0 0 80 32" className="h-8 w-14 text-brand-navy">
+                  <polyline
+                    points="0,26 12,22 24,24 36,14 48,17 60,7 80,2"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <p className="text-lg font-bold text-brand-navy">
+                  92<span className="text-xs font-medium">th</span>
+                </p>
+              </div>
+              <p className="mt-1 text-[11px] font-medium text-green-600">
                 +18 in 30 days
               </p>
             </div>
 
-            <div className="absolute -bottom-6 -right-4 hidden w-40 rounded-xl border border-black/5 bg-white p-3 shadow-lg sm:block">
+            <div className="absolute bottom-16 -right-4 hidden w-44 rounded-xl border border-black/5 bg-white p-3.5 shadow-lg sm:block">
               <p className="text-[11px] font-medium text-brand-ink/50">
                 Mock test analysis
               </p>
-              <p className="mt-1 text-lg font-bold text-brand-gold">78%</p>
-              <p className="text-[11px] text-brand-ink/60">accuracy score</p>
+              <div className="mt-1.5 flex items-center gap-3">
+                <div
+                  className="h-11 w-11 shrink-0 rounded-full"
+                  style={{
+                    background:
+                      "conic-gradient(var(--color-brand-navy) 0% 78%, rgba(0,0,0,0.08) 78% 100%)",
+                  }}
+                >
+                  <div className="m-1 flex h-9 w-9 items-center justify-center rounded-full bg-white text-[10px] font-bold text-brand-navy">
+                    78%
+                  </div>
+                </div>
+                <p className="text-[11px] text-brand-ink/60">
+                  accuracy
+                  <br />
+                  score
+                </p>
+              </div>
             </div>
+          </div>
+        </div>
+
+        <div className="relative z-10 mx-auto -mt-8 max-w-5xl px-4 pb-14 sm:px-6 md:-mt-10">
+          <div className="grid grid-cols-2 gap-6 rounded-2xl border border-black/5 bg-white p-6 shadow-lg sm:grid-cols-4 sm:p-7">
+            {heroHighlights.map((item) => (
+              <div key={item.title} className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-gold/15 text-brand-gold">
+                  {item.icon}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-brand-navy">
+                    {item.title}
+                  </p>
+                  <p className="mt-0.5 text-xs text-brand-ink/60">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
