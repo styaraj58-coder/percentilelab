@@ -6,69 +6,12 @@ import { auth } from "@/auth";
 import { MathText } from "@/components/math-text";
 import { prisma } from "@/lib/prisma";
 
+import {
+  QuestionSummaryTable,
+  type ReviewRow,
+} from "./question-summary-table";
+
 export const metadata: Metadata = { title: "Test results | Percentile Lab" };
-
-type ReviewRow = {
-  index: number;
-  id: string;
-  text: string;
-  difficulty: number | null;
-};
-
-function QuestionSummaryTable({
-  title,
-  badgeClass,
-  rows,
-  emptyMessage,
-}: {
-  title: string;
-  badgeClass: string;
-  rows: ReviewRow[];
-  emptyMessage: string;
-}) {
-  return (
-    <div>
-      <h3 className="flex items-center gap-2 text-sm font-semibold text-brand-navy">
-        {title}
-        <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${badgeClass}`}>
-          {rows.length}
-        </span>
-      </h3>
-      <div className="mt-3 overflow-x-auto rounded-xl border border-black/5 bg-white">
-        {rows.length === 0 ? (
-          <p className="p-4 text-sm text-brand-ink/50">{emptyMessage}</p>
-        ) : (
-          <table className="w-full min-w-[280px] text-left text-sm">
-            <thead className="border-b border-black/5 bg-brand-cream/60 text-xs uppercase tracking-wide text-brand-ink/50">
-              <tr>
-                <th className="px-4 py-2.5 font-medium">Q#</th>
-                <th className="px-4 py-2.5 font-medium">Question</th>
-                <th className="px-4 py-2.5 font-medium">Difficulty %</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.id} className="border-b border-black/5 last:border-0">
-                  <td className="px-4 py-2.5 font-medium text-brand-navy">
-                    <a href={`#q-${row.id}`} className="hover:underline">
-                      Q{row.index + 1}
-                    </a>
-                  </td>
-                  <td className="max-w-[240px] truncate px-4 py-2.5 text-brand-ink/70">
-                    {row.text}
-                  </td>
-                  <td className="px-4 py-2.5 text-brand-ink/70">
-                    {row.difficulty === null ? "—" : `${row.difficulty}%`}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
-    </div>
-  );
-}
 
 export default async function AttemptResultsPage({
   params,
@@ -311,7 +254,7 @@ export default async function AttemptResultsPage({
           Difficulty % = students who got it wrong ÷ students who attempted
           it, across every submitted attempt on this test.
         </p>
-        <div className="mt-4 grid gap-6 lg:grid-cols-3">
+        <div className="mt-4 grid items-start gap-6 sm:grid-cols-3">
           <QuestionSummaryTable
             title="Correct"
             badgeClass="bg-green-100 text-green-700"
