@@ -7,6 +7,7 @@ export type ReviewRow = {
   id: string;
   text: string;
   difficulty: number | null;
+  seconds: number;
 };
 
 const PAGE_SIZE = 5;
@@ -43,6 +44,7 @@ export function QuestionSummaryTable({
               <tr>
                 <th className="px-4 py-2.5 font-medium">Q#</th>
                 <th className="px-4 py-2.5 font-medium">Question</th>
+                <th className="px-4 py-2.5 font-medium">Time</th>
                 <th className="px-4 py-2.5 font-medium">Difficulty %</th>
               </tr>
             </thead>
@@ -57,6 +59,7 @@ export function QuestionSummaryTable({
                   <td className="max-w-[240px] truncate px-4 py-2.5 text-brand-ink/70">
                     {row.text}
                   </td>
+                  <td className="px-4 py-2.5 text-brand-ink/70">{row.seconds}s</td>
                   <td className="px-4 py-2.5 text-brand-ink/70">
                     {row.difficulty === null ? "—" : `${row.difficulty}%`}
                   </td>
