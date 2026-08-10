@@ -302,41 +302,6 @@ export default async function AttemptResultsPage({
         </div>
       </section>
 
-      {/* Time-per-question */}
-      <section className="mt-10">
-        <h2 className="text-lg font-semibold text-brand-navy">
-          Time per question
-        </h2>
-        <p className="mt-1 text-sm text-brand-ink/60">
-          Average: {Math.round(avgTime)}s per question
-        </p>
-        <div className="mt-4 grid grid-cols-6 gap-2 sm:grid-cols-8 md:grid-cols-10">
-          {timeEntries.map((t, index) => {
-            const overAverage = avgTime > 0 && t.seconds > avgTime * 1.6;
-            const skipped = t.seconds === 0;
-            return (
-              <div
-                key={t.id}
-                title={`Q${index + 1}: ${t.seconds}s — ${t.text}`}
-                className={`flex h-14 flex-col items-center justify-center rounded-md text-xs font-semibold ${
-                  skipped
-                    ? "bg-black/5 text-brand-ink/40"
-                    : overAverage
-                      ? "bg-red-50 text-red-700"
-                      : "bg-brand-navy/5 text-brand-navy"
-                }`}
-              >
-                <span>Q{index + 1}</span>
-                <span className="font-normal">{t.seconds}s</span>
-              </div>
-            );
-          })}
-        </div>
-        <p className="mt-2 text-xs text-brand-ink/50">
-          Red = well above your average time · Grey = skipped
-        </p>
-      </section>
-
       {/* Correct / Incorrect / Not attempted */}
       <section className="mt-10">
         <h2 className="text-lg font-semibold text-brand-navy">
@@ -499,6 +464,41 @@ export default async function AttemptResultsPage({
             });
           })()}
         </div>
+      </section>
+
+      {/* Time-per-question */}
+      <section className="mt-10">
+        <h2 className="text-lg font-semibold text-brand-navy">
+          Time per question
+        </h2>
+        <p className="mt-1 text-sm text-brand-ink/60">
+          Average: {Math.round(avgTime)}s per question
+        </p>
+        <div className="mt-4 grid grid-cols-6 gap-2 sm:grid-cols-8 md:grid-cols-10">
+          {timeEntries.map((t, index) => {
+            const overAverage = avgTime > 0 && t.seconds > avgTime * 1.6;
+            const skipped = t.seconds === 0;
+            return (
+              <div
+                key={t.id}
+                title={`Q${index + 1}: ${t.seconds}s — ${t.text}`}
+                className={`flex h-14 flex-col items-center justify-center rounded-md text-xs font-semibold ${
+                  skipped
+                    ? "bg-black/5 text-brand-ink/40"
+                    : overAverage
+                      ? "bg-red-50 text-red-700"
+                      : "bg-brand-navy/5 text-brand-navy"
+                }`}
+              >
+                <span>Q{index + 1}</span>
+                <span className="font-normal">{t.seconds}s</span>
+              </div>
+            );
+          })}
+        </div>
+        <p className="mt-2 text-xs text-brand-ink/50">
+          Red = well above your average time · Grey = skipped
+        </p>
       </section>
     </div>
   );
