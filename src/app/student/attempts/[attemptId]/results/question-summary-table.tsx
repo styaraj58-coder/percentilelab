@@ -35,32 +35,28 @@ export function QuestionSummaryTable({
           {rows.length}
         </span>
       </h3>
-      <div className="mt-3 flex-1 overflow-x-auto rounded-xl border border-black/5 bg-white">
+      <div className="mt-3 flex-1 rounded-xl border border-black/5 bg-white">
         {rows.length === 0 ? (
           <p className="p-4 text-sm text-brand-ink/50">{emptyMessage}</p>
         ) : (
-          <table className="w-full min-w-[280px] text-left text-sm">
+          <table className="w-full table-fixed text-left text-sm">
             <thead className="border-b border-black/5 bg-brand-cream/60 text-xs uppercase tracking-wide text-brand-ink/50">
               <tr>
-                <th className="px-4 py-2.5 font-medium">Q#</th>
-                <th className="px-4 py-2.5 font-medium">Question</th>
-                <th className="px-4 py-2.5 font-medium">Time</th>
-                <th className="px-4 py-2.5 font-medium">Difficulty %</th>
+                <th className="w-1/3 px-3 py-2.5 font-medium">Q#</th>
+                <th className="w-1/3 px-3 py-2.5 font-medium">Time</th>
+                <th className="w-1/3 px-3 py-2.5 font-medium">Difficulty</th>
               </tr>
             </thead>
             <tbody>
               {visibleRows.map((row) => (
                 <tr key={row.id} className="border-b border-black/5 last:border-0">
-                  <td className="px-4 py-2.5 font-medium text-brand-navy">
+                  <td className="px-3 py-2.5 font-medium text-brand-navy">
                     <a href={`#q-${row.id}`} className="hover:underline">
                       Q{row.index + 1}
                     </a>
                   </td>
-                  <td className="max-w-[240px] truncate px-4 py-2.5 text-brand-ink/70">
-                    {row.text}
-                  </td>
-                  <td className="px-4 py-2.5 text-brand-ink/70">{row.seconds}s</td>
-                  <td className="px-4 py-2.5 text-brand-ink/70">
+                  <td className="px-3 py-2.5 text-brand-ink/70">{row.seconds}s</td>
+                  <td className="px-3 py-2.5 text-brand-ink/70">
                     {row.difficulty === null ? "—" : `${row.difficulty}%`}
                   </td>
                 </tr>
