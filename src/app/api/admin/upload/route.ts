@@ -50,19 +50,27 @@ export async function POST(request: Request) {
   const filename = `${randomUUID()}.${extension}`;
   const bytes = Buffer.from(await file.arrayBuffer());
 
-  const supabase = getSupabaseAdmin();
-  const { error } = await supabase.storage
-    .from(UPLOADS_BUCKET)
-    .upload(filename, bytes, { contentType: file.type });
+  try {
+    const supabase = getSupabaseAdmin();
+    const { error } = await supabase.storage
+      .from(UPLOADS_BUCKET)
+      .upload(filename, bytes, { contentType: file.type });
 
-  if (error) {
+    if (error) {
+      console.error("Supabase Storage upload failed:", error.message);
+      return NextResponse.json(
+        { error: "Failed to store the uploaded file" },
+        { status: 500 }
+      );
+    }
+
+    const { data: pub } = supabase.storage.from(UPLOADS_BUCKET).getPublicUrl(filename);
+    return NextResponse.json({ url: pub.publicUrl });
+  } catch (err) {
+    console.error("Upload route misconfigured:", err);
     return NextResponse.json(
-      { error: "Failed to store the uploaded file" },
+      { error: "File storage is not configured on the server" },
       { status: 500 }
     );
   }
-
-  const { data: pub } = supabase.storage.from(UPLOADS_BUCKET).getPublicUrl(filename);
-
-  return NextResponse.json({ url: pub.publicUrl });
 }
