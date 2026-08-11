@@ -124,8 +124,9 @@ export function ExamRunner({ data }: { data: ExamData }) {
         ...prev,
         [questionId]: (prev[questionId] ?? 0) + elapsedSeconds,
       }));
-      void saveAnswer(data.attemptId, questionId, selectedOptionId, elapsedSeconds);
+      return saveAnswer(data.attemptId, questionId, selectedOptionId, elapsedSeconds);
     }
+    return undefined;
   }
 
   function handleSubmit(auto: boolean) {
@@ -135,8 +136,10 @@ export function ExamRunner({ data }: { data: ExamData }) {
       return;
     }
     submittedRef.current = true;
-    flushTime();
     startTransition(async () => {
+      // Wait for the last question's time/answer to actually persist before
+      // grading reads it back — otherwise a race could silently drop it.
+      await flushTime();
       await submitAttempt(data.attemptId);
     });
   }

@@ -34,39 +34,30 @@ export default async function AttemptResultsPage({
     redirect(`/exam/${attemptId}`);
   }
 
-  const test = await prisma.test.findUnique({
-    where: { id: attempt.testId },
-    include: {
-      sections: {
-        orderBy: { order: "asc" },
-        include: {
-          questions: {
-            orderBy: { order: "asc" },
-            include: {
-              options: { orderBy: { order: "asc" } },
-              passage: { select: { id: true, title: true, text: true } },
+  const [test, answers] = await Promise.all([
+    prisma.test.findUnique({
+      where: { id: attempt.testId },
+      include: {
+        sections: {
+          orderBy: { order: "asc" },
+          include: {
+            questions: {
+              orderBy: { order: "asc" },
+              include: {
+                options: { orderBy: { order: "asc" } },
+                passage: { select: { id: true, title: true, text: true } },
+              },
             },
           },
         },
       },
-    },
-  });
+    }),
+    prisma.answer.findMany({ where: { attemptId } }),
+  ]);
 
   if (!test) notFound();
 
-  const answers = await prisma.answer.findMany({ where: { attemptId } });
   const answerByQuestion = new Map(answers.map((a) => [a.questionId, a]));
-
-  const otherAttempts = await prisma.testAttempt.findMany({
-    where: { testId: test.id, submittedAt: { not: null } },
-    select: { score: true },
-  });
-  const allScores = otherAttempts.map((a) => a.score ?? 0);
-  const myScore = attempt.score ?? 0;
-  const below = allScores.filter((s) => s < myScore).length;
-  const percentile = allScores.length
-    ? Math.round((below / allScores.length) * 1000) / 10
-    : 0;
 
   const sectionStats = test.sections.map((section) => {
     let correctMarks = 0;
@@ -109,14 +100,26 @@ export default async function AttemptResultsPage({
   const correctOptionIdByQuestion = new Map(
     allQuestions.map((q) => [q.id, q.options.find((o) => o.isCorrect)?.id])
   );
-  const allAnswersForTest = await prisma.answer.findMany({
-    where: {
-      questionId: { in: allQuestions.map((q) => q.id) },
-      selectedOptionId: { not: null },
-      attempt: { submittedAt: { not: null } },
-    },
-    select: { questionId: true, selectedOptionId: true },
-  });
+  const [otherAttempts, allAnswersForTest] = await Promise.all([
+    prisma.testAttempt.findMany({
+      where: { testId: test.id, submittedAt: { not: null } },
+      select: { score: true },
+    }),
+    prisma.answer.findMany({
+      where: {
+        questionId: { in: allQuestions.map((q) => q.id) },
+        selectedOptionId: { not: null },
+        attempt: { submittedAt: { not: null } },
+      },
+      select: { questionId: true, selectedOptionId: true },
+    }),
+  ]);
+  const allScores = otherAttempts.map((a) => a.score ?? 0);
+  const myScore = attempt.score ?? 0;
+  const below = allScores.filter((s) => s < myScore).length;
+  const percentile = allScores.length
+    ? Math.round((below / allScores.length) * 1000) / 10
+    : 0;
   const attemptedCountByQuestion = new Map<string, number>();
   const correctCountByQuestion = new Map<string, number>();
   for (const a of allAnswersForTest) {
