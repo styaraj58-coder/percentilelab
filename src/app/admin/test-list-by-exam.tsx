@@ -16,6 +16,7 @@ export type TestRow = {
   questionCount: number;
   sectionCount: number;
   attemptCount: number;
+  createdByName: string;
 };
 
 export function TestListByExam({ tests }: { tests: TestRow[] }) {
@@ -38,9 +39,9 @@ export function TestListByExam({ tests }: { tests: TestRow[] }) {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-brand-navy">Your tests</h1>
+          <h1 className="text-2xl font-bold text-brand-navy">All tests</h1>
           <p className="mt-1 text-sm text-brand-ink/60">
-            {tests.length} test{tests.length === 1 ? "" : "s"} created
+            {tests.length} test{tests.length === 1 ? "" : "s"} across every admin
           </p>
         </div>
         <Link
@@ -91,7 +92,7 @@ export function TestListByExam({ tests }: { tests: TestRow[] }) {
         <div className="mt-8 rounded-xl border border-dashed border-brand-navy/20 bg-white p-10 text-center">
           <p className="text-brand-ink/70">
             {activeExam === "All"
-              ? "You haven't created any tests yet."
+              ? "No tests have been created yet."
               : `No tests yet for ${activeExam}.`}
           </p>
           <Link
@@ -110,6 +111,7 @@ export function TestListByExam({ tests }: { tests: TestRow[] }) {
               <tr>
                 <th className="px-5 py-3 font-medium">Title</th>
                 <th className="px-5 py-3 font-medium">Exam</th>
+                <th className="px-5 py-3 font-medium">Created by</th>
                 <th className="px-5 py-3 font-medium">Questions</th>
                 <th className="px-5 py-3 font-medium">Duration</th>
                 <th className="px-5 py-3 font-medium">Attempts</th>
@@ -124,6 +126,7 @@ export function TestListByExam({ tests }: { tests: TestRow[] }) {
                     {test.title}
                   </td>
                   <td className="px-5 py-4 text-brand-ink/70">{test.targetExam}</td>
+                  <td className="px-5 py-4 text-brand-ink/70">{test.createdByName}</td>
                   <td className="px-5 py-4 text-brand-ink/70">
                     {test.questionCount} ({test.sectionCount} sections)
                   </td>

@@ -28,7 +28,7 @@ async function persistTest(
 
     if (id) {
       const existing = await tx.test.findUnique({ where: { id } });
-      if (!existing || existing.createdById !== createdById) {
+      if (!existing) {
         throw new Error("Test not found");
       }
       await tx.test.update({
@@ -156,10 +156,10 @@ export async function updateTest(
 }
 
 export async function setTestPublished(testId: string, published: boolean) {
-  const admin = await requireAdmin();
+  await requireAdmin();
 
   const test = await prisma.test.findUnique({ where: { id: testId } });
-  if (!test || test.createdById !== admin.id) {
+  if (!test) {
     throw new Error("Test not found");
   }
 
@@ -168,10 +168,10 @@ export async function setTestPublished(testId: string, published: boolean) {
 }
 
 export async function deleteTest(testId: string) {
-  const admin = await requireAdmin();
+  await requireAdmin();
 
   const test = await prisma.test.findUnique({ where: { id: testId } });
-  if (!test || test.createdById !== admin.id) {
+  if (!test) {
     throw new Error("Test not found");
   }
 

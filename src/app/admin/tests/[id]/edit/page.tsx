@@ -35,7 +35,7 @@ export default async function EditTestPage({
     },
   });
 
-  if (!test || test.createdById !== session.user.id) {
+  if (!test) {
     notFound();
   }
 

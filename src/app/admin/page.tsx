@@ -1,15 +1,12 @@
-import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
 import { TestListByExam, type TestRow } from "./test-list-by-exam";
 
 export default async function AdminDashboardPage() {
-  const session = await auth();
-
   const tests = await prisma.test.findMany({
-    where: { createdById: session!.user.id },
     orderBy: { createdAt: "desc" },
     include: {
+      createdBy: { select: { name: true } },
       sections: { select: { _count: { select: { questions: true } } } },
       _count: { select: { attempts: true } },
     },
@@ -24,6 +21,7 @@ export default async function AdminDashboardPage() {
     questionCount: test.sections.reduce((sum, s) => sum + s._count.questions, 0),
     sectionCount: test.sections.length,
     attemptCount: test._count.attempts,
+    createdByName: test.createdBy.name,
   }));
 
   return <TestListByExam tests={rows} />;

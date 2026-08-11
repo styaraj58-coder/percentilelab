@@ -27,7 +27,7 @@ export default async function TestResultsPage({
     },
   });
 
-  if (!test || test.createdById !== session.user.id) {
+  if (!test) {
     notFound();
   }
 
