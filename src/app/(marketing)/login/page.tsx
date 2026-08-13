@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Log in | Percentile Lab" };
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ registered?: string }>;
+  searchParams: Promise<{ registered?: string; reset?: string }>;
 }) {
   const params = await searchParams;
 
@@ -19,7 +19,10 @@ export default async function LoginPage({
       </p>
 
       <div className="mt-8">
-        <LoginForm registered={params.registered === "1"} />
+        <LoginForm
+          registered={params.registered === "1"}
+          reset={params.reset === "1"}
+        />
       </div>
     </div>
   );

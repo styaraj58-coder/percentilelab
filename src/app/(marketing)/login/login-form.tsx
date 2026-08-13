@@ -5,7 +5,13 @@ import { useActionState, useState } from "react";
 
 import { loginAction } from "./actions";
 
-export function LoginForm({ registered }: { registered: boolean }) {
+export function LoginForm({
+  registered,
+  reset,
+}: {
+  registered: boolean;
+  reset?: boolean;
+}) {
   const [state, formAction, pending] = useActionState(loginAction, undefined);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -14,6 +20,11 @@ export function LoginForm({ registered }: { registered: boolean }) {
       {registered && (
         <p className="rounded-md bg-brand-cream px-4 py-3 text-sm text-brand-navy">
           Account created — sign in below.
+        </p>
+      )}
+      {reset && (
+        <p className="rounded-md bg-brand-cream px-4 py-3 text-sm text-brand-navy">
+          Password reset — sign in with your new password.
         </p>
       )}
       {state?.error && (
@@ -37,9 +48,17 @@ export function LoginForm({ registered }: { registered: boolean }) {
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-brand-ink">
-          Password
-        </label>
+        <div className="flex items-center justify-between">
+          <label htmlFor="password" className="block text-sm font-medium text-brand-ink">
+            Password
+          </label>
+          <Link
+            href="/forgot-password"
+            className="text-xs font-medium text-brand-navy hover:text-brand-gold"
+          >
+            Forgot password?
+          </Link>
+        </div>
         <div className="relative">
           <input
             id="password"

@@ -30,6 +30,23 @@ model User {
   testsCreated Test[]        @relation("TestCreatedBy")
   attempts     TestAttempt[]
   resourcesCreated Resource[] @relation("ResourceCreatedBy")
+  passwordResetTokens PasswordResetToken[]
+}
+
+// Forgot-password flow: a short-lived, single-use token emailed to the
+// user. Only the SHA-256 hash is stored — the raw token (in the emailed
+// link) is never persisted, so a DB leak alone can't be used to reset
+// anyone's password.
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
 }
 
 model Test {

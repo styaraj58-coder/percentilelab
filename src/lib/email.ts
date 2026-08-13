@@ -43,3 +43,36 @@ export async function sendNewStudentNotification(student: {
     console.error("Failed to send new-student notification email:", error);
   }
 }
+
+export async function sendPasswordResetEmail(user: {
+  name: string;
+  email: string;
+  resetUrl: string;
+}) {
+  if (!resend) {
+    console.warn("Skipping password reset email: RESEND_API_KEY not set.");
+    return;
+  }
+
+  try {
+    await resend.emails.send({
+      from: process.env.RESEND_FROM_EMAIL || "Percentile Lab <onboarding@resend.dev>",
+      to: user.email,
+      subject: "Reset your Percentile Lab password",
+      text: [
+        `Hi ${user.name},`,
+        "",
+        "We got a request to reset your Percentile Lab password. Click the link below to choose a new one — it expires in 1 hour:",
+        "",
+        user.resetUrl,
+        "",
+        "If you didn't request this, you can safely ignore this email.",
+      ].join("\n"),
+    });
+  } catch (error) {
+    // Never let a failed email surface details to the caller — the
+    // forgot-password flow always shows the same generic message either
+    // way, to avoid leaking which emails have accounts.
+    console.error("Failed to send password reset email:", error);
+  }
+}
