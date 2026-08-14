@@ -73,7 +73,7 @@ export function TestsBrowser({
               key={test.id}
               className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-black/5 bg-white p-6"
             >
-              <div>
+              <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <h2 className="text-lg font-semibold text-brand-navy">
                     {test.title}
@@ -94,13 +94,13 @@ export function TestsBrowser({
               </div>
 
               {isAuthenticated ? (
-                <form action={startAttempt.bind(null, test.id)}>
+                <form action={startAttempt.bind(null, test.id)} className="shrink-0">
                   <StartTestButton label="Start test" />
                 </form>
               ) : (
                 <Link
                   href="/register"
-                  className="rounded-md bg-brand-navy px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
+                  className="shrink-0 rounded-md bg-brand-navy px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
                 >
                   Get started free
                 </Link>
