@@ -133,58 +133,52 @@ export default function HomePage() {
   return (
     <div>
       <section className="relative overflow-hidden bg-brand-cream">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 pb-16 pt-16 sm:px-6 md:grid-cols-2 md:items-stretch md:gap-12 md:pb-20 md:pt-20">
-          <div className="flex flex-col justify-center py-6">
-            <h1 className="text-4xl font-bold leading-tight text-brand-navy sm:text-5xl">
-              Practice like it&apos;s exam day. <br />
-              Know your <span className="text-brand-gold">percentile</span>{" "}
-              before you walk in.
-            </h1>
-            <div className="mt-5 h-1.5 w-16 rounded-full bg-brand-gold" />
-            <p className="mt-5 max-w-xl text-base text-brand-ink/70 sm:text-lg">
-              Percentile Lab gives you timed mock tests for every major MBA
-              entrance exam — CAT, XAT, MAH-CET, SNAP, NMAT, CMAT, MAT, and
-              ATMA — with section-wise scoring, time-per-question analysis,
-              and full answer reviews.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Link
-                href="/register"
-                className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
-              >
-                Start practicing free
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </Link>
-              <Link
-                href="/about"
-                className="inline-flex items-center gap-2 rounded-full border border-brand-navy/20 px-6 py-3.5 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy/5"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-4 w-4">
-                  <circle cx="12" cy="12" r="8.5" />
-                  <path fill="currentColor" stroke="none" d="M10.5 9.2v5.6l4.7-2.8-4.7-2.8Z" />
-                </svg>
-                Learn more
-              </Link>
-            </div>
-          </div>
+        <video
+          src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/47177fc5-2b48-4232-bf03-f5938c108529.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover opacity-30"
+        />
 
-          <div className="relative py-6 md:py-10">
-            <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-3xl bg-black shadow-xl shadow-brand-navy/10">
-              <video
-                src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/47177fc5-2b48-4232-bf03-f5938c108529.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="h-full w-full object-contain"
-              />
-            </div>
+        <div className="relative z-10 mx-auto flex min-h-[520px] max-w-3xl flex-col items-center px-4 pb-16 pt-16 text-center sm:px-6 md:min-h-[600px] md:pb-20 md:pt-20">
+          <h1 className="text-4xl font-bold leading-tight text-brand-navy sm:text-5xl">
+            Practice like it&apos;s exam day. <br />
+            Know your <span className="text-brand-gold">percentile</span>{" "}
+            before you walk in.
+          </h1>
+          <div className="mt-5 h-1.5 w-16 rounded-full bg-brand-gold" />
+          <p className="mt-5 max-w-xl text-base text-brand-ink/70 sm:text-lg">
+            Percentile Lab gives you timed mock tests for every major MBA
+            entrance exam — CAT, XAT, MAH-CET, SNAP, NMAT, CMAT, MAT, and
+            ATMA — with section-wise scoring, time-per-question analysis,
+            and full answer reviews.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <Link
+              href="/register"
+              className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
+            >
+              Start practicing free
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </Link>
+            <Link
+              href="/about"
+              className="inline-flex items-center gap-2 rounded-full border border-brand-navy/20 px-6 py-3.5 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-navy/5"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-4 w-4">
+                <circle cx="12" cy="12" r="8.5" />
+                <path fill="currentColor" stroke="none" d="M10.5 9.2v5.6l4.7-2.8-4.7-2.8Z" />
+              </svg>
+              Learn more
+            </Link>
           </div>
         </div>
 
-        <div className="relative z-10 mx-auto -mt-8 max-w-5xl px-4 pb-14 sm:px-6 md:-mt-10">
+        <div className="relative z-10 mx-auto max-w-5xl px-4 pb-14 sm:px-6">
           <div className="grid grid-cols-2 gap-6 rounded-2xl bg-brand-navy p-6 shadow-lg sm:grid-cols-4 sm:p-7">
             {heroHighlights.map((item) => (
               <div key={item.title} className="flex items-start gap-3">
