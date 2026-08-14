@@ -139,8 +139,9 @@ export default function HomePage() {
           loop
           muted
           playsInline
-          className="absolute inset-0 h-full w-full object-cover opacity-30"
+          className="absolute inset-0 h-full w-full object-cover opacity-60"
         />
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-cream/90 via-brand-cream/70 to-brand-cream/90" />
 
         <div className="relative z-10 mx-auto flex min-h-[520px] max-w-3xl flex-col items-center px-4 pb-16 pt-16 text-center sm:px-6 md:min-h-[600px] md:pb-20 md:pt-20">
           <h1 className="text-4xl font-bold leading-tight text-brand-navy sm:text-5xl">
