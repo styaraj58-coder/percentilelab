@@ -172,13 +172,13 @@ export default function HomePage() {
 
           <div className="relative py-6 md:py-10">
             <div className="relative mx-auto h-[380px] w-full max-w-md overflow-hidden rounded-3xl shadow-xl shadow-brand-navy/10 md:h-full">
-              <Image
-                src="/images/hero-banner.jpg"
-                alt="Student reviewing her mock test performance"
-                fill
-                sizes="(min-width: 768px) 40vw, 90vw"
-                className="object-cover"
-                priority
+              <video
+                src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/47177fc5-2b48-4232-bf03-f5938c108529.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="h-full w-full object-cover"
               />
             </div>
 
