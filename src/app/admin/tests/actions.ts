@@ -1,11 +1,14 @@
 "use server";
 
+import { randomUUID } from "node:crypto";
+
+import type { Prisma } from "@prisma/client";
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { testSchema, type QuestionInput, type TestInput } from "@/lib/validation";
+import { testSchema, type TestInput } from "@/lib/validation";
 
 export type SaveTestState = { error?: string } | undefined;
 
@@ -23,99 +26,135 @@ async function persistTest(
   createdById: string,
   testId?: string
 ) {
-  await prisma.$transaction(async (tx) => {
-    let id = testId;
+  // IDs are generated here (instead of left to the DB default) so every
+  // section/passage/question/option can be inserted in one createMany call
+  // each, rather than one row at a time. With enough questions, one-row-at-
+  // a-time inside a single transaction was slow enough to blow past
+  // Prisma's default interactive-transaction timeout and fail outright.
+  const sectionsData: Omit<Prisma.SectionCreateManyInput, "testId">[] = [];
+  const passagesData: Prisma.PassageCreateManyInput[] = [];
+  const questionsData: Prisma.QuestionCreateManyInput[] = [];
+  const optionsData: Prisma.OptionCreateManyInput[] = [];
 
-    if (id) {
-      const existing = await tx.test.findUnique({ where: { id } });
-      if (!existing) {
-        throw new Error("Test not found");
-      }
-      await tx.test.update({
-        where: { id },
-        data: {
-          title: input.title,
-          description: input.description || null,
-          targetExam: input.targetExam,
-          durationMinutes: input.durationMinutes,
-          published,
-        },
-      });
-      // Replace sections/questions/options wholesale — simplest consistent
-      // approach for an admin-authored form with no partial-edit UI yet.
-      await tx.section.deleteMany({ where: { testId: id } });
-    } else {
-      const created = await tx.test.create({
-        data: {
-          title: input.title,
-          description: input.description || null,
-          targetExam: input.targetExam,
-          durationMinutes: input.durationMinutes,
-          published,
-          createdById,
-        },
-      });
-      id = created.id;
-    }
+  for (const [sectionIndex, section] of input.sections.entries()) {
+    const sectionId = randomUUID();
+    sectionsData.push({ id: sectionId, name: section.name, order: sectionIndex });
 
-    for (const [sectionIndex, section] of input.sections.entries()) {
-      const createdSection = await tx.section.create({
-        data: { testId: id, name: section.name, order: sectionIndex },
-      });
-
-      async function createQuestion(
-        question: QuestionInput,
-        order: number,
-        passageId: string | null
-      ) {
-        const createdQuestion = await tx.question.create({
-          data: {
-            sectionId: createdSection.id,
+    let order = 0;
+    for (const block of section.blocks) {
+      if (block.kind === "question") {
+        const questionId = randomUUID();
+        questionsData.push({
+          id: questionId,
+          sectionId,
+          passageId: null,
+          order,
+          text: block.question.text,
+          imageUrl: block.question.imageUrl || null,
+          explanation: block.question.explanation || null,
+          marks: block.question.marks,
+        });
+        for (const [optionIndex, option] of block.question.options.entries()) {
+          optionsData.push({
+            id: randomUUID(),
+            questionId,
+            text: option.text,
+            imageUrl: option.imageUrl || null,
+            isCorrect: option.isCorrect,
+            order: optionIndex,
+          });
+        }
+        order += 1;
+      } else {
+        const passageId = randomUUID();
+        passagesData.push({
+          id: passageId,
+          sectionId,
+          title: block.passage.passageTitle || null,
+          text: block.passage.passageText,
+        });
+        for (const question of block.passage.questions) {
+          const questionId = randomUUID();
+          questionsData.push({
+            id: questionId,
+            sectionId,
             passageId,
             order,
             text: question.text,
             imageUrl: question.imageUrl || null,
             explanation: question.explanation || null,
             marks: question.marks,
-          },
-        });
-
-        for (const [optionIndex, option] of question.options.entries()) {
-          await tx.option.create({
-            data: {
-              questionId: createdQuestion.id,
+          });
+          for (const [optionIndex, option] of question.options.entries()) {
+            optionsData.push({
+              id: randomUUID(),
+              questionId,
               text: option.text,
               imageUrl: option.imageUrl || null,
               isCorrect: option.isCorrect,
               order: optionIndex,
-            },
-          });
-        }
-      }
-
-      let order = 0;
-      for (const block of section.blocks) {
-        if (block.kind === "question") {
-          await createQuestion(block.question, order, null);
-          order += 1;
-        } else {
-          const createdPassage = await tx.passage.create({
-            data: {
-              sectionId: createdSection.id,
-              title: block.passage.passageTitle || null,
-              text: block.passage.passageText,
-            },
-          });
-          for (const question of block.passage.questions) {
-            await createQuestion(question, order, createdPassage.id);
-            order += 1;
+            });
           }
+          order += 1;
         }
       }
     }
+  }
 
-    return id;
-  });
+  await prisma.$transaction(
+    async (tx) => {
+      let id = testId;
+
+      if (id) {
+        const existing = await tx.test.findUnique({ where: { id } });
+        if (!existing) {
+          throw new Error("Test not found");
+        }
+        await tx.test.update({
+          where: { id },
+          data: {
+            title: input.title,
+            description: input.description || null,
+            targetExam: input.targetExam,
+            durationMinutes: input.durationMinutes,
+            published,
+          },
+        });
+        // Replace sections/questions/options wholesale — simplest consistent
+        // approach for an admin-authored form with no partial-edit UI yet.
+        // Cascades to passages/questions/options via the schema's onDelete rules.
+        await tx.section.deleteMany({ where: { testId: id } });
+      } else {
+        const created = await tx.test.create({
+          data: {
+            title: input.title,
+            description: input.description || null,
+            targetExam: input.targetExam,
+            durationMinutes: input.durationMinutes,
+            published,
+            createdById,
+          },
+        });
+        id = created.id;
+      }
+
+      await tx.section.createMany({
+        data: sectionsData.map((s) => ({ ...s, testId: id })),
+      });
+      if (passagesData.length > 0) {
+        await tx.passage.createMany({ data: passagesData });
+      }
+      if (questionsData.length > 0) {
+        await tx.question.createMany({ data: questionsData });
+      }
+      if (optionsData.length > 0) {
+        await tx.option.createMany({ data: optionsData });
+      }
+
+      return id;
+    },
+    { timeout: 20_000 }
+  );
 }
 
 export async function createTest(
@@ -129,7 +168,12 @@ export async function createTest(
     return { error: parsed.error.issues[0]?.message ?? "Invalid test data" };
   }
 
-  await persistTest(parsed.data, published, admin.id);
+  try {
+    await persistTest(parsed.data, published, admin.id);
+  } catch (error) {
+    console.error("Failed to create test:", error);
+    return { error: "Could not save this test. Please try again." };
+  }
   revalidateTag("tests");
   redirect("/admin");
 }
@@ -148,7 +192,8 @@ export async function updateTest(
 
   try {
     await persistTest(parsed.data, published, admin.id, testId);
-  } catch {
+  } catch (error) {
+    console.error("Failed to update test:", error);
     return { error: "Could not update this test." };
   }
   revalidateTag("tests");
