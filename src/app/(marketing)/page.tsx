@@ -133,17 +133,7 @@ export default function HomePage() {
   return (
     <div>
       <section className="relative overflow-hidden bg-brand-cream">
-        <video
-          src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/47177fc5-2b48-4232-bf03-f5938c108529.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover opacity-60"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-cream/90 via-brand-cream/70 to-brand-cream/90" />
-
-        <div className="relative z-10 mx-auto flex min-h-[520px] max-w-3xl flex-col items-center px-4 pb-16 pt-16 text-center sm:px-6 md:min-h-[600px] md:pb-20 md:pt-20">
+        <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-4 pb-10 pt-16 text-center sm:px-6 md:pt-20">
           <h1 className="text-4xl font-bold leading-tight text-brand-navy sm:text-5xl">
             Practice like it&apos;s exam day. <br />
             Know your <span className="text-brand-gold">percentile</span>{" "}
@@ -176,6 +166,19 @@ export default function HomePage() {
               </svg>
               Learn more
             </Link>
+          </div>
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-4xl px-4 pb-14 sm:px-6">
+          <div className="aspect-video w-full overflow-hidden rounded-3xl bg-black shadow-xl shadow-brand-navy/10">
+            <video
+              src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/47177fc5-2b48-4232-bf03-f5938c108529.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="h-full w-full object-cover"
+            />
           </div>
         </div>
 
