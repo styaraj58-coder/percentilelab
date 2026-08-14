@@ -171,63 +171,15 @@ export default function HomePage() {
           </div>
 
           <div className="relative py-6 md:py-10">
-            <div className="relative mx-auto h-[380px] w-full max-w-md overflow-hidden rounded-3xl shadow-xl shadow-brand-navy/10 md:h-full">
+            <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-3xl bg-black shadow-xl shadow-brand-navy/10">
               <video
                 src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/47177fc5-2b48-4232-bf03-f5938c108529.mp4"
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="h-full w-full object-cover"
+                className="h-full w-full object-contain"
               />
-            </div>
-
-            <div className="absolute -left-4 top-8 hidden w-48 rounded-xl border border-black/5 bg-white p-3.5 shadow-lg sm:block">
-              <p className="text-[11px] font-medium text-brand-ink/50">
-                Your progress
-              </p>
-              <div className="mt-1.5 flex items-end justify-between gap-2">
-                <svg viewBox="0 0 80 32" className="h-8 w-14 text-brand-navy">
-                  <polyline
-                    points="0,26 12,22 24,24 36,14 48,17 60,7 80,2"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <p className="text-lg font-bold text-brand-navy">
-                  92<span className="text-xs font-medium">th</span>
-                </p>
-              </div>
-              <p className="mt-1 text-[11px] font-medium text-green-600">
-                +18 in 30 days
-              </p>
-            </div>
-
-            <div className="absolute bottom-16 -right-4 hidden w-44 rounded-xl border border-black/5 bg-white p-3.5 shadow-lg sm:block">
-              <p className="text-[11px] font-medium text-brand-ink/50">
-                Mock test analysis
-              </p>
-              <div className="mt-1.5 flex items-center gap-3">
-                <div
-                  className="h-11 w-11 shrink-0 rounded-full"
-                  style={{
-                    background:
-                      "conic-gradient(var(--color-brand-navy) 0% 78%, rgba(0,0,0,0.08) 78% 100%)",
-                  }}
-                >
-                  <div className="m-1 flex h-9 w-9 items-center justify-center rounded-full bg-white text-[10px] font-bold text-brand-navy">
-                    78%
-                  </div>
-                </div>
-                <p className="text-[11px] text-brand-ink/60">
-                  accuracy
-                  <br />
-                  score
-                </p>
-              </div>
             </div>
           </div>
         </div>
