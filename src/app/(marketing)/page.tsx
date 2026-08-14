@@ -241,7 +241,7 @@ export default function HomePage() {
               alt="Student filling in an answer sheet during a timed mock test"
               width={1200}
               height={800}
-              className="h-56 w-full object-cover"
+              className="aspect-[3/2] w-full object-cover"
             />
             <div className="p-6">
               <h3 className="text-center text-lg font-semibold text-brand-navy">
@@ -259,7 +259,7 @@ export default function HomePage() {
               alt="Student thinking through an answer during a mock test"
               width={1200}
               height={800}
-              className="h-56 w-full object-cover"
+              className="aspect-[3/2] w-full object-cover"
             />
             <div className="p-6">
               <h3 className="text-center text-lg font-semibold text-brand-navy">
