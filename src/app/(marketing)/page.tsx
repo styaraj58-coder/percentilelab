@@ -203,7 +203,7 @@ export default function HomePage() {
             <img
               src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/f6412b1f-059b-474b-82d8-9b471806e475.png"
               alt="Percentile Lab"
-              className="absolute bottom-9 right-9 h-9 w-9 object-contain"
+              className="absolute bottom-[10%] right-[7%] w-[6%] aspect-square object-contain"
             />
           </div>
         </div>
