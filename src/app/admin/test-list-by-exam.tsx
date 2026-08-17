@@ -155,6 +155,12 @@ export function TestListByExam({ tests }: { tests: TestRow[] }) {
                   <td className="px-5 py-4">
                     <div className="flex flex-wrap items-center gap-3">
                       <Link
+                        href={`/admin/tests/${test.id}/preview`}
+                        className="text-brand-navy hover:text-brand-gold hover:underline"
+                      >
+                        Preview
+                      </Link>
+                      <Link
                         href={`/admin/tests/${test.id}/edit`}
                         className="text-brand-navy hover:text-brand-gold hover:underline"
                       >
