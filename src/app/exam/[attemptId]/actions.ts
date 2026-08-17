@@ -53,28 +53,29 @@ export async function submitAttempt(attemptId: string) {
   const attempt = await requireOwnedAttempt(attemptId);
 
   if (!attempt.submittedAt) {
-    const test = await prisma.test.findUnique({
-      where: { id: attempt.testId },
-      select: {
-        sections: {
-          select: {
-            questions: {
-              select: {
-                id: true,
-                marks: true,
-                options: { select: { id: true, isCorrect: true } },
+    const [test, answers] = await Promise.all([
+      prisma.test.findUnique({
+        where: { id: attempt.testId },
+        select: {
+          sections: {
+            select: {
+              questions: {
+                select: {
+                  id: true,
+                  marks: true,
+                  options: { select: { id: true, isCorrect: true } },
+                },
               },
             },
           },
         },
-      },
-    });
+      }),
+      prisma.answer.findMany({
+        where: { attemptId },
+        select: { questionId: true, selectedOptionId: true },
+      }),
+    ]);
     if (!test) throw new Error("Test not found");
-
-    const answers = await prisma.answer.findMany({
-      where: { attemptId },
-      select: { questionId: true, selectedOptionId: true },
-    });
     const answerByQuestion = new Map(answers.map((a) => [a.questionId, a]));
 
     let score = 0;
