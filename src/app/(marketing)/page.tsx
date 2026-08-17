@@ -190,7 +190,7 @@ export default function HomePage() {
         </div>
 
         <div className="relative z-10 mx-auto max-w-4xl px-4 pb-14 sm:px-6">
-          <div className="aspect-video w-full overflow-hidden rounded-3xl bg-black shadow-xl shadow-brand-navy/10">
+          <div className="relative aspect-video w-full overflow-hidden rounded-3xl bg-black shadow-xl shadow-brand-navy/10">
             <video
               src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/47177fc5-2b48-4232-bf03-f5938c108529.mp4"
               autoPlay
@@ -198,6 +198,12 @@ export default function HomePage() {
               muted
               playsInline
               className="h-full w-full object-cover"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/f6412b1f-059b-474b-82d8-9b471806e475.png"
+              alt="Percentile Lab"
+              className="absolute bottom-9 right-9 h-9 w-9 object-contain"
             />
           </div>
         </div>
