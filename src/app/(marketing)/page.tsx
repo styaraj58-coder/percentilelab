@@ -169,19 +169,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="relative z-10 mx-auto max-w-4xl px-4 pb-14 sm:px-6">
-          <div className="aspect-video w-full overflow-hidden rounded-3xl bg-black shadow-xl shadow-brand-navy/10">
-            <video
-              src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/47177fc5-2b48-4232-bf03-f5938c108529.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="h-full w-full object-cover"
-            />
-          </div>
-        </div>
-
         <div className="relative z-10 mx-auto max-w-5xl px-4 pb-14 sm:px-6">
           <div className="grid grid-cols-2 gap-6 rounded-2xl bg-brand-navy p-6 shadow-lg sm:grid-cols-4 sm:p-7">
             {heroHighlights.map((item) => (
@@ -199,6 +186,19 @@ export default function HomePage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-4xl px-4 pb-14 sm:px-6">
+          <div className="aspect-video w-full overflow-hidden rounded-3xl bg-black shadow-xl shadow-brand-navy/10">
+            <video
+              src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/47177fc5-2b48-4232-bf03-f5938c108529.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="h-full w-full object-cover"
+            />
           </div>
         </div>
       </section>
