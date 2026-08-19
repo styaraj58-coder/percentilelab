@@ -82,6 +82,27 @@ export function SiteFooter() {
                 +91 80531 34016
               </a>
             </p>
+            <p className="mt-3">
+              <a
+                href="https://www.instagram.com/percentile.lab?igsh=NXgxdXUzejZkOXN0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-brand-gold"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.75}
+                  className="h-4 w-4"
+                >
+                  <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
+                  <circle cx="12" cy="12" r="4.25" />
+                  <circle cx="17.15" cy="6.85" r="0.5" fill="currentColor" stroke="none" />
+                </svg>
+                Instagram
+              </a>
+            </p>
           </div>
         </div>
 
