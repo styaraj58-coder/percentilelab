@@ -12,6 +12,9 @@ export default function AboutPage() {
       <h1 className="mt-2 text-3xl font-bold text-brand-navy sm:text-4xl">
         Built for one goal: a higher percentile, on any MBA entrance exam
       </h1>
+      <p className="mt-3 text-sm font-medium text-brand-ink/60">
+        Created by Satya Raj, CET 99%iler
+      </p>
 
       <div className="mt-8 space-y-6 text-brand-ink/80">
         <p>
