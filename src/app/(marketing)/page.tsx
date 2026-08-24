@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { MockTestPopup } from "@/components/mock-test-popup";
+
 const features = [
   {
     title: "Full-length MBA entrance exam mocks",
@@ -132,6 +134,7 @@ const heroHighlights = [
 export default function HomePage() {
   return (
     <div>
+      <MockTestPopup />
       <section className="relative overflow-hidden bg-brand-cream">
         <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-4 pb-10 pt-16 text-center sm:px-6 md:pt-20">
           <h1 className="text-4xl font-bold leading-tight text-brand-navy sm:text-5xl">
