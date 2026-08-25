@@ -31,6 +31,7 @@ model User {
   attempts     TestAttempt[]
   resourcesCreated Resource[] @relation("ResourceCreatedBy")
   passwordResetTokens PasswordResetToken[]
+  bankQuestionsCreated BankQuestion[] @relation("BankQuestionCreatedBy")
 }
 
 // Forgot-password flow: a short-lived, single-use token emailed to the
@@ -146,6 +147,67 @@ model Resource {
   createdAt   DateTime @default(now())
 
   @@index([type])
+}
+
+// A shared stimulus multiple bank questions are grouped under — a seating/
+// arrangement puzzle's scenario, a DI dataset, a reading passage, etc. Mirrors
+// Passage's role on a materialized Test, but at the bank level, and generation
+// pulls every question in a set together (never a partial set) since they only
+// make sense read against the same stimulus.
+model BankQuestionSet {
+  id        String         @id @default(cuid())
+  title     String?
+  stimulus  String
+  imageUrl  String?
+  questions BankQuestion[]
+  createdAt DateTime       @default(now())
+}
+
+// A pool question, independent of any specific Test. The mock generator draws
+// from here (filtered by section/difficulty, excluding already-used
+// questions) and materializes real Test/Section/Passage/Question/Option rows
+// from what it picks — generated tests behave exactly like hand-built ones
+// afterward, so nothing about the exam-taking, grading, or results code needs
+// to know a test was ever bank-generated.
+model BankQuestion {
+  id                   String              @id @default(cuid())
+  // Top-level mock section this question belongs to — kept as a plain string
+  // (not a relation) so it lines up with Section.name on generated tests
+  // without a join. See BANK_SECTIONS in src/lib/validation.ts.
+  section              String
+  topic                String
+  subTopic             String?
+  difficulty           String
+  estimatedTimeSeconds Int                 @default(60)
+  conceptTested        String?
+  tags                 String[]            @default([])
+  order                Int                 @default(0)
+  setId                String?
+  set                  BankQuestionSet?    @relation(fields: [setId], references: [id], onDelete: SetNull)
+  text                 String
+  imageUrl             String?
+  explanation          String?
+  marks                Int                 @default(1)
+  options              BankOption[]
+  // Once drawn into a generated mock, a bank question is retired (never
+  // reused across mocks) — set the first time it's consumed.
+  usedInTestId         String?
+  createdById          String
+  createdBy            User                @relation("BankQuestionCreatedBy", fields: [createdById], references: [id])
+  createdAt            DateTime            @default(now())
+
+  @@index([section, topic, difficulty])
+  @@index([usedInTestId])
+}
+
+model BankOption {
+  id             String       @id @default(cuid())
+  bankQuestionId String
+  bankQuestion   BankQuestion @relation(fields: [bankQuestionId], references: [id], onDelete: Cascade)
+  text           String
+  imageUrl       String?
+  isCorrect      Boolean      @default(false)
+  order          Int
 }
 
 model Answer {

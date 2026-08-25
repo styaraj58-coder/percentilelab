@@ -35,6 +35,12 @@ export default async function AdminLayout({
                 New test
               </Link>
               <Link
+                href="/admin/bank"
+                className="text-sm font-medium text-brand-ink/80 hover:text-brand-navy"
+              >
+                Bank
+              </Link>
+              <Link
                 href="/admin/users"
                 className="text-sm font-medium text-brand-ink/80 hover:text-brand-navy"
               >

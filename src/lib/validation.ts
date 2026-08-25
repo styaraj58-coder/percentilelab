@@ -94,3 +94,75 @@ export const testSchema = z.object({
 
 export type TestInput = z.infer<typeof testSchema>;
 export type QuestionInput = z.infer<typeof questionSchema>;
+
+// The four top-level mock sections the question bank and generator key off
+// of — kept separate from a materialized Test's free-text Section.name, but
+// the generator names generated sections identically to these.
+export const BANK_SECTIONS = [
+  "Logical Reasoning",
+  "Abstract Reasoning",
+  "Quantitative Aptitude",
+  "Verbal Ability & RC",
+] as const;
+
+export const DIFFICULTY_LEVELS = ["EASY", "MODERATE", "DIFFICULT"] as const;
+
+// The default CET-level mix every generated mock uses for now (Foundation/
+// Advanced tiers can be added later without changing this shape).
+export const CET_DIFFICULTY_MIX = { EASY: 0.25, MODERATE: 0.5, DIFFICULT: 0.25 } as const;
+
+export const bankOptionSchema = z.object({
+  text: z.string().trim().min(1, "Option text is required"),
+  imageUrl: z.string().trim().optional(),
+  isCorrect: z.boolean(),
+});
+
+export const bankQuestionSchema = z.object({
+  section: z.enum(BANK_SECTIONS, { message: "Select a section" }),
+  topic: z.string().trim().min(1, "Topic is required"),
+  subTopic: z.string().trim().optional(),
+  difficulty: z.enum(DIFFICULTY_LEVELS, { message: "Select a difficulty" }),
+  estimatedTimeSeconds: z.coerce.number().int().min(10).max(900).default(60),
+  conceptTested: z.string().trim().optional(),
+  tags: z.array(z.string().trim().min(1)).default([]),
+  text: z.string().trim().min(1, "Question text is required"),
+  imageUrl: z.string().trim().optional(),
+  explanation: z.string().trim().optional(),
+  marks: z.coerce.number().int().min(1).max(100).default(1),
+  options: z
+    .array(bankOptionSchema)
+    .min(2, "At least 2 options are required")
+    .max(6, "At most 6 options are allowed")
+    .refine((opts) => opts.filter((o) => o.isCorrect).length === 1, {
+      message: "Exactly one option must be marked correct",
+    }),
+});
+
+// A generator-time group: a shared stimulus plus the bank questions written
+// against it (an arrangement puzzle, a DI dataset, a reading passage, ...).
+export const bankQuestionSetSchema = z.object({
+  title: z.string().trim().optional(),
+  stimulus: z.string().trim().min(1, "Stimulus text is required"),
+  imageUrl: z.string().trim().optional(),
+  questions: z.array(bankQuestionSchema).min(1, "Add at least one question"),
+});
+
+export type BankQuestionInput = z.infer<typeof bankQuestionSchema>;
+export type BankQuestionSetInput = z.infer<typeof bankQuestionSetSchema>;
+
+export const generateMockSchema = z.object({
+  title: z.string().trim().min(3, "Title must be at least 3 characters"),
+  targetExam: z.enum(MBA_ENTRANCE_EXAMS, {
+    message: "Select which entrance exam this mock is for",
+  }),
+  durationMinutes: z.coerce.number().int().min(1).max(600),
+  published: z.boolean().default(false),
+  sectionCounts: z.object({
+    "Logical Reasoning": z.coerce.number().int().min(0).max(400),
+    "Abstract Reasoning": z.coerce.number().int().min(0).max(400),
+    "Quantitative Aptitude": z.coerce.number().int().min(0).max(400),
+    "Verbal Ability & RC": z.coerce.number().int().min(0).max(400),
+  }),
+});
+
+export type GenerateMockInput = z.infer<typeof generateMockSchema>;
