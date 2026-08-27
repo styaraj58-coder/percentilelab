@@ -103,6 +103,12 @@ model Question {
   imageUrl    String?
   explanation String?
   marks       Int      @default(1)
+  // Carried over from BankQuestion when a test is generated from the bank;
+  // left null for hand-built tests. Powers the results page's "Weak Topics"
+  // breakdown — that section is skipped entirely when a test has no topic
+  // data at all.
+  topic       String?
+  subTopic    String?
   options     Option[]
   answers     Answer[]
 }

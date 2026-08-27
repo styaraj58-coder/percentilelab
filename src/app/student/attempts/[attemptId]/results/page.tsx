@@ -103,7 +103,14 @@ export default async function AttemptResultsPage({
   const [otherAttempts, allAnswersForTest] = await Promise.all([
     prisma.testAttempt.findMany({
       where: { testId: test.id, submittedAt: { not: null } },
-      select: { score: true },
+      select: {
+        id: true,
+        score: true,
+        studentId: true,
+        submittedAt: true,
+        student: { select: { name: true } },
+      },
+      orderBy: [{ score: "desc" }, { submittedAt: "asc" }],
     }),
     prisma.answer.findMany({
       where: {
@@ -142,6 +149,80 @@ export default async function AttemptResultsPage({
       return [q.id, attempted > 0 ? Math.round((incorrect / attempted) * 100) : null];
     })
   );
+
+  // Leaderboard — every submitted attempt on this test, ranked by score
+  // (ties broken by who submitted first). otherAttempts is already sorted
+  // that way by the query above.
+  const leaderboardRows = otherAttempts.map((a, index) => ({
+    rank: index + 1,
+    attemptId: a.id,
+    name: a.student.name,
+    score: a.score ?? 0,
+    isMe: a.studentId === session.user.id,
+  }));
+  const myRank = leaderboardRows.find((r) => r.isMe)?.rank ?? null;
+  const leaderboardTop = leaderboardRows.slice(0, 10);
+  const meInTop = leaderboardTop.some((r) => r.isMe);
+
+  // Weak topics — only meaningful for tests whose questions carry topic tags
+  // (currently: mocks generated from the question bank). Hand-built tests
+  // have no topic data, so this whole section is skipped rather than shown
+  // empty or misleading.
+  const topicAgg = new Map<string, { correct: number; total: number }>();
+  for (const question of allQuestions) {
+    if (!question.topic) continue;
+    const entry = topicAgg.get(question.topic) ?? { correct: 0, total: 0 };
+    entry.total += 1;
+    const answer = answerByQuestion.get(question.id);
+    const correctOption = question.options.find((o) => o.isCorrect);
+    if (answer?.selectedOptionId && answer.selectedOptionId === correctOption?.id) {
+      entry.correct += 1;
+    }
+    topicAgg.set(question.topic, entry);
+  }
+  const topicStats = [...topicAgg.entries()]
+    .map(([topic, { correct, total }]) => ({
+      topic,
+      correct,
+      total,
+      accuracy: Math.round((correct / total) * 100),
+    }))
+    .sort((a, b) => a.accuracy - b.accuracy);
+  const weakTopics = topicStats.filter((t) => t.accuracy < 60);
+
+  // Recommended action — a few rule-based, plain-language suggestions
+  // derived from section accuracy, topic accuracy (if available), and
+  // pacing (how much got left unattempted).
+  const sectionsWithAccuracy = sectionStats.map((s) => ({
+    ...s,
+    accuracy: s.questionCount > 0 ? Math.round((s.correctCount / s.questionCount) * 100) : 0,
+  }));
+  const weakestSection = [...sectionsWithAccuracy].sort((a, b) => a.accuracy - b.accuracy)[0];
+  const recommendations: string[] = [];
+  if (weakestSection && sectionsWithAccuracy.length > 1) {
+    recommendations.push(
+      `${weakestSection.name} is your weakest section at ${weakestSection.accuracy}% accuracy (${weakestSection.correctCount}/${weakestSection.questionCount} correct) — spend your next study block there before moving on.`
+    );
+  }
+  if (weakTopics.length > 0) {
+    const worst = weakTopics[0];
+    recommendations.push(
+      `Within that, "${worst.topic}" stands out at just ${worst.accuracy}% accuracy (${worst.correct}/${worst.total}) — worth targeted practice on this topic specifically.`
+    );
+  }
+  const unattemptedCount = allQuestions.filter(
+    (q) => !answerByQuestion.get(q.id)?.selectedOptionId
+  ).length;
+  if (allQuestions.length > 0 && unattemptedCount / allQuestions.length > 0.15) {
+    recommendations.push(
+      `You left ${unattemptedCount} question(s) unattempted — if that wasn't intentional, work on pacing so you reach every question next time.`
+    );
+  }
+  if (recommendations.length === 0) {
+    recommendations.push(
+      "Solid, even performance across sections — no single weak spot to flag. Keep practicing at this pace and watch your percentile trend over your next few mocks."
+    );
+  }
 
   const correctQuestions: ReviewRow[] = [];
   const incorrectQuestions: ReviewRow[] = [];
@@ -208,38 +289,160 @@ export default async function AttemptResultsPage({
         </div>
       </div>
 
-      {/* Section-wise breakdown */}
+      {/* Recommended action */}
+      <section className="mt-10 rounded-xl border border-brand-gold/30 bg-brand-cream/40 p-5">
+        <h2 className="text-lg font-semibold text-brand-navy">
+          Recommended action
+        </h2>
+        <ul className="mt-3 space-y-2 text-sm text-brand-ink/80">
+          {recommendations.map((rec, i) => (
+            <li key={i} className="flex gap-2">
+              <span className="text-brand-gold">•</span>
+              <span>{rec}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Section performance */}
       <section className="mt-10">
         <h2 className="text-lg font-semibold text-brand-navy">
-          Section-wise breakdown
+          Section performance
         </h2>
+        <div className="mt-4 space-y-4">
+          {sectionsWithAccuracy.map((s) => (
+            <div
+              key={s.id}
+              className="rounded-xl border border-black/5 bg-white p-5"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="font-medium text-brand-navy">{s.name}</p>
+                <span
+                  className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                    s.accuracy >= 70
+                      ? "bg-green-100 text-green-700"
+                      : s.accuracy >= 40
+                        ? "bg-amber-100 text-amber-700"
+                        : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {s.accuracy}% accuracy
+                </span>
+              </div>
+              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-brand-cream">
+                <div
+                  className={`h-full rounded-full ${
+                    s.accuracy >= 70
+                      ? "bg-green-500"
+                      : s.accuracy >= 40
+                        ? "bg-amber-500"
+                        : "bg-red-500"
+                  }`}
+                  style={{ width: `${s.accuracy}%` }}
+                />
+              </div>
+              <div className="mt-3 flex flex-wrap gap-4 text-xs text-brand-ink/60">
+                <span>Score: {s.correctMarks}/{s.sectionTotalMarks}</span>
+                <span>Correct: {s.correctCount}/{s.questionCount}</span>
+                <span>Attempted: {s.answeredCount}/{s.questionCount}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Weak topics — only shown when this test's questions carry topic tags */}
+      {weakTopics.length > 0 && (
+        <section className="mt-10">
+          <h2 className="text-lg font-semibold text-brand-navy">
+            Weak topics
+          </h2>
+          <p className="mt-1 text-sm text-brand-ink/60">
+            Topics where your accuracy fell below 60%.
+          </p>
+          <div className="mt-4 overflow-x-auto rounded-xl border border-black/5 bg-white">
+            <table className="w-full min-w-[420px] text-left text-sm">
+              <thead className="border-b border-black/5 bg-brand-cream/60 text-xs uppercase tracking-wide text-brand-ink/50">
+                <tr>
+                  <th className="px-5 py-3 font-medium">Topic</th>
+                  <th className="px-5 py-3 font-medium">Accuracy</th>
+                  <th className="px-5 py-3 font-medium">Correct</th>
+                </tr>
+              </thead>
+              <tbody>
+                {weakTopics.map((t) => (
+                  <tr key={t.topic} className="border-b border-black/5 last:border-0">
+                    <td className="px-5 py-3 font-medium text-brand-navy">
+                      {t.topic}
+                    </td>
+                    <td className="px-5 py-3 text-red-700">{t.accuracy}%</td>
+                    <td className="px-5 py-3 text-brand-ink/70">
+                      {t.correct}/{t.total}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      {/* Leaderboard */}
+      <section className="mt-10">
+        <h2 className="text-lg font-semibold text-brand-navy">Leaderboard</h2>
+        <p className="mt-1 text-sm text-brand-ink/60">
+          Ranked by score among everyone who has taken this test
+          {myRank ? ` — you're ranked #${myRank} of ${leaderboardRows.length}.` : "."}
+        </p>
         <div className="mt-4 overflow-x-auto rounded-xl border border-black/5 bg-white">
-          <table className="w-full min-w-[480px] text-left text-sm">
+          <table className="w-full min-w-[380px] text-left text-sm">
             <thead className="border-b border-black/5 bg-brand-cream/60 text-xs uppercase tracking-wide text-brand-ink/50">
               <tr>
-                <th className="px-5 py-3 font-medium">Section</th>
+                <th className="px-5 py-3 font-medium">Rank</th>
+                <th className="px-5 py-3 font-medium">Name</th>
                 <th className="px-5 py-3 font-medium">Score</th>
-                <th className="px-5 py-3 font-medium">Correct</th>
-                <th className="px-5 py-3 font-medium">Attempted</th>
               </tr>
             </thead>
             <tbody>
-              {sectionStats.map((s) => (
-                <tr key={s.id} className="border-b border-black/5 last:border-0">
+              {leaderboardTop.map((row) => (
+                <tr
+                  key={row.attemptId}
+                  className={`border-b border-black/5 last:border-0 ${
+                    row.isMe ? "bg-brand-gold/10" : ""
+                  }`}
+                >
                   <td className="px-5 py-3 font-medium text-brand-navy">
-                    {s.name}
+                    #{row.rank}
                   </td>
                   <td className="px-5 py-3 text-brand-ink/70">
-                    {s.correctMarks} / {s.sectionTotalMarks}
+                    {row.name}
+                    {row.isMe && (
+                      <span className="ml-2 rounded-full bg-brand-navy px-2 py-0.5 text-[10px] font-semibold text-white">
+                        You
+                      </span>
+                    )}
                   </td>
                   <td className="px-5 py-3 text-brand-ink/70">
-                    {s.correctCount} / {s.questionCount}
-                  </td>
-                  <td className="px-5 py-3 text-brand-ink/70">
-                    {s.answeredCount} / {s.questionCount}
+                    {row.score}/{attempt.totalMarks}
                   </td>
                 </tr>
               ))}
+              {!meInTop && myRank && (
+                <tr className="border-t-2 border-dashed border-black/10 bg-brand-gold/10">
+                  <td className="px-5 py-3 font-medium text-brand-navy">
+                    #{myRank}
+                  </td>
+                  <td className="px-5 py-3 text-brand-ink/70">
+                    {leaderboardRows.find((r) => r.isMe)?.name}
+                    <span className="ml-2 rounded-full bg-brand-navy px-2 py-0.5 text-[10px] font-semibold text-white">
+                      You
+                    </span>
+                  </td>
+                  <td className="px-5 py-3 text-brand-ink/70">
+                    {leaderboardRows.find((r) => r.isMe)?.score}/{attempt.totalMarks}
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

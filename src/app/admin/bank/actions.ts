@@ -329,6 +329,8 @@ export async function generateMock(
           imageUrl: bankQuestion.imageUrl,
           explanation: bankQuestion.explanation,
           marks: bankQuestion.marks,
+          topic: bankQuestion.topic,
+          subTopic: bankQuestion.subTopic,
         });
         const questionId = questionsData[questionsData.length - 1].id as string;
         for (const option of bankQuestion.options) {
