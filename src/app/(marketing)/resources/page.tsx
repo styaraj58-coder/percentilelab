@@ -22,7 +22,7 @@ export const metadata: Metadata = { title: "Study Resources | Percentile Lab" };
 const articles = [
   {
     title: "Why sectional cutoffs matter more than your overall score",
-    body: "Most MBA entrance exams — CAT, XAT, MAH-CET, and others — evaluate you section by section, not just on total marks. A strong Quant score can't make up for a section you clear by luck — many institutes apply a minimum cutoff per section. Use the section-wise breakdown on every mock to find your weakest section early, and weight your next week of practice toward it instead of drilling what you're already good at.",
+    body: "Most MBA entrance exams — CAT, MAH-CET, and others — evaluate you section by section, not just on total marks. A strong Quant score can't make up for a section you clear by luck — many institutes apply a minimum cutoff per section. Use the section-wise breakdown on every mock to find your weakest section early, and weight your next week of practice toward it instead of drilling what you're already good at.",
   },
   {
     title: "Time-box every section before you start",

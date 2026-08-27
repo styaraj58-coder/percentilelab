@@ -17,11 +17,7 @@ export const resetPasswordSchema = z.object({
 export const MBA_ENTRANCE_EXAMS = [
   "MH-CET (MBA)",
   "CAT",
-  "XAT",
-  "CMAT",
   "MAT",
-  "NMAT",
-  "SNAP",
   "ATMA",
   "Other",
 ] as const;

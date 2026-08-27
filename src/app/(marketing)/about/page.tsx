@@ -28,8 +28,8 @@ export default function AboutPage() {
         </p>
         <p>
           Every test on this platform is built around the structure of the
-          exam you&apos;re actually taking: CAT, XAT, MAH-CET, SNAP, NMAT,
-          CMAT, MAT, ATMA, and more: timed, sectional, and scored the way
+          exam you&apos;re actually taking: CAT, MAH-CET, MAT, ATMA, and
+          more: timed, sectional, and scored the way
           the real exam scores you. But the part that actually moves your
           percentile happens after you submit: a full breakdown of your
           accuracy by section, how long you spent on every single question,

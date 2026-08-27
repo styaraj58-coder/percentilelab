@@ -8,7 +8,7 @@ import { TestsBrowser, type TestSummary } from "./tests-browser";
 export const metadata: Metadata = {
   title: "Mock Tests | Percentile Lab",
   description:
-    "Browse timed mock tests for CAT, XAT, MAH-CET, SNAP, NMAT, CMAT, MAT, ATMA, and more — filter by entrance exam and start practicing.",
+    "Browse timed mock tests for CAT, MAH-CET, MAT, ATMA, and more — filter by entrance exam and start practicing.",
 };
 export default async function TestsPage() {
   const session = await auth();
