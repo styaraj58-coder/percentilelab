@@ -301,4 +301,78 @@ export const exams: ExamInfo[] = [
       { label: "Result", window: "~1–2 weeks after each test window" },
     ],
   },
+  {
+    slug: "ug-bms-cet",
+    shortName: "UG BMS CET",
+    fullName: "MAH BBA/BMS/BCA/BBM CET (Undergraduate)",
+    conductedBy: "State CET Cell, Maharashtra",
+    about:
+      "UG BMS CET is the state-level entrance test for admission to undergraduate management programs — BMS, BBA, BCA, BBM, and similar — at colleges across Maharashtra, including NM College, Mithibai, and Jai Hind. It's a shorter, simpler test than the MBA-level MAH-CET: no sectional cutoffs, no sectional time limits, and no negative marking, with a heavier weight on English and general reasoning than on quant.",
+    pattern: {
+      mode: "Computer-based test (CBT)",
+      duration: "90 minutes",
+      totalQuestions: "100 MCQs",
+      markingScheme: "+1 per correct answer, no negative marking",
+      sections: [
+        { name: "English Language", questions: "40 questions", detail: "Largest section by weight" },
+        { name: "Reasoning (Verbal & Arithmetic)", questions: "30 questions" },
+        { name: "General Knowledge & Awareness", questions: "15 questions" },
+        { name: "Computer Basics", questions: "15 questions" },
+      ],
+    },
+    syllabus: [
+      {
+        category: "English Language",
+        topics: [
+          "Reading comprehension passages",
+          "Sentence completion and correction",
+          "Grammar and vocabulary",
+          "Word usage",
+        ],
+      },
+      {
+        category: "Reasoning (Verbal & Arithmetic)",
+        topics: [
+          "Logical and analytical reasoning",
+          "Puzzles and arrangements",
+          "Arithmetic-based reasoning and data interpretation",
+          "Quick problem-solving under time pressure",
+        ],
+      },
+      {
+        category: "General Knowledge & Awareness",
+        topics: [
+          "Current affairs (national & international)",
+          "Static general knowledge",
+          "Business and economy news",
+        ],
+      },
+      {
+        category: "Computer Basics",
+        topics: [
+          "Fundamentals of computers and operating systems",
+          "MS Office basics",
+          "Internet and basic networking concepts",
+        ],
+      },
+    ],
+    topColleges: [
+      "NM College (Narsee Monjee), Mumbai",
+      "Mithibai College, Mumbai",
+      "Jai Hind College, Mumbai",
+      "R A Podar College of Commerce & Economics, Mumbai",
+      "Wilson College, Mumbai",
+      "P G Sanghvi (Hinduja) College of Commerce, Mumbai",
+      "Vaze College, Mumbai",
+      "Sydenham College of Commerce & Economics, Mumbai",
+      "K J Somaiya College of Arts & Commerce, Mumbai",
+      "VES College of Arts, Science and Commerce, Mumbai",
+    ],
+    tentativeDates: [
+      { label: "Registration opens", window: "Mid-January" },
+      { label: "Registration closes", window: "Mid-March" },
+      { label: "Exam day", window: "Late April" },
+      { label: "Result", window: "May" },
+    ],
+  },
 ];

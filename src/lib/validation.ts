@@ -19,6 +19,7 @@ export const MBA_ENTRANCE_EXAMS = [
   "CAT",
   "MAT",
   "ATMA",
+  "UG BMS CET",
   "Other",
 ] as const;
 
