@@ -8,6 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://percentilelab.in"),
   title: "Percentile Lab | MBA Entrance Exam Test Prep",
   description:
     "Practice mock tests for CAT, MAH-CET, MAT, ATMA, and more — timed exams with detailed percentile and section-wise analysis from Percentile Lab.",
