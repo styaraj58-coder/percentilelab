@@ -15,14 +15,17 @@ export type TestSummary = {
   durationMinutes: number;
   questionCount: number;
   sectionCount: number;
+  isFreePreview: boolean;
 };
 
 export function TestsBrowser({
   tests,
   isAuthenticated,
+  hasPremiumAccess,
 }: {
   tests: TestSummary[];
   isAuthenticated: boolean;
+  hasPremiumAccess: boolean;
 }) {
   const [selectedExam, setSelectedExam] = useState<string>("All");
 
@@ -81,6 +84,11 @@ export function TestsBrowser({
                   <span className="rounded-full bg-brand-gold/15 px-2.5 py-0.5 text-xs font-semibold text-brand-gold">
                     {test.targetExam}
                   </span>
+                  {!test.isFreePreview && (
+                    <span className="rounded-full bg-brand-navy/10 px-2.5 py-0.5 text-xs font-semibold text-brand-navy">
+                      Premium
+                    </span>
+                  )}
                 </div>
                 {test.description && (
                   <p className="mt-1 text-sm text-brand-ink/70">
@@ -93,16 +101,23 @@ export function TestsBrowser({
                 </p>
               </div>
 
-              {isAuthenticated ? (
-                <form action={startAttempt.bind(null, test.id)} className="shrink-0">
-                  <StartTestButton label="Start test" />
-                </form>
-              ) : (
+              {!isAuthenticated ? (
                 <Link
                   href="/register"
                   className="shrink-0 rounded-md bg-brand-navy px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
                 >
                   Get started free
+                </Link>
+              ) : test.isFreePreview || hasPremiumAccess ? (
+                <form action={startAttempt.bind(null, test.id)} className="shrink-0">
+                  <StartTestButton label="Start test" />
+                </form>
+              ) : (
+                <Link
+                  href="/pricing"
+                  className="shrink-0 rounded-md border border-brand-gold px-5 py-2.5 text-sm font-semibold text-brand-gold transition-colors hover:bg-brand-gold/10"
+                >
+                  Upgrade to unlock
                 </Link>
               )}
             </div>

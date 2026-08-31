@@ -13,6 +13,7 @@ export type TestRow = {
   targetExam: string;
   durationMinutes: number;
   published: boolean;
+  isFreePreview: boolean;
   questionCount: number;
   sectionCount: number;
   attemptCount: number;
@@ -142,15 +143,26 @@ export function TestListByExam({ tests }: { tests: TestRow[] }) {
                     </Link>
                   </td>
                   <td className="px-5 py-4">
-                    <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                        test.published
-                          ? "bg-green-100 text-green-700"
-                          : "bg-amber-100 text-amber-700"
-                      }`}
-                    >
-                      {test.published ? "Published" : "Draft"}
-                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      <span
+                        className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                          test.published
+                            ? "bg-green-100 text-green-700"
+                            : "bg-amber-100 text-amber-700"
+                        }`}
+                      >
+                        {test.published ? "Published" : "Draft"}
+                      </span>
+                      <span
+                        className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                          test.isFreePreview
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-brand-gold/15 text-brand-gold"
+                        }`}
+                      >
+                        {test.isFreePreview ? "Free" : "Premium"}
+                      </span>
+                    </div>
                   </td>
                   <td className="px-5 py-4">
                     <div className="flex flex-wrap items-center gap-3">

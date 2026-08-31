@@ -22,3 +22,8 @@ export async function setUserRole(userId: string, role: "ADMIN" | "STUDENT") {
 
   await prisma.user.update({ where: { id: userId }, data: { role } });
 }
+
+export async function setUserPremium(userId: string, isPremium: boolean) {
+  await requireAdmin();
+  await prisma.user.update({ where: { id: userId }, data: { isPremium } });
+}

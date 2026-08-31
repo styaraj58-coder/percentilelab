@@ -44,6 +44,7 @@ export default async function EditTestPage({
     description: test.description ?? "",
     targetExam: test.targetExam,
     durationMinutes: test.durationMinutes,
+    isFreePreview: test.isFreePreview,
     sections: test.sections.map((section) => {
       const blocks: InitialTestData["sections"][number]["blocks"] = [];
       let openPassageId: string | null = null;

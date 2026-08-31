@@ -66,6 +66,7 @@ export type InitialTestData = {
   description: string;
   targetExam: string;
   durationMinutes: number;
+  isFreePreview: boolean;
   sections: SectionState[];
 };
 
@@ -292,6 +293,9 @@ export function TestBuilder({
   const [durationMinutes, setDurationMinutes] = useState(
     initialData?.durationMinutes ?? 60
   );
+  const [isFreePreview, setIsFreePreview] = useState(
+    initialData?.isFreePreview ?? false
+  );
   const [sections, setSections] = useState<SectionState[]>(
     initialData?.sections ?? [newSection("Section 1")]
   );
@@ -384,6 +388,7 @@ export function TestBuilder({
       description,
       targetExam,
       durationMinutes,
+      isFreePreview,
       sections: sections.map((s) => ({
         name: s.name,
         blocks: s.blocks.map((b) => {
@@ -493,6 +498,16 @@ export function TestBuilder({
             className="mt-1 w-32 rounded-md border border-black/10 px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
           />
         </div>
+
+        <label className="flex items-center gap-2 text-sm text-brand-ink">
+          <input
+            type="checkbox"
+            checked={isFreePreview}
+            onChange={(e) => setIsFreePreview(e.target.checked)}
+            className="h-4 w-4 accent-brand-navy"
+          />
+          Free preview (accessible without a premium account)
+        </label>
       </div>
 
       {sections.map((section, sIndex) => {

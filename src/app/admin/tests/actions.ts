@@ -118,6 +118,7 @@ async function persistTest(
             targetExam: input.targetExam,
             durationMinutes: input.durationMinutes,
             published,
+            isFreePreview: input.isFreePreview,
           },
         });
         // Replace sections/questions/options wholesale — simplest consistent
@@ -132,6 +133,7 @@ async function persistTest(
             targetExam: input.targetExam,
             durationMinutes: input.durationMinutes,
             published,
+            isFreePreview: input.isFreePreview,
             createdById,
           },
         });

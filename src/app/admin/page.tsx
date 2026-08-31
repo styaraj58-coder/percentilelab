@@ -18,6 +18,7 @@ export default async function AdminDashboardPage() {
     targetExam: test.targetExam,
     durationMinutes: test.durationMinutes,
     published: test.published,
+    isFreePreview: test.isFreePreview,
     questionCount: test.sections.reduce((sum, s) => sum + s._count.questions, 0),
     sectionCount: test.sections.length,
     attemptCount: test._count.attempts,

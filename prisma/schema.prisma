@@ -20,6 +20,10 @@ model User {
   email        String        @unique
   passwordHash String
   role         String        @default("STUDENT")
+  // Manually toggled by an admin for now (see /admin/users); set
+  // automatically once a payment gateway is wired up. Grants access to
+  // tests where Test.isFreePreview is false.
+  isPremium    Boolean       @default(false)
   // Student profile fields — required at signup for STUDENT accounts
   // (enforced in app validation), left null for seeded ADMIN accounts.
   phone        String?
@@ -60,6 +64,10 @@ model Test {
   targetExam      String        @default("MH-CET (MBA)")
   durationMinutes Int
   published       Boolean       @default(false)
+  // Accessible without a premium account. Defaults to false so newly
+  // created tests are premium-gated unless an admin opts them into the
+  // free tier (see /admin/tests and the bank mock generator).
+  isFreePreview   Boolean       @default(false)
   createdById     String
   createdBy       User          @relation("TestCreatedBy", fields: [createdById], references: [id])
   sections        Section[]

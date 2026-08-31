@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
 import { getPublishedTests } from "@/lib/tests-data";
 
 import { TestsBrowser, type TestSummary } from "./tests-browser";
@@ -13,6 +14,21 @@ export const metadata: Metadata = {
 export default async function TestsPage() {
   const session = await auth();
 
+  // A fresh lookup (not the JWT session) so a just-granted premium upgrade
+  // shows up immediately instead of waiting for the session to re-issue.
+  let hasPremiumAccess = false;
+  if (session?.user) {
+    if (session.user.role === "ADMIN") {
+      hasPremiumAccess = true;
+    } else {
+      const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { isPremium: true },
+      });
+      hasPremiumAccess = user?.isPremium ?? false;
+    }
+  }
+
   const tests = await getPublishedTests();
 
   const testSummaries: TestSummary[] = tests.map((test) => ({
@@ -23,6 +39,7 @@ export default async function TestsPage() {
     durationMinutes: test.durationMinutes,
     questionCount: test.sections.reduce((sum, s) => sum + s._count.questions, 0),
     sectionCount: test.sections.length,
+    isFreePreview: test.isFreePreview,
   }));
 
   return (
@@ -39,7 +56,11 @@ export default async function TestsPage() {
       </p>
 
       <div className="mt-10">
-        <TestsBrowser tests={testSummaries} isAuthenticated={!!session?.user} />
+        <TestsBrowser
+          tests={testSummaries}
+          isAuthenticated={!!session?.user}
+          hasPremiumAccess={hasPremiumAccess}
+        />
       </div>
     </div>
   );

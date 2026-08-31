@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
+import { PremiumToggle } from "./premium-toggle";
 import { RoleToggle } from "./role-toggle";
 
 export const metadata: Metadata = { title: "Users | Percentile Lab" };
@@ -17,6 +18,7 @@ export default async function AdminUsersPage() {
       name: true,
       email: true,
       role: true,
+      isPremium: true,
       college: true,
       course: true,
       targetExam: true,
@@ -43,6 +45,7 @@ export default async function AdminUsersPage() {
               <th className="px-5 py-3 font-medium">Name</th>
               <th className="px-5 py-3 font-medium">Email</th>
               <th className="px-5 py-3 font-medium">Role</th>
+              <th className="px-5 py-3 font-medium">Premium</th>
               <th className="px-5 py-3 font-medium">College / Course</th>
               <th className="px-5 py-3 font-medium">Attempts</th>
               <th className="px-5 py-3 font-medium">Joined</th>
@@ -64,6 +67,9 @@ export default async function AdminUsersPage() {
                   >
                     {user.role}
                   </span>
+                </td>
+                <td className="px-5 py-4">
+                  <PremiumToggle userId={user.id} isPremium={user.isPremium} />
                 </td>
                 <td className="px-5 py-4 text-brand-ink/70">
                   {user.college ? (

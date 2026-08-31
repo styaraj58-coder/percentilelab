@@ -21,6 +21,7 @@ export function GenerateMockForm() {
   const [targetExam, setTargetExam] = useState<string>("MH-CET (MBA)");
   const [durationMinutes, setDurationMinutes] = useState(150);
   const [published, setPublished] = useState(false);
+  const [isFreePreview, setIsFreePreview] = useState(false);
   const [counts, setCounts] = useState(DEFAULT_COUNTS);
   const [state, setState] = useState<GenerateMockState>(undefined);
   const [isPending, startTransition] = useTransition();
@@ -35,6 +36,7 @@ export function GenerateMockForm() {
         targetExam: targetExam as (typeof MBA_ENTRANCE_EXAMS)[number],
         durationMinutes,
         published,
+        isFreePreview,
         sectionCounts: counts,
       });
       setState(result);
@@ -129,6 +131,16 @@ export function GenerateMockForm() {
             className="h-4 w-4 accent-brand-navy"
           />
           Publish immediately
+        </label>
+
+        <label className="flex items-center gap-2 text-sm text-brand-ink">
+          <input
+            type="checkbox"
+            checked={isFreePreview}
+            onChange={(e) => setIsFreePreview(e.target.checked)}
+            className="h-4 w-4 accent-brand-navy"
+          />
+          Free preview (accessible without a premium account)
         </label>
 
         <button

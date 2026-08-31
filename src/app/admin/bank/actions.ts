@@ -387,6 +387,7 @@ export async function generateMock(
             targetExam: data.targetExam,
             durationMinutes: data.durationMinutes,
             published: data.published,
+            isFreePreview: data.isFreePreview,
             createdById: admin.id,
           },
         });
