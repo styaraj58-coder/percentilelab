@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/student", "/exam", "/post-login"],
       },
     ],
-    sitemap: "https://percentilelab.in/sitemap.xml",
+    sitemap: "https://www.percentilelab.in/sitemap.xml",
   };
 }

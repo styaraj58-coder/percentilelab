@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const BASE_URL = "https://percentilelab.in";
+const BASE_URL = "https://www.percentilelab.in";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = ["", "/about", "/exams", "/pricing", "/resources", "/tests"];
