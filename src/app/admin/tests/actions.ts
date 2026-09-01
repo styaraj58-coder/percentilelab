@@ -214,6 +214,18 @@ export async function setTestPublished(testId: string, published: boolean) {
   revalidateTag("tests");
 }
 
+export async function setTestFreePreview(testId: string, isFreePreview: boolean) {
+  await requireAdmin();
+
+  const test = await prisma.test.findUnique({ where: { id: testId } });
+  if (!test) {
+    throw new Error("Test not found");
+  }
+
+  await prisma.test.update({ where: { id: testId }, data: { isFreePreview } });
+  revalidateTag("tests");
+}
+
 export async function deleteTest(testId: string) {
   await requireAdmin();
 

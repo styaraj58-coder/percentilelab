@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
-import { deleteTest, setTestPublished } from "./tests/actions";
+import { deleteTest, setTestFreePreview, setTestPublished } from "./tests/actions";
 
 export function PublishToggle({
   testId,
@@ -28,6 +28,33 @@ export function PublishToggle({
       className="text-brand-navy hover:text-brand-gold hover:underline disabled:opacity-50"
     >
       {published ? "Unpublish" : "Publish"}
+    </button>
+  );
+}
+
+export function FreePreviewToggle({
+  testId,
+  isFreePreview,
+}: {
+  testId: string;
+  isFreePreview: boolean;
+}) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  return (
+    <button
+      type="button"
+      disabled={isPending}
+      onClick={() =>
+        startTransition(async () => {
+          await setTestFreePreview(testId, !isFreePreview);
+          router.refresh();
+        })
+      }
+      className="text-brand-navy hover:text-brand-gold hover:underline disabled:opacity-50"
+    >
+      {isFreePreview ? "Make premium" : "Make free"}
     </button>
   );
 }

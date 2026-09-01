@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { MBA_ENTRANCE_EXAMS } from "@/lib/validation";
 
-import { PublishToggle, DeleteTestButton } from "./test-row-actions";
+import { PublishToggle, FreePreviewToggle, DeleteTestButton } from "./test-row-actions";
 
 export type TestRow = {
   id: string;
@@ -179,6 +179,10 @@ export function TestListByExam({ tests }: { tests: TestRow[] }) {
                         Edit
                       </Link>
                       <PublishToggle testId={test.id} published={test.published} />
+                      <FreePreviewToggle
+                        testId={test.id}
+                        isFreePreview={test.isFreePreview}
+                      />
                       <DeleteTestButton testId={test.id} />
                     </div>
                   </td>
