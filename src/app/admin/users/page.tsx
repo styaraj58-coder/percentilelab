@@ -19,6 +19,7 @@ export default async function AdminUsersPage() {
       email: true,
       role: true,
       isPremium: true,
+      phone: true,
       college: true,
       course: true,
       targetExam: true,
@@ -44,6 +45,7 @@ export default async function AdminUsersPage() {
             <tr>
               <th className="px-5 py-3 font-medium">Name</th>
               <th className="px-5 py-3 font-medium">Email</th>
+              <th className="px-5 py-3 font-medium">Contact number</th>
               <th className="px-5 py-3 font-medium">Role</th>
               <th className="px-5 py-3 font-medium">Premium</th>
               <th className="px-5 py-3 font-medium">College / Course</th>
@@ -57,6 +59,9 @@ export default async function AdminUsersPage() {
               <tr key={user.id} className="border-b border-black/5 last:border-0">
                 <td className="px-5 py-4 font-medium text-brand-navy">{user.name}</td>
                 <td className="px-5 py-4 text-brand-ink/70">{user.email}</td>
+                <td className="px-5 py-4 text-brand-ink/70">
+                  {user.phone || <span className="text-brand-ink/30">—</span>}
+                </td>
                 <td className="px-5 py-4">
                   <span
                     className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
