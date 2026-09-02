@@ -9,7 +9,7 @@ import { TestsBrowser, type TestSummary } from "./tests-browser";
 export const metadata: Metadata = {
   title: "Mock Tests | Percentile Lab",
   description:
-    "Browse timed mock tests for CAT, MAH-CET, MAT, ATMA, and more — filter by entrance exam and start practicing.",
+    "Browse timed mock tests for CAT, MAH-CET, MAT, ATMA, and more - filter by entrance exam and start practicing.",
 };
 export default async function TestsPage() {
   const session = await auth();
@@ -52,7 +52,7 @@ export default async function TestsPage() {
       </h1>
       <p className="mt-3 max-w-2xl text-brand-ink/70">
         Every mock and sectional test on Percentile Lab, filterable by
-        entrance exam — pick yours from the dropdown below.
+        entrance exam - pick yours from the dropdown below.
       </p>
 
       <div className="mt-10">

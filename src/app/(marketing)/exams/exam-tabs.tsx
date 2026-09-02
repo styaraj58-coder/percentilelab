@@ -187,7 +187,7 @@ export function ExamTabs({ exams }: { exams: ExamInfo[] }) {
 
         <p className="mt-10 text-xs text-brand-ink/50">
           Exam patterns, syllabi, accepting colleges, and dates are set by
-          each conducting body and can change from year to year — dates
+          each conducting body and can change from year to year - dates
           above are typical tentative windows based on past cycles, not
           confirmed for the upcoming exam. This page is a study reference.
           Always confirm current-year details on the official exam website

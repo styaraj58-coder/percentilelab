@@ -50,7 +50,7 @@ export async function requestPasswordReset(
     await sendPasswordResetEmail({ name: user.name, email: user.email, resetUrl });
   }
 
-  // Always the same response whether or not the email has an account —
+  // Always the same response whether or not the email has an account -
   // otherwise this form could be used to check which emails are registered.
   return { success: true };
 }

@@ -24,7 +24,7 @@ export default function AboutPage() {
         />
         <div>
           <p className="font-semibold text-brand-navy">Satya Raj</p>
-          <p className="text-sm text-brand-ink/60">Founder — CET 99%iler</p>
+          <p className="text-sm text-brand-ink/60">Founder - CET 99%iler</p>
         </div>
       </div>
 

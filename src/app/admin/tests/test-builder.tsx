@@ -634,7 +634,7 @@ export function TestBuilder({
                         onChange={(e) =>
                           updatePassage(section.id, block.id, { text: e.target.value })
                         }
-                        placeholder="Paste the full passage here — every question below will show it."
+                        placeholder="Paste the full passage here - every question below will show it."
                         rows={6}
                         className="mt-1 w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
                       />

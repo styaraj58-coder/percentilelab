@@ -155,7 +155,7 @@ export function GenerateMockForm() {
       {state?.testId && state.summary && (
         <div className="rounded-xl border border-green-200 bg-green-50 p-5">
           <p className="text-sm font-semibold text-green-800">
-            Mock generated —{" "}
+            Mock generated -{" "}
             <Link
               href={`/admin/tests/${state.testId}/preview`}
               className="underline hover:text-green-900"
@@ -200,7 +200,7 @@ export function GenerateMockForm() {
           </table>
           {state.summary.some((s) => s.drawn < s.requested) && (
             <p className="mt-3 text-xs text-amber-700">
-              Some sections came up short — the bank doesn&apos;t have enough
+              Some sections came up short - the bank doesn&apos;t have enough
               unused questions at the requested difficulty mix yet.
             </p>
           )}

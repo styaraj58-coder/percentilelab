@@ -49,7 +49,7 @@ export default function PricingPage() {
           Start free. Upgrade when you need more.
         </h1>
         <p className="mx-auto mt-3 max-w-xl text-brand-ink/70">
-          Core test-taking and analysis features are free — no card required.
+          Core test-taking and analysis features are free - no card required.
         </p>
       </div>
 

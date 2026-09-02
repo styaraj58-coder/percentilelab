@@ -39,7 +39,7 @@ export const exams: ExamInfo[] = [
     fullName: "Maharashtra Common Entrance Test (MBA/MMS)",
     conductedBy: "State CET Cell, Maharashtra",
     about:
-      "MAH-CET (MBA/MMS) is the state-level entrance test for admission to MBA/MMS programs at management institutes across Maharashtra, including the Jamnalal Bajaj Institute, Sydenham, and PUMBA. It's a computer-based test built around speed and accuracy across four sections, with no negative marking — which changes the risk calculus compared to national exams like CAT.",
+      "MAH-CET (MBA/MMS) is the state-level entrance test for admission to MBA/MMS programs at management institutes across Maharashtra, including the Jamnalal Bajaj Institute, Sydenham, and PUMBA. It's a computer-based test built around speed and accuracy across four sections, with no negative marking - which changes the risk calculus compared to national exams like CAT.",
     pattern: {
       mode: "Computer-based test (CBT)",
       duration: "150 minutes",
@@ -111,7 +111,7 @@ export const exams: ExamInfo[] = [
     fullName: "Common Admission Test",
     conductedBy: "Indian Institutes of Management (IIMs), on rotation",
     about:
-      "CAT is India's most competitive MBA entrance exam, used for admission to the IIMs and accepted by hundreds of other B-schools. It tests data interpretation and logical reasoning as a standalone section, alongside quant and verbal, under strict sectional time limits — you can't borrow time from one section to finish another.",
+      "CAT is India's most competitive MBA entrance exam, used for admission to the IIMs and accepted by hundreds of other B-schools. It tests data interpretation and logical reasoning as a standalone section, alongside quant and verbal, under strict sectional time limits - you can't borrow time from one section to finish another.",
     pattern: {
       mode: "Computer-based test (CBT), sectional timing enforced",
       duration: "~120 minutes (individual sectional time limits apply)",
@@ -183,7 +183,7 @@ export const exams: ExamInfo[] = [
     about:
       "MAT is unique for running four times a year and offering both a paper-based and computer-based mode, making it a flexible option accepted by a wide range of B-schools. It closely mirrors the classic five-section MBA aptitude format.",
     pattern: {
-      mode: "Paper-based (PBT), Computer-based (CBT), or Internet-based (IBT) — candidate's choice",
+      mode: "Paper-based (PBT), Computer-based (CBT), or Internet-based (IBT) - candidate's choice",
       duration: "150 minutes",
       totalQuestions: "200 questions",
       markingScheme: "+1 for correct, -0.25 for wrong answer",
@@ -230,7 +230,7 @@ export const exams: ExamInfo[] = [
       "Symbiosis Institute of Management Studies (SIMS), Pune",
     ],
     tentativeDates: [
-      { label: "Test windows", window: "Runs 4 times a year — February, May, September, December" },
+      { label: "Test windows", window: "Runs 4 times a year - February, May, September, December" },
       { label: "Registration", window: "Closes ~1–2 weeks before each test window" },
       { label: "Result", window: "~2–3 weeks after each test window" },
     ],
@@ -296,7 +296,7 @@ export const exams: ExamInfo[] = [
       "K J Somaiya Institute of Management, Mumbai",
     ],
     tentativeDates: [
-      { label: "Test windows", window: "Runs ~6 times a year — roughly Feb, Apr, May, Jul, Sep, Dec" },
+      { label: "Test windows", window: "Runs ~6 times a year - roughly Feb, Apr, May, Jul, Sep, Dec" },
       { label: "Registration", window: "Closes ~1–2 weeks before each test window" },
       { label: "Result", window: "~1–2 weeks after each test window" },
     ],
@@ -307,7 +307,7 @@ export const exams: ExamInfo[] = [
     fullName: "MAH BBA/BMS/BCA/BBM CET (Undergraduate)",
     conductedBy: "State CET Cell, Maharashtra",
     about:
-      "UG BMS CET is the state-level entrance test for admission to undergraduate management programs — BMS, BBA, BCA, BBM, and similar — at colleges across Maharashtra, including NM College, Mithibai, and Jai Hind. It's a shorter, simpler test than the MBA-level MAH-CET: no sectional cutoffs, no sectional time limits, and no negative marking, with a heavier weight on English and general reasoning than on quant.",
+      "UG BMS CET is the state-level entrance test for admission to undergraduate management programs - BMS, BBA, BCA, BBM, and similar - at colleges across Maharashtra, including NM College, Mithibai, and Jai Hind. It's a shorter, simpler test than the MBA-level MAH-CET: no sectional cutoffs, no sectional time limits, and no negative marking, with a heavier weight on English and general reasoning than on quant.",
     pattern: {
       mode: "Computer-based test (CBT)",
       duration: "90 minutes",

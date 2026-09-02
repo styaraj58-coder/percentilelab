@@ -6,7 +6,7 @@ import { ExamTabs } from "@/app/(marketing)/exams/exam-tabs";
 export const metadata: Metadata = {
   title: "MBA Entrance Exams | Percentile Lab",
   description:
-    "Syllabus and exam pattern for MAH-CET, CAT, MAT, and ATMA — the major MBA entrance exams in India.",
+    "Syllabus and exam pattern for MAH-CET, CAT, MAT, and ATMA - the major MBA entrance exams in India.",
 };
 
 export default function ExamsPage() {
@@ -19,7 +19,7 @@ export default function ExamsPage() {
         Know the exam before you prep for it
       </h1>
       <p className="mt-3 max-w-2xl text-brand-ink/70">
-        Syllabus and exam pattern for every major MBA entrance exam — pick a
+        Syllabus and exam pattern for every major MBA entrance exam - pick a
         tab to see what it actually tests.
       </p>
 

@@ -201,13 +201,13 @@ export default async function AttemptResultsPage({
   const recommendations: string[] = [];
   if (weakestSection && sectionsWithAccuracy.length > 1) {
     recommendations.push(
-      `${weakestSection.name} is your weakest section at ${weakestSection.accuracy}% accuracy (${weakestSection.correctCount}/${weakestSection.questionCount} correct) — spend your next study block there before moving on.`
+      `${weakestSection.name} is your weakest section at ${weakestSection.accuracy}% accuracy (${weakestSection.correctCount}/${weakestSection.questionCount} correct) - spend your next study block there before moving on.`
     );
   }
   if (weakTopics.length > 0) {
     const worst = weakTopics[0];
     recommendations.push(
-      `Within that, "${worst.topic}" stands out at just ${worst.accuracy}% accuracy (${worst.correct}/${worst.total}) — worth targeted practice on this topic specifically.`
+      `Within that, "${worst.topic}" stands out at just ${worst.accuracy}% accuracy (${worst.correct}/${worst.total}) - worth targeted practice on this topic specifically.`
     );
   }
   const unattemptedCount = allQuestions.filter(
@@ -215,12 +215,12 @@ export default async function AttemptResultsPage({
   ).length;
   if (allQuestions.length > 0 && unattemptedCount / allQuestions.length > 0.15) {
     recommendations.push(
-      `You left ${unattemptedCount} question(s) unattempted — if that wasn't intentional, work on pacing so you reach every question next time.`
+      `You left ${unattemptedCount} question(s) unattempted - if that wasn't intentional, work on pacing so you reach every question next time.`
     );
   }
   if (recommendations.length === 0) {
     recommendations.push(
-      "Solid, even performance across sections — no single weak spot to flag. Keep practicing at this pace and watch your percentile trend over your next few mocks."
+      "Solid, even performance across sections - no single weak spot to flag. Keep practicing at this pace and watch your percentile trend over your next few mocks."
     );
   }
 
@@ -392,7 +392,7 @@ export default async function AttemptResultsPage({
         <h2 className="text-lg font-semibold text-brand-navy">Leaderboard</h2>
         <p className="mt-1 text-sm text-brand-ink/60">
           Ranked by score among everyone who has taken this test
-          {myRank ? ` — you're ranked #${myRank} of ${leaderboardRows.length}.` : "."}
+          {myRank ? ` - you're ranked #${myRank} of ${leaderboardRows.length}.` : "."}
         </p>
         <div className="mt-4 overflow-x-auto rounded-xl border border-black/5 bg-white">
           <table className="w-full min-w-[380px] text-left text-sm">
@@ -467,7 +467,7 @@ export default async function AttemptResultsPage({
             title="Incorrect"
             badgeClass="bg-red-100 text-red-700"
             rows={incorrectQuestions}
-            emptyMessage="No incorrect answers — nice."
+            emptyMessage="No incorrect answers - nice."
           />
           <QuestionSummaryTable
             title="Not attempted"
@@ -544,7 +544,7 @@ export default async function AttemptResultsPage({
                       {(() => {
                         const difficulty = difficultyByQuestion.get(question.id);
                         return difficulty === null || difficulty === undefined
-                          ? "—"
+                          ? "-"
                           : `${difficulty}%`;
                       })()}
                     </span>

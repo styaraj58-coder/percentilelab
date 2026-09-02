@@ -60,7 +60,7 @@ export default async function AdminUsersPage() {
                 <td className="px-5 py-4 font-medium text-brand-navy">{user.name}</td>
                 <td className="px-5 py-4 text-brand-ink/70">{user.email}</td>
                 <td className="px-5 py-4 text-brand-ink/70">
-                  {user.phone || <span className="text-brand-ink/30">—</span>}
+                  {user.phone || <span className="text-brand-ink/30">-</span>}
                 </td>
                 <td className="px-5 py-4">
                   <span
@@ -85,7 +85,7 @@ export default async function AdminUsersPage() {
                       )}
                     </>
                   ) : (
-                    <span className="text-brand-ink/30">—</span>
+                    <span className="text-brand-ink/30">-</span>
                   )}
                 </td>
                 <td className="px-5 py-4 text-brand-ink/70">{user._count.attempts}</td>

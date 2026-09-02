@@ -22,11 +22,11 @@ export const metadata: Metadata = { title: "Study Resources | Percentile Lab" };
 const articles = [
   {
     title: "Why sectional cutoffs matter more than your overall score",
-    body: "Most MBA entrance exams — CAT, MAH-CET, and others — evaluate you section by section, not just on total marks. A strong Quant score can't make up for a section you clear by luck — many institutes apply a minimum cutoff per section. Use the section-wise breakdown on every mock to find your weakest section early, and weight your next week of practice toward it instead of drilling what you're already good at.",
+    body: "Most MBA entrance exams - CAT, MAH-CET, and others - evaluate you section by section, not just on total marks. A strong Quant score can't make up for a section you clear by luck - many institutes apply a minimum cutoff per section. Use the section-wise breakdown on every mock to find your weakest section early, and weight your next week of practice toward it instead of drilling what you're already good at.",
   },
   {
     title: "Time-box every section before you start",
-    body: "Decide, before the timer starts, how many minutes each section gets — and stick to it even if you're not done. Students who lose the most marks usually aren't weak on content; they run out of time on a section they were strong in because an earlier section ran long. Check your time-per-question analysis after each mock to see exactly where your pacing breaks down.",
+    body: "Decide, before the timer starts, how many minutes each section gets - and stick to it even if you're not done. Students who lose the most marks usually aren't weak on content; they run out of time on a section they were strong in because an earlier section ran long. Check your time-per-question analysis after each mock to see exactly where your pacing breaks down.",
   },
   {
     title: "Attempt in two passes, not one",
@@ -56,7 +56,7 @@ export default async function ResourcesPage() {
         Videos, PDFs, and prep tips in one place
       </h1>
       <p className="mt-3 max-w-2xl text-brand-ink/70">
-        Free study material curated by the Percentile Lab team — pick a tab
+        Free study material curated by the Percentile Lab team - pick a tab
         below to browse.
       </p>
 
@@ -72,7 +72,7 @@ export default async function ResourcesPage() {
           MBA entrance exam prep tips
         </h2>
         <p className="mt-3 text-brand-ink/70">
-          Short, practical notes on how to prep smarter — not just longer.
+          Short, practical notes on how to prep smarter - not just longer.
         </p>
 
         <div className="mt-8 space-y-8">

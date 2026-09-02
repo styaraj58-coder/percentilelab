@@ -42,14 +42,14 @@ export default async function StudentDashboardPage() {
       {myExam && (
         <p className="mt-2 text-sm text-brand-ink/70">
           You&apos;re registered for{" "}
-          <span className="font-semibold text-brand-navy">{myExam}</span> —
+          <span className="font-semibold text-brand-navy">{myExam}</span> -
           tests for it are shown first below.
         </p>
       )}
 
       {tests.length === 0 ? (
         <div className="mt-8 rounded-xl border border-dashed border-brand-navy/20 bg-white p-10 text-center text-brand-ink/60">
-          No tests are published yet — check back soon.
+          No tests are published yet - check back soon.
         </div>
       ) : (
         <div className="mt-8 space-y-6">

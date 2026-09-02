@@ -158,7 +158,7 @@ export function ResourceTabs({
             </div>
           ) : (
             <p className="text-sm text-brand-ink/50">
-              No videos published yet — check back soon.
+              No videos published yet - check back soon.
             </p>
           )
         ) : materials.length > 0 ? (
@@ -169,7 +169,7 @@ export function ResourceTabs({
           </div>
         ) : (
           <p className="text-sm text-brand-ink/50">
-            No study materials published yet — check back soon.
+            No study materials published yet - check back soon.
           </p>
         )}
       </div>

@@ -66,8 +66,8 @@ export function TestsBrowser({
       {visibleTests.length === 0 ? (
         <div className="mt-8 rounded-xl border border-dashed border-brand-navy/20 bg-white p-10 text-center text-brand-ink/60">
           {selectedExam === "All"
-            ? "No tests are published yet — check back soon."
-            : `No ${selectedExam} tests published yet — check back soon.`}
+            ? "No tests are published yet - check back soon."
+            : `No ${selectedExam} tests published yet - check back soon.`}
         </div>
       ) : (
         <div className="mt-8 space-y-4">

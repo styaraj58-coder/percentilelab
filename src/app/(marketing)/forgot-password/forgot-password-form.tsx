@@ -12,7 +12,7 @@ export function ForgotPasswordForm() {
     return (
       <div className="rounded-md bg-brand-cream px-4 py-3 text-sm text-brand-navy">
         If an account exists for that email, we&apos;ve sent a password
-        reset link — check your inbox.
+        reset link - check your inbox.
       </div>
     );
   }

@@ -57,7 +57,7 @@ export function QuestionSummaryTable({
                   </td>
                   <td className="px-3 py-2.5 text-brand-ink/70">{row.seconds}s</td>
                   <td className="px-3 py-2.5 text-brand-ink/70">
-                    {row.difficulty === null ? "—" : `${row.difficulty}%`}
+                    {row.difficulty === null ? "-" : `${row.difficulty}%`}
                   </td>
                 </tr>
               ))}

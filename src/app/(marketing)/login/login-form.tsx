@@ -19,12 +19,12 @@ export function LoginForm({
     <form action={formAction} className="space-y-4">
       {registered && (
         <p className="rounded-md bg-brand-cream px-4 py-3 text-sm text-brand-navy">
-          Account created — sign in below.
+          Account created - sign in below.
         </p>
       )}
       {reset && (
         <p className="rounded-md bg-brand-cream px-4 py-3 text-sm text-brand-navy">
-          Password reset — sign in with your new password.
+          Password reset - sign in with your new password.
         </p>
       )}
       {state?.error && (

@@ -373,7 +373,7 @@ export async function generateMock(
     if (usedBankQuestionIds.length === 0) {
       return {
         error:
-          "No matching questions were found in the bank for any requested section — add bank content first.",
+          "No matching questions were found in the bank for any requested section - add bank content first.",
       };
     }
 

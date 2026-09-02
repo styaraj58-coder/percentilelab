@@ -55,7 +55,7 @@ export function MockTestPopup() {
           Take a mock test now
         </h2>
         <p className="mt-2 text-sm text-brand-ink/70">
-          See exactly where you stand — pick a timed mock and get your
+          See exactly where you stand - pick a timed mock and get your
           percentile, section-wise breakdown, and full answer review right
           after you submit.
         </p>

@@ -7,7 +7,7 @@ const features = [
   {
     title: "Full-length MBA entrance exam mocks",
     description:
-      "Sectional MCQ tests covering Quant, Verbal, Logical Reasoning, and General Awareness — built the way CAT, MAH-CET, and every other MBA entrance exam is actually structured.",
+      "Sectional MCQ tests covering Quant, Verbal, Logical Reasoning, and General Awareness - built the way CAT, MAH-CET, and every other MBA entrance exam is actually structured.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
         <path strokeLinecap="round" strokeLinejoin="round" d="M6 3.5h9l3 3v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1Z" />
@@ -28,7 +28,7 @@ const features = [
   {
     title: "Section-wise breakdown",
     description:
-      "Know which section is pulling your score down — accuracy and marks broken out by section, every time.",
+      "Know which section is pulling your score down - accuracy and marks broken out by section, every time.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v9l7.8 4.5" />
@@ -75,7 +75,7 @@ const steps = [
   {
     step: "1",
     title: "Create your free account",
-    description: "Sign up in under a minute — no payment required to get started.",
+    description: "Sign up in under a minute - no payment required to get started.",
   },
   {
     step: "2",
@@ -145,7 +145,7 @@ export default function HomePage() {
           <div className="mt-5 h-1.5 w-16 rounded-full bg-brand-gold" />
           <p className="mt-5 max-w-xl text-base text-brand-ink/70 sm:text-lg">
             Percentile Lab gives you timed mock tests for every major MBA
-            entrance exam — CAT, MAH-CET, MAT, and ATMA — with section-wise
+            entrance exam - CAT, MAH-CET, MAT, and ATMA - with section-wise
             scoring, time-per-question analysis, and full answer reviews.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -256,7 +256,7 @@ export default function HomePage() {
                 Real exam pressure, right at home
               </h3>
               <p className="mt-1 text-center text-sm text-brand-ink/70">
-                One running clock, no pausing — practice the way you&apos;ll
+                One running clock, no pausing - practice the way you&apos;ll
                 actually be tested.
               </p>
             </div>
@@ -274,7 +274,7 @@ export default function HomePage() {
                 Think it through, then check yourself
               </h3>
               <p className="mt-1 text-center text-sm text-brand-ink/70">
-                Every question gets a full explanation afterward — not just a
+                Every question gets a full explanation afterward - not just a
                 right or wrong.
               </p>
             </div>
