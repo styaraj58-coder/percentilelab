@@ -135,7 +135,7 @@ export default function HomePage() {
   return (
     <div>
       <MockTestPopup />
-      <section className="relative overflow-hidden bg-brand-navy">
+      <section className="relative overflow-hidden bg-brand-cream">
         <div className="relative overflow-hidden">
           <Image
             src="/images/hero-student-bg.jpg"
