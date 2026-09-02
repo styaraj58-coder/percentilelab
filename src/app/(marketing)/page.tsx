@@ -145,7 +145,7 @@ export default function HomePage() {
             className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/85 to-brand-navy/25" />
-          <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-4 pb-10 pt-16 text-center sm:px-6 md:pt-20 lg:max-w-6xl lg:items-start lg:text-left">
+          <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-4 pb-16 pt-16 text-center sm:px-6 sm:pb-20 md:pt-20 lg:max-w-6xl lg:items-start lg:text-left">
             <h1 className="text-4xl font-bold leading-tight text-white sm:text-5xl">
               Practice like it&apos;s exam day. <br />
               Know your <span className="text-brand-gold">percentile</span>{" "}
