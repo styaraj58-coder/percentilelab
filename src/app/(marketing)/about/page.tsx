@@ -16,11 +16,11 @@ export default function AboutPage() {
 
       <div className="mt-6 flex items-center gap-4">
         <Image
-          src="/images/satya-raj-founder.jpg"
+          src="/images/satya-raj-headshot.jpg"
           alt="Satya Raj, founder of Percentile Lab"
           width={731}
-          height={1045}
-          className="h-16 w-16 rounded-full object-cover ring-2 ring-brand-gold/30 sm:h-20 sm:w-20"
+          height={731}
+          className="h-20 w-20 rounded-full object-cover ring-2 ring-brand-gold/30 sm:h-24 sm:w-24"
         />
         <div>
           <p className="font-semibold text-brand-navy">Satya Raj</p>
