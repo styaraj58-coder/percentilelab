@@ -14,6 +14,18 @@ export const resetPasswordSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
+export const enquirySchema = z.object({
+  name: z.string().trim().min(2, "Name must be at least 2 characters"),
+  phone: z
+    .string()
+    .trim()
+    .min(10, "Enter a valid contact number")
+    .max(15, "Enter a valid contact number")
+    .regex(/^[0-9+\-\s]+$/, "Enter a valid contact number"),
+  email: z.string().trim().email("Enter a valid email").optional().or(z.literal("")),
+  message: z.string().trim().max(1000, "Keep it under 1000 characters").optional(),
+});
+
 export const MBA_ENTRANCE_EXAMS = [
   "MH-CET (MBA)",
   "CAT",

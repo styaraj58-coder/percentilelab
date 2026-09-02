@@ -44,6 +44,42 @@ export async function sendNewStudentNotification(student: {
   }
 }
 
+export async function sendEnquiryNotification(enquiry: {
+  name: string;
+  phone: string;
+  email?: string;
+  message?: string;
+}) {
+  const notifyEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+  if (!resend || !notifyEmail) {
+    console.warn(
+      "Skipping enquiry notification email: RESEND_API_KEY or ADMIN_NOTIFICATION_EMAIL not set."
+    );
+    return;
+  }
+
+  try {
+    await resend.emails.send({
+      from: process.env.RESEND_FROM_EMAIL || "Percentile Lab <onboarding@resend.dev>",
+      to: notifyEmail,
+      subject: `New enquiry: ${enquiry.name}`,
+      text: [
+        "Someone submitted an enquiry from the website.",
+        "",
+        `Name: ${enquiry.name}`,
+        `Phone: ${enquiry.phone}`,
+        enquiry.email ? `Email: ${enquiry.email}` : null,
+        enquiry.message ? `Message: ${enquiry.message}` : null,
+        `Submitted: ${new Date().toLocaleString()}`,
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    });
+  } catch (error) {
+    console.error("Failed to send enquiry notification email:", error);
+  }
+}
+
 export async function sendPasswordResetEmail(user: {
   name: string;
   email: string;

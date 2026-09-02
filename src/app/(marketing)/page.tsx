@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { MockTestPopup } from "@/components/mock-test-popup";
+import { EnquireNow } from "@/components/enquire-now";
 
 const features = [
   {
@@ -135,6 +136,7 @@ export default function HomePage() {
   return (
     <div>
       <MockTestPopup />
+      <EnquireNow />
       <section className="relative overflow-hidden bg-brand-cream">
         <div className="relative overflow-hidden">
           <Image
