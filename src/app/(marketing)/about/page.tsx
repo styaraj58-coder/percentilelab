@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = { title: "About | Percentile Lab" };
@@ -12,9 +13,20 @@ export default function AboutPage() {
       <h1 className="mt-2 text-3xl font-bold text-brand-navy sm:text-4xl">
         Built for one goal: a higher percentile, on any MBA entrance exam
       </h1>
-      <p className="mt-3 text-sm font-medium text-brand-ink/60">
-        Created by Satya Raj, CET 99%iler
-      </p>
+
+      <div className="mt-6 flex items-center gap-4">
+        <Image
+          src="/images/satya-raj-founder.jpg"
+          alt="Satya Raj, founder of Percentile Lab"
+          width={731}
+          height={1045}
+          className="h-16 w-16 rounded-full object-cover ring-2 ring-brand-gold/30 sm:h-20 sm:w-20"
+        />
+        <div>
+          <p className="font-semibold text-brand-navy">Satya Raj</p>
+          <p className="text-sm text-brand-ink/60">Founder — CET 99%iler</p>
+        </div>
+      </div>
 
       <div className="mt-8 space-y-6 text-brand-ink/80">
         <p>
