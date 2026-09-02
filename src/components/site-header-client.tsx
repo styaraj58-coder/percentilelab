@@ -5,13 +5,13 @@ import { useState } from "react";
 
 import { Logo } from "@/components/logo";
 import { signOutAction } from "@/lib/actions";
+import { exams } from "@/lib/exam-data";
 
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/tests", label: "Tests" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/exams", label: "Exams" },
   { href: "/resources", label: "Resources" },
 ];
 
@@ -30,7 +30,39 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
         <Logo />
 
         <nav className="hidden items-center gap-6 md:flex">
-          {navLinks.map((link) => (
+          {navLinks.slice(0, 4).map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-sm font-medium text-brand-ink/80 transition-colors hover:text-brand-navy"
+            >
+              {link.label}
+            </Link>
+          ))}
+
+          <div className="group relative">
+            <Link
+              href="/exams"
+              className="text-sm font-medium text-brand-ink/80 transition-colors hover:text-brand-navy"
+            >
+              Exams
+            </Link>
+            <div className="invisible absolute left-1/2 top-full z-50 w-56 -translate-x-1/2 pt-3 opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div className="overflow-hidden rounded-xl border border-black/5 bg-white py-2 shadow-lg">
+                {exams.map((exam) => (
+                  <Link
+                    key={exam.slug}
+                    href={`/exams?exam=${exam.slug}`}
+                    className="block px-4 py-2 text-sm text-brand-ink/80 transition-colors hover:bg-brand-cream hover:text-brand-navy"
+                  >
+                    {exam.shortName}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {navLinks.slice(4).map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -104,7 +136,24 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
       {open && (
         <div className="border-t border-black/5 bg-white px-4 py-4 md:hidden">
           <nav className="flex flex-col gap-3">
-            {navLinks.map((link) => (
+            {navLinks.slice(0, 4).map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className="text-sm font-medium text-brand-ink/80 hover:text-brand-navy"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Link
+              href="/exams"
+              onClick={() => setOpen(false)}
+              className="text-sm font-medium text-brand-ink/80 hover:text-brand-navy"
+            >
+              Exams
+            </Link>
+            {navLinks.slice(4).map((link) => (
               <Link
                 key={link.href}
                 href={link.href}

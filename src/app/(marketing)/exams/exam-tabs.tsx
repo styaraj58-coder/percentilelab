@@ -4,8 +4,14 @@ import { useState } from "react";
 
 import type { ExamInfo } from "@/lib/exam-data";
 
-export function ExamTabs({ exams }: { exams: ExamInfo[] }) {
-  const [activeSlug, setActiveSlug] = useState(exams[0]?.slug);
+export function ExamTabs({
+  exams,
+  initialSlug,
+}: {
+  exams: ExamInfo[];
+  initialSlug?: string;
+}) {
+  const [activeSlug, setActiveSlug] = useState(initialSlug ?? exams[0]?.slug);
   const active = exams.find((e) => e.slug === activeSlug) ?? exams[0];
 
   if (!active) return null;

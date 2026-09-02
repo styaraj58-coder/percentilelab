@@ -9,7 +9,14 @@ export const metadata: Metadata = {
     "Syllabus and exam pattern for MAH-CET, CAT, MAT, and ATMA - the major MBA entrance exams in India.",
 };
 
-export default function ExamsPage() {
+export default async function ExamsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ exam?: string }>;
+}) {
+  const { exam } = await searchParams;
+  const initialSlug = exams.some((e) => e.slug === exam) ? exam : undefined;
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
       <p className="text-xs font-semibold uppercase tracking-wide text-brand-gold">
@@ -24,7 +31,7 @@ export default function ExamsPage() {
       </p>
 
       <div className="mt-10">
-        <ExamTabs exams={exams} />
+        <ExamTabs exams={exams} initialSlug={initialSlug} />
       </div>
     </div>
   );
