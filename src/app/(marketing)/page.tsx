@@ -181,7 +181,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="relative z-10 mx-auto max-w-5xl px-4 pb-14 sm:px-6">
+        <div className="relative z-10 mx-auto max-w-5xl px-4 pb-14 pt-10 sm:px-6 sm:pt-14">
           <div className="grid grid-cols-2 gap-6 rounded-2xl bg-brand-navy p-6 shadow-lg sm:grid-cols-4 sm:p-7">
             {heroHighlights.map((item) => (
               <div key={item.title} className="flex items-start gap-3">
