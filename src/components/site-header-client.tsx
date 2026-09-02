@@ -16,7 +16,7 @@ const navLinks = [
 ];
 
 const navLinkClass =
-  "relative text-sm font-medium text-brand-ink/80 transition-colors hover:text-brand-navy after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-brand-gold after:transition-all after:duration-200 hover:after:w-full";
+  "relative whitespace-nowrap text-sm font-medium text-brand-ink/80 transition-colors hover:text-brand-navy after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-brand-gold after:transition-all after:duration-200 hover:after:w-full";
 
 type SessionInfo = {
   name: string;
@@ -32,7 +32,7 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
         <Logo />
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-6 lg:flex">
           {navLinks.slice(0, 4).map((link) => (
             <Link key={link.href} href={link.href} className={navLinkClass}>
               {link.label}
@@ -78,19 +78,19 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 md:flex">
+        <div className="hidden items-center gap-4 lg:flex">
           {session ? (
             <>
               <Link
                 href={dashboardHref}
-                className="rounded-md bg-brand-navy px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
+                className="whitespace-nowrap rounded-md bg-brand-navy px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
               >
                 Dashboard
               </Link>
               <form action={signOutAction}>
                 <button
                   type="submit"
-                  className="cursor-pointer text-sm font-medium text-brand-navy transition-colors hover:text-brand-gold"
+                  className="cursor-pointer whitespace-nowrap text-sm font-medium text-brand-navy transition-colors hover:text-brand-gold"
                 >
                   Sign out
                 </button>
@@ -100,13 +100,13 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
             <>
               <Link
                 href="/login"
-                className="text-sm font-medium text-brand-navy hover:text-brand-gold"
+                className="whitespace-nowrap text-sm font-medium text-brand-navy hover:text-brand-gold"
               >
                 Log in
               </Link>
               <Link
                 href="/register"
-                className="rounded-md bg-brand-gold px-4 py-2 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-gold-light"
+                className="whitespace-nowrap rounded-md bg-brand-gold px-4 py-2 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-gold-light"
               >
                 Get Started
               </Link>
@@ -117,7 +117,7 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="flex h-9 w-9 items-center justify-center rounded-md text-brand-navy md:hidden"
+          className="flex h-9 w-9 items-center justify-center rounded-md text-brand-navy lg:hidden"
           aria-label="Toggle menu"
           aria-expanded={open}
         >
@@ -139,7 +139,7 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
       </div>
 
       {open && (
-        <div className="border-t border-black/5 bg-white px-4 py-4 md:hidden">
+        <div className="border-t border-black/5 bg-white px-4 py-4 lg:hidden">
           <nav className="flex flex-col gap-3">
             {navLinks.slice(0, 4).map((link) => (
               <Link

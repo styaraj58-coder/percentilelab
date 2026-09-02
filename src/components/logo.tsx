@@ -12,7 +12,7 @@ export function Logo({ className = "" }: { className?: string }) {
         className="h-9 w-9 object-contain"
         priority
       />
-      <span className="font-semibold text-lg leading-tight text-brand-navy">
+      <span className="whitespace-nowrap font-semibold text-lg leading-tight text-brand-navy">
         Percentile <span className="text-brand-gold">Lab</span>
       </span>
     </Link>
