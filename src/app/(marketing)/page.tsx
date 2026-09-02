@@ -235,15 +235,15 @@ export default function HomePage() {
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="rounded-xl border border-black/5 bg-white p-6 shadow-sm"
+              className="rounded-xl bg-brand-navy p-6 shadow-sm"
             >
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-brand-gold/15 text-brand-gold">
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-brand-gold">
                 {feature.icon}
               </div>
-              <h3 className="text-lg font-semibold text-brand-navy">
+              <h3 className="text-lg font-semibold text-white">
                 {feature.title}
               </h3>
-              <p className="mt-2 text-sm text-brand-ink/70">
+              <p className="mt-2 text-sm text-white/70">
                 {feature.description}
               </p>
             </div>
