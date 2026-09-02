@@ -79,7 +79,7 @@ export default async function ResourcesPage() {
           {articles.map((article) => (
             <article
               key={article.title}
-              className="rounded-xl border border-black/5 bg-white p-6 shadow-sm"
+              className="rounded-xl border border-black/5 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-navy/15 hover:shadow-md"
             >
               <h3 className="text-lg font-semibold text-brand-navy">
                 {article.title}

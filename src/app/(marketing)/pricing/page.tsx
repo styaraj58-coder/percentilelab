@@ -57,7 +57,7 @@ export default function PricingPage() {
         {plans.map((plan) => (
           <div
             key={plan.name}
-            className={`flex flex-col rounded-2xl border p-8 ${
+            className={`flex flex-col rounded-2xl border p-8 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl ${
               plan.highlight
                 ? "border-brand-gold bg-brand-navy text-white"
                 : "border-black/10 bg-white"

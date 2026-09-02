@@ -15,6 +15,9 @@ const navLinks = [
   { href: "/resources", label: "Resources" },
 ];
 
+const navLinkClass =
+  "relative text-sm font-medium text-brand-ink/80 transition-colors hover:text-brand-navy after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-brand-gold after:transition-all after:duration-200 hover:after:w-full";
+
 type SessionInfo = {
   name: string;
   role: string;
@@ -31,11 +34,7 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
 
         <nav className="hidden items-center gap-6 md:flex">
           {navLinks.slice(0, 4).map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-brand-ink/80 transition-colors hover:text-brand-navy"
-            >
+            <Link key={link.href} href={link.href} className={navLinkClass}>
               {link.label}
             </Link>
           ))}
@@ -43,7 +42,7 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
           <div className="group relative">
             <Link
               href="/exams"
-              className="flex items-center gap-1 text-sm font-medium text-brand-ink/80 transition-colors hover:text-brand-navy"
+              className={`flex items-center gap-1 ${navLinkClass}`}
             >
               Exams
               <svg
@@ -73,11 +72,7 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
           </div>
 
           {navLinks.slice(4).map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-brand-ink/80 transition-colors hover:text-brand-navy"
-            >
+            <Link key={link.href} href={link.href} className={navLinkClass}>
               {link.label}
             </Link>
           ))}

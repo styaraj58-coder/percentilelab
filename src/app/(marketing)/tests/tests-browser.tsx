@@ -74,7 +74,7 @@ export function TestsBrowser({
           {visibleTests.map((test) => (
             <div
               key={test.id}
-              className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-black/5 bg-white p-6"
+              className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-black/5 bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-navy/15 hover:shadow-md"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">

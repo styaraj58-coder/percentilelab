@@ -34,7 +34,7 @@ function VideoCard({ video }: { video: ResourceItem }) {
   const embedUrl = getYouTubeEmbedUrl(video.url);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-black/5 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-xl border border-black/5 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
       {embedUrl ? (
         <div className="aspect-video w-full">
           <iframe
@@ -71,7 +71,7 @@ function MaterialCard({ material }: { material: ResourceItem }) {
       href={material.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-start gap-4 rounded-xl border border-black/5 bg-white p-5 shadow-sm transition-colors hover:border-brand-navy/20"
+      className="flex items-start gap-4 rounded-xl border border-black/5 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-navy/20 hover:shadow-md"
     >
       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-gold/15 text-brand-gold">
         <svg

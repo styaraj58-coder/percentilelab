@@ -20,7 +20,7 @@ export default function AboutPage() {
           alt="Satya Raj, founder of Percentile Lab"
           width={731}
           height={731}
-          className="h-20 w-20 rounded-full object-cover ring-2 ring-brand-gold/30 sm:h-24 sm:w-24"
+          className="h-20 w-20 rounded-full object-cover ring-2 ring-brand-gold/30 transition-transform duration-300 hover:scale-105 sm:h-24 sm:w-24"
         />
         <div>
           <p className="font-semibold text-brand-navy">Satya Raj</p>

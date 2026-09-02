@@ -62,7 +62,7 @@ export function ExamTabs({
             Exam pattern
           </h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-xl border border-black/5 bg-white p-4">
+            <div className="rounded-xl border border-black/5 bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-navy/15 hover:shadow-md">
               <p className="text-xs uppercase tracking-wide text-brand-ink/50">
                 Mode
               </p>
@@ -70,7 +70,7 @@ export function ExamTabs({
                 {active.pattern.mode}
               </p>
             </div>
-            <div className="rounded-xl border border-black/5 bg-white p-4">
+            <div className="rounded-xl border border-black/5 bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-navy/15 hover:shadow-md">
               <p className="text-xs uppercase tracking-wide text-brand-ink/50">
                 Duration
               </p>
@@ -78,7 +78,7 @@ export function ExamTabs({
                 {active.pattern.duration}
               </p>
             </div>
-            <div className="rounded-xl border border-black/5 bg-white p-4">
+            <div className="rounded-xl border border-black/5 bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-navy/15 hover:shadow-md">
               <p className="text-xs uppercase tracking-wide text-brand-ink/50">
                 Total questions
               </p>
@@ -86,7 +86,7 @@ export function ExamTabs({
                 {active.pattern.totalQuestions}
               </p>
             </div>
-            <div className="rounded-xl border border-black/5 bg-white p-4">
+            <div className="rounded-xl border border-black/5 bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-navy/15 hover:shadow-md">
               <p className="text-xs uppercase tracking-wide text-brand-ink/50">
                 Marking scheme
               </p>
@@ -134,7 +134,7 @@ export function ExamTabs({
             {active.syllabus.map((group) => (
               <div
                 key={group.category}
-                className="rounded-xl border border-black/5 bg-white p-5"
+                className="rounded-xl border border-black/5 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-navy/15 hover:shadow-md"
               >
                 <p className="font-semibold text-brand-navy">
                   {group.category}

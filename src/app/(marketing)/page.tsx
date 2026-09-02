@@ -235,7 +235,7 @@ export default function HomePage() {
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="rounded-xl bg-brand-navy p-6 shadow-sm"
+              className="rounded-xl bg-brand-navy p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:bg-brand-navy-light hover:shadow-lg"
             >
               <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-brand-gold">
                 {feature.icon}
@@ -253,14 +253,16 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <div className="grid gap-10 sm:grid-cols-2">
-          <div className="overflow-hidden rounded-2xl bg-brand-cream">
-            <Image
-              src="/images/student-taking-test.jpg"
-              alt="Student filling in an answer sheet during a timed mock test"
-              width={1200}
-              height={800}
-              className="aspect-[3/2] w-full object-cover"
-            />
+          <div className="group overflow-hidden rounded-2xl bg-brand-cream transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
+            <div className="overflow-hidden">
+              <Image
+                src="/images/student-taking-test.jpg"
+                alt="Student filling in an answer sheet during a timed mock test"
+                width={1200}
+                height={800}
+                className="aspect-[3/2] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
             <div className="p-6">
               <h3 className="text-center text-lg font-semibold text-brand-navy">
                 Real exam pressure, right at home
@@ -271,14 +273,16 @@ export default function HomePage() {
               </p>
             </div>
           </div>
-          <div className="overflow-hidden rounded-2xl bg-brand-cream">
-            <Image
-              src="/images/student-thinking.jpg"
-              alt="Student thinking through an answer during a mock test"
-              width={1200}
-              height={800}
-              className="aspect-[3/2] w-full object-cover"
-            />
+          <div className="group overflow-hidden rounded-2xl bg-brand-cream transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
+            <div className="overflow-hidden">
+              <Image
+                src="/images/student-thinking.jpg"
+                alt="Student thinking through an answer during a mock test"
+                width={1200}
+                height={800}
+                className="aspect-[3/2] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
             <div className="p-6">
               <h3 className="text-center text-lg font-semibold text-brand-navy">
                 Think it through, then check yourself
