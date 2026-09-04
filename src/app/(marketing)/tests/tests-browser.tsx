@@ -28,46 +28,73 @@ export function TestsBrowser({
   hasPremiumAccess: boolean;
 }) {
   const [selectedExam, setSelectedExam] = useState<string>("All");
+  const [selectedType, setSelectedType] = useState<"All" | "Sectional" | "Full-length">("All");
 
   const examsWithCounts = MBA_ENTRANCE_EXAMS.map((exam) => ({
     exam,
     count: tests.filter((t) => t.targetExam === exam).length,
   }));
 
-  const visibleTests =
-    selectedExam === "All" ? tests : tests.filter((t) => t.targetExam === selectedExam);
+  const testType = (test: TestSummary) => (test.sectionCount === 1 ? "Sectional" : "Full-length");
+  const sectionalCount = tests.filter((t) => testType(t) === "Sectional").length;
+  const fullLengthCount = tests.filter((t) => testType(t) === "Full-length").length;
+
+  const visibleTests = tests
+    .filter((t) => selectedExam === "All" || t.targetExam === selectedExam)
+    .filter((t) => selectedType === "All" || testType(t) === selectedType);
 
   return (
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <label
-            htmlFor="exam-filter"
-            className="block text-xs font-medium text-brand-ink/70"
-          >
-            Entrance exam
-          </label>
-          <select
-            id="exam-filter"
-            value={selectedExam}
-            onChange={(e) => setSelectedExam(e.target.value)}
-            className="mt-1 w-64 max-w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
-          >
-            <option value="All">All exams ({tests.length})</option>
-            {examsWithCounts.map(({ exam, count }) => (
-              <option key={exam} value={exam}>
-                {exam} ({count})
-              </option>
-            ))}
-          </select>
+        <div className="flex flex-wrap gap-4">
+          <div>
+            <label
+              htmlFor="exam-filter"
+              className="block text-xs font-medium text-brand-ink/70"
+            >
+              Entrance exam
+            </label>
+            <select
+              id="exam-filter"
+              value={selectedExam}
+              onChange={(e) => setSelectedExam(e.target.value)}
+              className="mt-1 w-64 max-w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+            >
+              <option value="All">All exams ({tests.length})</option>
+              {examsWithCounts.map(({ exam, count }) => (
+                <option key={exam} value={exam}>
+                  {exam} ({count})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label
+              htmlFor="type-filter"
+              className="block text-xs font-medium text-brand-ink/70"
+            >
+              Test type
+            </label>
+            <select
+              id="type-filter"
+              value={selectedType}
+              onChange={(e) =>
+                setSelectedType(e.target.value as "All" | "Sectional" | "Full-length")
+              }
+              className="mt-1 w-56 max-w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+            >
+              <option value="All">All types ({tests.length})</option>
+              <option value="Sectional">Sectional test ({sectionalCount})</option>
+              <option value="Full-length">Full length mock test ({fullLengthCount})</option>
+            </select>
+          </div>
         </div>
       </div>
 
       {visibleTests.length === 0 ? (
         <div className="mt-8 rounded-xl border border-dashed border-brand-navy/20 bg-white p-10 text-center text-brand-ink/60">
-          {selectedExam === "All"
-            ? "No tests are published yet - check back soon."
-            : `No ${selectedExam} tests published yet - check back soon.`}
+          No tests match these filters - check back soon.
         </div>
       ) : (
         <div className="mt-8 space-y-4">
@@ -83,6 +110,9 @@ export function TestsBrowser({
                   </h2>
                   <span className="rounded-full bg-brand-gold/15 px-2.5 py-0.5 text-xs font-semibold text-brand-gold">
                     {test.targetExam}
+                  </span>
+                  <span className="rounded-full bg-black/5 px-2.5 py-0.5 text-xs font-semibold text-brand-ink/70">
+                    {testType(test) === "Sectional" ? "Sectional test" : "Full length mock test"}
                   </span>
                   {!test.isFreePreview && (
                     <span className="rounded-full bg-brand-navy/10 px-2.5 py-0.5 text-xs font-semibold text-brand-navy">
