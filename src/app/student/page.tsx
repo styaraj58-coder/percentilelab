@@ -14,11 +14,12 @@ export default async function StudentDashboardPage() {
   const [student, tests] = await Promise.all([
     prisma.user.findUnique({
       where: { id: studentId },
-      select: { targetExam: true },
+      select: { targetExam: true, isPremium: true },
     }),
     getPublishedTests(),
   ]);
   const myExam = student?.targetExam ?? null;
+  const hasPremiumAccess = session!.user.role === "ADMIN" || student?.isPremium === true;
 
   const attempts = await prisma.testAttempt.findMany({
     where: { studentId, testId: { in: tests.map((t) => t.id) } },
@@ -106,11 +107,20 @@ export default async function StudentDashboardPage() {
                     </p>
                   </div>
 
-                  <form action={startAttempt.bind(null, test.id)}>
-                    <StartTestButton
-                      label={inProgress ? "Resume test" : "Start test"}
-                    />
-                  </form>
+                  {test.isFreePreview || hasPremiumAccess ? (
+                    <form action={startAttempt.bind(null, test.id)}>
+                      <StartTestButton
+                        label={inProgress ? "Resume test" : "Start test"}
+                      />
+                    </form>
+                  ) : (
+                    <Link
+                      href="/pricing"
+                      className="shrink-0 rounded-md border border-brand-gold px-5 py-2.5 text-sm font-semibold text-brand-gold transition-colors hover:bg-brand-gold/10"
+                    >
+                      Upgrade to unlock
+                    </Link>
+                  )}
                 </div>
 
                 {completed.length > 0 && (
