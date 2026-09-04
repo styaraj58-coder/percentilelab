@@ -80,22 +80,76 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
 
         <div className="hidden items-center gap-4 lg:flex">
           {session ? (
-            <>
-              <Link
-                href={dashboardHref}
-                className="whitespace-nowrap rounded-md bg-brand-navy px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
+            <div className="group relative">
+              <button
+                type="button"
+                className="flex items-center gap-1.5 rounded-full py-1.5 pl-1.5 pr-3 text-brand-navy transition-colors hover:bg-brand-cream"
+                aria-label="Account menu"
               >
-                Dashboard
-              </Link>
-              <form action={signOutAction}>
-                <button
-                  type="submit"
-                  className="cursor-pointer whitespace-nowrap text-sm font-medium text-brand-navy transition-colors hover:text-brand-gold"
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-navy text-xs font-semibold text-white">
+                  {session.name.charAt(0).toUpperCase()}
+                </span>
+                <span className="max-w-[140px] truncate text-sm font-medium">
+                  {session.name}
+                </span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-3.5 w-3.5 shrink-0 transition-transform duration-150 group-hover:rotate-180"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
                 >
-                  Sign out
-                </button>
-              </form>
-            </>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
+                </svg>
+              </button>
+              <div className="invisible absolute right-0 top-full z-50 w-44 pt-3 opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                <div className="overflow-hidden rounded-xl bg-brand-navy py-2 shadow-lg">
+                  <Link
+                    href={dashboardHref}
+                    className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M3.75 3.75h6v6h-6v-6ZM14.25 3.75h6v6h-6v-6ZM3.75 14.25h6v6h-6v-6ZM14.25 14.25h6v6h-6v-6Z"
+                      />
+                    </svg>
+                    Dashboard
+                  </Link>
+                  <form action={signOutAction}>
+                    <button
+                      type="submit"
+                      className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M21 12H9M18 15l3-3-3-3"
+                        />
+                      </svg>
+                      Sign out
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
           ) : (
             <div className="group relative">
               <button
@@ -234,6 +288,10 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
           <div className="mt-4 flex flex-col gap-3 border-t border-black/5 pt-4">
             {session ? (
               <>
+                <p className="text-sm text-brand-ink/60">
+                  Signed in as{" "}
+                  <span className="font-semibold text-brand-navy">{session.name}</span>
+                </p>
                 <Link
                   href={dashboardHref}
                   className="rounded-md bg-brand-navy px-4 py-2 text-center text-sm font-semibold text-white"
