@@ -21,18 +21,12 @@ export default async function StudentDashboardPage() {
   const myExam = student?.targetExam ?? null;
   const hasPremiumAccess = session!.user.role === "ADMIN" || student?.isPremium === true;
 
+  const myExamTests = myExam ? tests.filter((t) => t.targetExam === myExam) : tests;
+
   const attempts = await prisma.testAttempt.findMany({
-    where: { studentId, testId: { in: tests.map((t) => t.id) } },
+    where: { studentId, testId: { in: myExamTests.map((t) => t.id) } },
     orderBy: { startedAt: "desc" },
   });
-
-  const sortedTests = myExam
-    ? [...tests].sort((a, b) => {
-        const aMatch = a.targetExam === myExam ? 0 : 1;
-        const bMatch = b.targetExam === myExam ? 0 : 1;
-        return aMatch - bMatch;
-      })
-    : tests;
 
   return (
     <div>
@@ -52,19 +46,21 @@ export default async function StudentDashboardPage() {
       </div>
       {myExam && (
         <p className="mt-2 text-sm text-brand-ink/70">
-          You&apos;re registered for{" "}
-          <span className="font-semibold text-brand-navy">{myExam}</span> -
-          tests for it are shown first below.
+          Showing tests for{" "}
+          <span className="font-semibold text-brand-navy">{myExam}</span>,
+          the exam you registered for.
         </p>
       )}
 
-      {tests.length === 0 ? (
+      {myExamTests.length === 0 ? (
         <div className="mt-8 rounded-xl border border-dashed border-brand-navy/20 bg-white p-10 text-center text-brand-ink/60">
-          No tests are published yet - check back soon.
+          {myExam
+            ? `No ${myExam} tests are published yet - check back soon.`
+            : "No tests are published yet - check back soon."}
         </div>
       ) : (
         <div className="mt-8 space-y-6">
-          {sortedTests.map((test) => {
+          {myExamTests.map((test) => {
             const testAttempts = attempts.filter((a) => a.testId === test.id);
             const inProgress = testAttempts.find((a) => !a.submittedAt);
             const completed = testAttempts.filter((a) => a.submittedAt);
@@ -72,15 +68,9 @@ export default async function StudentDashboardPage() {
               (sum, s) => sum + s._count.questions,
               0
             );
-            const isMyExam = myExam !== null && test.targetExam === myExam;
 
             return (
-              <div
-                key={test.id}
-                className={`rounded-xl border bg-white p-6 ${
-                  isMyExam ? "border-brand-gold/50 ring-1 ring-brand-gold/30" : "border-black/5"
-                }`}
-              >
+              <div key={test.id} className="rounded-xl border border-black/5 bg-white p-6">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -90,11 +80,6 @@ export default async function StudentDashboardPage() {
                       <span className="rounded-full bg-brand-gold/15 px-2.5 py-0.5 text-xs font-semibold text-brand-gold">
                         {test.targetExam}
                       </span>
-                      {isMyExam && (
-                        <span className="rounded-full bg-brand-navy px-2.5 py-0.5 text-xs font-semibold text-white">
-                          Your exam
-                        </span>
-                      )}
                     </div>
                     {test.description && (
                       <p className="mt-1 text-sm text-brand-ink/70">
