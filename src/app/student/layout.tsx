@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
@@ -22,6 +23,12 @@ export default async function StudentLayout({
             <span className="hidden text-sm text-brand-ink/60 sm:inline">
               {session.user.name}
             </span>
+            <Link
+              href="/student/profile"
+              className="text-sm font-medium text-brand-navy hover:text-brand-gold"
+            >
+              Edit profile
+            </Link>
             <form action={signOutAction}>
               <button
                 type="submit"

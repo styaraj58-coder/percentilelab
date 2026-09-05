@@ -52,6 +52,21 @@ export const registerSchema = z.object({
   }),
 });
 
+export const profileSchema = z.object({
+  name: z.string().trim().min(2, "Name must be at least 2 characters"),
+  phone: z
+    .string()
+    .trim()
+    .min(10, "Enter a valid contact number")
+    .max(15, "Enter a valid contact number")
+    .regex(/^[0-9+\-\s]+$/, "Enter a valid contact number"),
+  college: z.string().trim().min(2, "College name is required"),
+  course: z.string().trim().min(2, "Course is required"),
+  targetExam: z.enum(MBA_ENTRANCE_EXAMS, {
+    message: "Select an MBA entrance exam",
+  }),
+});
+
 export const optionSchema = z.object({
   text: z.string().trim().min(1, "Option text is required"),
   imageUrl: z.string().trim().optional(),

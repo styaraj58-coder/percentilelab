@@ -125,6 +125,28 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
                     </svg>
                     Dashboard
                   </Link>
+                  {session.role !== "ADMIN" && (
+                    <Link
+                      href="/student/profile"
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.25a7.5 7.5 0 0 1 15 0"
+                        />
+                      </svg>
+                      Edit profile
+                    </Link>
+                  )}
                   <form action={signOutAction}>
                     <button
                       type="submit"
@@ -298,6 +320,14 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
                 >
                   Dashboard
                 </Link>
+                {session.role !== "ADMIN" && (
+                  <Link
+                    href="/student/profile"
+                    className="text-sm font-medium text-brand-navy"
+                  >
+                    Edit profile
+                  </Link>
+                )}
                 <form action={signOutAction}>
                   <button
                     type="submit"
