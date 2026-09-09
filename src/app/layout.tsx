@@ -1,6 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+
+import { RegisterServiceWorker } from "@/components/register-service-worker";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -12,6 +14,25 @@ export const metadata: Metadata = {
   title: "Percentile Lab | MBA Entrance Exam Test Prep",
   description:
     "Practice mock tests for CAT, MAH-CET, MAT, ATMA, and more - timed exams with detailed percentile and section-wise analysis from Percentile Lab.",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Percentile Lab",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#14224b",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -21,7 +42,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="antialiased bg-white text-brand-ink">{children}</body>
+      <body className="antialiased bg-white text-brand-ink">
+        {children}
+        <RegisterServiceWorker />
+      </body>
     </html>
   );
 }
