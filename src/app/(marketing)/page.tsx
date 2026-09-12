@@ -3,8 +3,11 @@ import Link from "next/link";
 
 import { MockTestPopup } from "@/components/mock-test-popup";
 import { EnquireNow } from "@/components/enquire-now";
+import { exams } from "@/lib/exam-data";
+import { prisma } from "@/lib/prisma";
+import { getPublishedTests } from "@/lib/tests-data";
 
-const features = [
+const features: { title: string; id?: string; description: string; icon: React.ReactNode }[] = [
   {
     title: "Full-length MBA entrance exam mocks",
     description:
@@ -18,6 +21,7 @@ const features = [
   },
   {
     title: "Percentile-based scoring",
+    id: "percentile-analytics",
     description:
       "See exactly where you stand against every other student who has taken the same test, not just a raw score.",
     icon: (
@@ -50,6 +54,7 @@ const features = [
   },
   {
     title: "Answer review with solutions",
+    id: "answer-review",
     description:
       "Go back through every question after submitting, see the correct answer, and read the explanation.",
     icon: (
@@ -91,10 +96,10 @@ const steps = [
   },
 ];
 
-const heroHighlights = [
+const heroHighlightsBase = [
   {
     title: "Every major exam",
-    description: "CAT, MAH-CET, and more.",
+    href: "/exams",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.25 4 9.5l8 3.25 8-3.25-8-3.25Z" />
@@ -104,7 +109,7 @@ const heroHighlights = [
   },
   {
     title: "Timed mock tests",
-    description: "Real exam pressure and pacing.",
+    href: "/tests",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
         <circle cx="12" cy="13" r="7.25" strokeLinecap="round" />
@@ -114,7 +119,7 @@ const heroHighlights = [
   },
   {
     title: "Percentile analytics",
-    description: "Section-wise, question-by-question.",
+    href: "#percentile-analytics",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
         <path strokeLinecap="round" strokeLinejoin="round" d="M5 19V10M12 19V5M19 19v-6" />
@@ -123,7 +128,7 @@ const heroHighlights = [
   },
   {
     title: "Full answer review",
-    description: "Explanations after every test.",
+    href: "#answer-review",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-5 w-5">
         <path strokeLinecap="round" strokeLinejoin="round" d="m5 12.5 4.5 4.5L19 7" />
@@ -132,7 +137,31 @@ const heroHighlights = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [tests, explainedQuestionCount, submittedAttemptCount] = await Promise.all([
+    getPublishedTests(),
+    prisma.question.count({
+      where: { explanation: { not: null }, section: { test: { published: true } } },
+    }),
+    prisma.testAttempt.count({ where: { submittedAt: { not: null } } }),
+  ]);
+
+  const heroHighlights = [
+    { ...heroHighlightsBase[0], description: exams.map((exam) => exam.shortName).join(", ") },
+    {
+      ...heroHighlightsBase[1],
+      description: `${tests.length} mock ${tests.length === 1 ? "test" : "tests"} live now.`,
+    },
+    {
+      ...heroHighlightsBase[2],
+      description: `${submittedAttemptCount.toLocaleString()} percentile reports generated.`,
+    },
+    {
+      ...heroHighlightsBase[3],
+      description: `${explainedQuestionCount.toLocaleString()} explained questions.`,
+    },
+  ];
+
   return (
     <div>
       <MockTestPopup />
@@ -186,7 +215,11 @@ export default function HomePage() {
         <div className="relative z-10 mx-auto max-w-5xl px-4 pb-14 pt-10 sm:px-6 sm:pt-14">
           <div className="grid grid-cols-2 gap-6 rounded-2xl bg-brand-navy p-6 shadow-lg sm:grid-cols-4 sm:p-7">
             {heroHighlights.map((item) => (
-              <div key={item.title} className="flex items-start gap-3">
+              <Link
+                key={item.title}
+                href={item.href}
+                className="flex items-start gap-3 rounded-lg -m-2 p-2 transition-colors hover:bg-white/5"
+              >
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-brand-gold">
                   {item.icon}
                 </div>
@@ -198,7 +231,7 @@ export default function HomePage() {
                     {item.description}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -237,7 +270,8 @@ export default function HomePage() {
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="rounded-xl bg-brand-navy p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:bg-brand-navy-light hover:shadow-lg"
+              id={feature.id}
+              className="scroll-mt-24 rounded-xl bg-brand-navy p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:bg-brand-navy-light hover:shadow-lg"
             >
               <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-brand-gold">
                 {feature.icon}
