@@ -296,10 +296,10 @@ export default async function HomePage() {
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
-            <Reveal key={feature.title} delay={(index % 3) * 100}>
+            <Reveal key={feature.title} delay={(index % 3) * 100} className="h-full">
               <div
                 id={feature.id}
-                className="scroll-mt-24 rounded-xl bg-brand-navy p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:bg-brand-navy-light hover:shadow-lg"
+                className="scroll-mt-24 h-full rounded-xl bg-brand-navy p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:bg-brand-navy-light hover:shadow-lg"
               >
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-brand-gold">
                   {feature.icon}
