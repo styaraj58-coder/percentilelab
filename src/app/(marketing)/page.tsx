@@ -206,7 +206,7 @@ export default async function HomePage() {
             <Reveal delay={400}>
               <div className="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start">
                 <Link
-                  href="/register"
+                  href="/tests"
                   className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-brand-navy transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-gold-light hover:shadow-lg"
                 >
                   Start practicing free
