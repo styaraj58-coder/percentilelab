@@ -59,13 +59,13 @@ export default function AboutPage() {
         <h2 className="text-lg font-semibold text-brand-navy">
           What you get with every test
         </h2>
-        <ul className="mt-4 grid gap-3 text-sm text-brand-ink/80 sm:grid-cols-2">
-          <li>• Sectional MCQ format matching your target exam</li>
-          <li>• Live countdown timer per test</li>
-          <li>• Overall score and percentile</li>
-          <li>• Section-wise accuracy breakdown</li>
-          <li>• Time spent per question</li>
-          <li>• Full answer review with explanations</li>
+        <ul className="mt-4 columns-1 gap-x-8 text-sm text-brand-ink/80 sm:columns-2">
+          <li className="mb-3 break-inside-avoid">• Sectional MCQ format matching your target exam</li>
+          <li className="mb-3 break-inside-avoid">• Live countdown timer per test</li>
+          <li className="mb-3 break-inside-avoid">• Overall score and percentile</li>
+          <li className="mb-3 break-inside-avoid">• Section-wise accuracy breakdown</li>
+          <li className="mb-3 break-inside-avoid">• Time spent per question</li>
+          <li className="break-inside-avoid">• Full answer review with explanations</li>
         </ul>
       </div>
 
