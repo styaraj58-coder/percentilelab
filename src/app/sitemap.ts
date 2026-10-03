@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 const BASE_URL = "https://www.percentilelab.in";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ["", "/about", "/exams", "/pricing", "/resources", "/tests"];
+  const routes = ["", "/about", "/courses", "/exams", "/pricing", "/resources", "/tests"];
 
   return routes.map((route) => ({
     url: `${BASE_URL}${route}`,
