@@ -10,7 +10,9 @@ export function AnimatedCounter({
   duration?: number;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [display, setDisplay] = useState(0);
+  // Starts at the real value so the server-rendered HTML (search engines,
+  // no-JS visitors, slow connections) shows the true number, never "0".
+  const [display, setDisplay] = useState(value);
 
   useEffect(() => {
     const el = ref.current;
@@ -23,6 +25,10 @@ export function AnimatedCounter({
       setDisplay(value);
       return;
     }
+
+    // The parent <Reveal> keeps this hidden until scrolled into view, so
+    // resetting to 0 here is never seen - it just primes the count-up.
+    setDisplay(0);
 
     const observer = new IntersectionObserver(
       ([entry]) => {
