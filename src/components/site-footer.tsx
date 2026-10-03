@@ -44,8 +44,8 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/exams" className="hover:text-brand-gold">
-                  Exams
+                <Link href="/blog" className="hover:text-brand-gold">
+                  Blog
                 </Link>
               </li>
               <li>

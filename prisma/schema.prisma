@@ -34,6 +34,7 @@ model User {
   testsCreated Test[]        @relation("TestCreatedBy")
   attempts     TestAttempt[]
   resourcesCreated Resource[] @relation("ResourceCreatedBy")
+  blogPostsCreated BlogPost[] @relation("BlogPostCreatedBy")
   passwordResetTokens PasswordResetToken[]
   bankQuestionsCreated BankQuestion[] @relation("BankQuestionCreatedBy")
 }
@@ -161,6 +162,26 @@ model Resource {
   createdAt   DateTime @default(now())
 
   @@index([type])
+}
+
+// Admin-written articles shown on the public Blog page. `content` is light
+// markdown (headings, bullet lists, bold/italic, images) rendered by
+// src/components/blog-content.tsx; unpublished posts are drafts.
+model BlogPost {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  title         String
+  excerpt       String?
+  content       String
+  coverImageUrl String?
+  authorName    String   @default("Satya Raj")
+  published     Boolean  @default(true)
+  createdById   String
+  createdBy     User     @relation("BlogPostCreatedBy", fields: [createdById], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([published, createdAt])
 }
 
 // A shared stimulus multiple bank questions are grouped under — a seating/
