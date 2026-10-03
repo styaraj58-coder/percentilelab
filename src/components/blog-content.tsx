@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 // HTML), so admin-authored text can't inject markup. Supported syntax:
 //   ## Heading / ### Subheading
 //   - bullet item (consecutive lines form one list)
+//   1. numbered item (consecutive lines form one list)
+//   | a | b |  then  |---|---|  then rows: a table
 //   ![alt text](https://image-url)   (on its own line)
 //   **bold**, *italic*, [link text](https://url) inside any text
 // Blank lines separate blocks.
@@ -76,6 +78,63 @@ export function BlogContent({ content }: { content: string }) {
                 <li key={j}>{renderInline(l.slice(2))}</li>
               ))}
             </ul>
+          );
+        }
+
+        if (lines.every((l) => /^\d+\. /.test(l))) {
+          return (
+            <ol key={i} className="list-decimal space-y-2 pl-6">
+              {lines.map((l, j) => (
+                <li key={j}>{renderInline(l.replace(/^\d+\. /, ""))}</li>
+              ))}
+            </ol>
+          );
+        }
+
+        // Markdown table: a header row, a |---|---| separator row, then rows.
+        if (
+          lines.length >= 3 &&
+          lines.every((l) => l.trim().startsWith("|")) &&
+          /^\|[\s:|-]+\|?$/.test(lines[1].trim()) &&
+          lines[1].includes("-")
+        ) {
+          const cells = (line: string) =>
+            line
+              .trim()
+              .replace(/^\|/, "")
+              .replace(/\|$/, "")
+              .split("|")
+              .map((c) => c.trim());
+          const header = cells(lines[0]);
+          const rows = lines.slice(2).map(cells);
+          return (
+            <div key={i} className="overflow-x-auto rounded-xl border border-black/10">
+              <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+                <thead className="bg-brand-cream text-brand-navy">
+                  <tr>
+                    {header.map((h, j) => (
+                      <th key={j} className="border-b border-black/10 px-4 py-3 font-semibold">
+                        {renderInline(h)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((row, r) => (
+                    <tr key={r} className="border-b border-black/5 last:border-0 align-top">
+                      {row.map((c, j) => (
+                        <td
+                          key={j}
+                          className={`px-4 py-3 ${j === 0 ? "font-semibold text-brand-navy" : "text-brand-ink/80"}`}
+                        >
+                          {renderInline(c)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           );
         }
 
