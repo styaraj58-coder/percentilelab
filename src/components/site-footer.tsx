@@ -1,10 +1,12 @@
 import Link from "next/link";
 
+import { exams } from "@/lib/exam-data";
+
 export function SiteFooter() {
   return (
     <footer className="border-t border-black/5 bg-brand-navy text-white/80">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
+        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-5">
           <div>
             <p className="text-lg font-semibold text-white">
               Percentile <span className="text-brand-gold">Lab</span>
@@ -51,6 +53,29 @@ export function SiteFooter() {
               <li>
                 <Link href="/resources" className="hover:text-brand-gold">
                   Resources
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold text-white">Exams</p>
+            <ul className="mt-3 space-y-2 text-sm">
+              {exams.map((exam) => (
+                <li key={exam.slug}>
+                  <Link href={`/exams/${exam.slug}`} className="hover:text-brand-gold">
+                    {exam.shortName}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/tools/score-calculator" className="hover:text-brand-gold">
+                  Score Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/sample-test" className="hover:text-brand-gold">
+                  Free Sample Test
                 </Link>
               </li>
             </ul>

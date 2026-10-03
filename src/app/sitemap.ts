@@ -1,11 +1,28 @@
 import type { MetadataRoute } from "next";
 
+import { exams } from "@/lib/exam-data";
 import { prisma } from "@/lib/prisma";
 
 const BASE_URL = "https://www.percentilelab.in";
 
+// Reads published blog posts from the database, so render per request
+// instead of freezing the list at build time.
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const routes = ["", "/about", "/blog", "/courses", "/exams", "/pricing", "/resources", "/tests"];
+  const routes = [
+    "",
+    "/about",
+    "/blog",
+    "/courses",
+    "/exams",
+    ...exams.map((exam) => `/exams/${exam.slug}`),
+    "/pricing",
+    "/resources",
+    "/sample-test",
+    "/tests",
+    "/tools/score-calculator",
+  ];
 
   const pages: MetadataRoute.Sitemap = routes.map((route) => ({
     url: `${BASE_URL}${route}`,

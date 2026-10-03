@@ -3,6 +3,8 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
+import { ProgressTrend } from "./progress-trend";
+
 export default async function AttemptedTestsPage() {
   const session = await auth();
   const studentId = session!.user.id;
@@ -29,6 +31,17 @@ export default async function AttemptedTestsPage() {
           Back to tests
         </Link>
       </div>
+
+      <ProgressTrend
+        points={[...attempts]
+          .reverse()
+          .filter((a) => a.totalMarks && a.totalMarks > 0 && a.score !== null)
+          .map((a) => ({
+            label: a.test.title,
+            date: a.submittedAt!,
+            percent: Math.round(((a.score ?? 0) / (a.totalMarks ?? 1)) * 100),
+          }))}
+      />
 
       {attempts.length === 0 ? (
         <div className="mt-8 rounded-xl border border-dashed border-brand-navy/20 bg-white p-10 text-center text-brand-ink/60">

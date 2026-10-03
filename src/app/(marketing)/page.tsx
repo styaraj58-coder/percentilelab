@@ -226,6 +226,15 @@ export default async function HomePage() {
                 </Link>
               </div>
             </Reveal>
+            <Reveal delay={500}>
+              <Link
+                href="/sample-test"
+                className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-white/80 underline decoration-brand-gold decoration-2 underline-offset-4 transition-colors hover:text-white"
+              >
+                Not ready to sign up? Try 10 free questions
+                <span aria-hidden="true">&rarr;</span>
+              </Link>
+            </Reveal>
           </div>
         </div>
 
