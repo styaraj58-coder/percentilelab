@@ -13,7 +13,7 @@ export function ProgressTrend({ points }: { points: TrendPoint[] }) {
 
   const x = (i: number) => pad.l + (innerW * i) / (points.length - 1);
   const y = (percent: number) => pad.t + innerH * (1 - percent / 100);
-  const path = points.map((p, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)},${y(p.percent).toFixed(1)}`).join(" ");
+  const path = points.map((p, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)},${y(Math.max(0, p.percent)).toFixed(1)}`).join(" ");
 
   const percents = points.map((p) => p.percent);
   const average = Math.round(percents.reduce((s, v) => s + v, 0) / percents.length);
@@ -66,7 +66,7 @@ export function ProgressTrend({ points }: { points: TrendPoint[] }) {
         ))}
         <path d={path} fill="none" stroke="#c9972e" strokeWidth={2.5} strokeLinejoin="round" strokeLinecap="round" />
         {points.map((p, i) => (
-          <circle key={i} cx={x(i)} cy={y(p.percent)} r={4} fill="#14224b" stroke="white" strokeWidth={1.5}>
+          <circle key={i} cx={x(i)} cy={y(Math.max(0, p.percent))} r={4} fill="#14224b" stroke="white" strokeWidth={1.5}>
             <title>{`${p.label} - ${p.percent}% (${p.date.toLocaleDateString("en-IN")})`}</title>
           </circle>
         ))}

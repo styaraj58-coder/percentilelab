@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 
 import { MathText } from "@/components/math-text";
+import { formatMarks, penaltyFor } from "@/lib/marking";
 
 import { saveAnswer, submitAttempt } from "./actions";
 
@@ -12,6 +13,8 @@ export type ExamData = {
   studentName: string;
   durationMinutes: number;
   startedAtMs: number;
+  // Fraction of a question's marks lost for a wrong answer (0 = none).
+  negativeRatio: number;
   sections: {
     id: string;
     name: string;
@@ -353,6 +356,14 @@ export function ExamRunner({ data }: { data: ExamData }) {
           <span>
             Marking Scheme:{" "}
             <span className="font-semibold text-green-700">+{currentQuestion.marks}</span>
+            {data.negativeRatio > 0 && (
+              <>
+                {" / "}
+                <span className="font-semibold text-red-700">
+                  -{formatMarks(penaltyFor(currentQuestion.marks, data.negativeRatio))}
+                </span>
+              </>
+            )}
           </span>
           <span className="flex items-center gap-1 font-mono tabular-nums">
             <ClockIcon />

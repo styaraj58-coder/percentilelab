@@ -141,7 +141,9 @@ model TestAttempt {
   student     User      @relation(fields: [studentId], references: [id], onDelete: Cascade)
   startedAt   DateTime  @default(now())
   submittedAt DateTime?
-  score       Int?
+  // Float: negative marking (e.g. -0.25 per wrong answer) gives fractional
+  // scores. totalMarks stays a whole number - it is the sum of question marks.
+  score       Float?
   totalMarks  Int?
   answers     Answer[]
 

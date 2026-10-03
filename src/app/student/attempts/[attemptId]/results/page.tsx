@@ -4,6 +4,12 @@ import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { MathText } from "@/components/math-text";
+import {
+  formatMarks,
+  markingSummary,
+  negativeRatioFor,
+  roundMarks,
+} from "@/lib/marking";
 import { prisma } from "@/lib/prisma";
 
 import {
@@ -59,10 +65,15 @@ export default async function AttemptResultsPage({
 
   const answerByQuestion = new Map(answers.map((a) => [a.questionId, a]));
 
+  const negativeRatio = negativeRatioFor(test.targetExam);
+  const marking = markingSummary(test.targetExam);
+
   const sectionStats = test.sections.map((section) => {
     let correctMarks = 0;
+    let penaltyMarks = 0;
     let sectionTotalMarks = 0;
     let correctCount = 0;
+    let wrongCount = 0;
     let answeredCount = 0;
 
     for (const question of section.questions) {
@@ -73,15 +84,20 @@ export default async function AttemptResultsPage({
       if (correctOption && answer?.selectedOptionId === correctOption.id) {
         correctMarks += question.marks;
         correctCount += 1;
+      } else if (answer?.selectedOptionId) {
+        penaltyMarks += question.marks * negativeRatio;
+        wrongCount += 1;
       }
     }
 
     return {
       id: section.id,
       name: section.name,
-      correctMarks,
+      correctMarks: roundMarks(correctMarks - penaltyMarks),
+      penaltyMarks: roundMarks(penaltyMarks),
       sectionTotalMarks,
       correctCount,
+      wrongCount,
       answeredCount,
       questionCount: section.questions.length,
     };
@@ -261,7 +277,7 @@ export default async function AttemptResultsPage({
         <div className="rounded-xl border border-black/5 bg-white p-5">
           <p className="text-xs uppercase tracking-wide text-brand-ink/50">Score</p>
           <p className="mt-1 text-2xl font-bold text-brand-navy">
-            {attempt.score} / {attempt.totalMarks}
+            {formatMarks(attempt.score ?? 0)} / {attempt.totalMarks}
           </p>
         </div>
         <div className="rounded-xl border border-black/5 bg-white p-5">
@@ -288,6 +304,12 @@ export default async function AttemptResultsPage({
           </p>
         </div>
       </div>
+
+      {marking && (
+        <p className="mt-3 text-xs text-brand-ink/60">
+          Negative marking applies to this test: {marking}.
+        </p>
+      )}
 
       {/* Recommended action */}
       <section className="mt-10 rounded-xl border border-brand-gold/30 bg-brand-cream/40 p-5">
@@ -342,8 +364,13 @@ export default async function AttemptResultsPage({
                 />
               </div>
               <div className="mt-3 flex flex-wrap gap-4 text-xs text-brand-ink/60">
-                <span>Score: {s.correctMarks}/{s.sectionTotalMarks}</span>
+                <span>Score: {formatMarks(s.correctMarks)}/{s.sectionTotalMarks}</span>
                 <span>Correct: {s.correctCount}/{s.questionCount}</span>
+                {s.penaltyMarks > 0 && (
+                  <span className="text-red-700">
+                    Wrong: {s.wrongCount} (-{formatMarks(s.penaltyMarks)})
+                  </span>
+                )}
                 <span>Attempted: {s.answeredCount}/{s.questionCount}</span>
               </div>
             </div>
@@ -423,7 +450,7 @@ export default async function AttemptResultsPage({
                     )}
                   </td>
                   <td className="px-5 py-3 text-brand-ink/70">
-                    {row.score}/{attempt.totalMarks}
+                    {formatMarks(row.score)}/{attempt.totalMarks}
                   </td>
                 </tr>
               ))}
@@ -439,7 +466,7 @@ export default async function AttemptResultsPage({
                     </span>
                   </td>
                   <td className="px-5 py-3 text-brand-ink/70">
-                    {leaderboardRows.find((r) => r.isMe)?.score}/{attempt.totalMarks}
+                    {formatMarks(leaderboardRows.find((r) => r.isMe)?.score ?? 0)}/{attempt.totalMarks}
                   </td>
                 </tr>
               )}

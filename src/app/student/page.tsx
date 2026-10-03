@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { auth } from "@/auth";
+import { formatMarks, markingSummary } from "@/lib/marking";
 import { prisma } from "@/lib/prisma";
 import { getPublishedTests } from "@/lib/tests-data";
 
@@ -89,6 +90,7 @@ export default async function StudentDashboardPage() {
                     <p className="mt-2 text-xs text-brand-ink/50">
                       {questionCount} questions · {test.sections.length}{" "}
                       sections · {test.durationMinutes} min
+                      {markingSummary(test.targetExam) && " · negative marking"}
                     </p>
                   </div>
 
@@ -120,7 +122,7 @@ export default async function StudentDashboardPage() {
                             href={`/student/attempts/${attempt.id}/results`}
                             className="text-brand-navy hover:text-brand-gold hover:underline"
                           >
-                            Attempt {completed.length - index}: {attempt.score}/
+                            Attempt {completed.length - index}: {formatMarks(attempt.score ?? 0)}/
                             {attempt.totalMarks}
                           </Link>{" "}
                           <span className="text-brand-ink/40">

@@ -61,6 +61,11 @@ export default async function CoursesPage() {
         "Your percentile is based on your score compared with every student who has submitted the same test on Percentile Lab - it is the share of them you scored higher than. It becomes more reliable as more students take the test.",
     },
     {
+      question: "Do the mocks have negative marking?",
+      answer:
+        "Only where the real exam does. Mocks for MAT and ATMA deduct a quarter of a question's marks for each wrong answer, and CAT mocks deduct a third (1 mark on a 3-mark question). MAH-CET and UG BMS CET have no negative marking, just like the real exams. Questions you leave unanswered never lose marks.",
+    },
+    {
       question: "Can I attempt a test more than once?",
       answer:
         "Yes. Every submitted attempt is saved with its own score and analysis, so you can retake a test and track your progress.",

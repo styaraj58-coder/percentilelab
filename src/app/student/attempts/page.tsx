@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { auth } from "@/auth";
+import { formatMarks } from "@/lib/marking";
 import { prisma } from "@/lib/prisma";
 
 import { ProgressTrend } from "./progress-trend";
@@ -66,7 +67,7 @@ export default async function AttemptedTestsPage() {
                     </p>
                   </div>
                   <span className="text-sm font-semibold text-brand-navy">
-                    {attempt.score}/{attempt.totalMarks}
+                    {formatMarks(attempt.score ?? 0)}/{attempt.totalMarks}
                   </span>
                 </Link>
               </li>

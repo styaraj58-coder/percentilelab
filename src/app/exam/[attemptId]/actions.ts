@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { negativeRatioFor, scoreAttempt } from "@/lib/marking";
 import { prisma } from "@/lib/prisma";
 
 async function requireOwnedAttempt(attemptId: string) {
@@ -57,6 +58,7 @@ export async function submitAttempt(attemptId: string) {
       prisma.test.findUnique({
         where: { id: attempt.testId },
         select: {
+          targetExam: true,
           sections: {
             select: {
               questions: {
@@ -76,24 +78,11 @@ export async function submitAttempt(attemptId: string) {
       }),
     ]);
     if (!test) throw new Error("Test not found");
-    const answerByQuestion = new Map(answers.map((a) => [a.questionId, a]));
-
-    let score = 0;
-    let totalMarks = 0;
-
-    for (const section of test.sections) {
-      for (const question of section.questions) {
-        totalMarks += question.marks;
-        const correctOption = question.options.find((o) => o.isCorrect);
-        const studentAnswer = answerByQuestion.get(question.id);
-        if (
-          correctOption &&
-          studentAnswer?.selectedOptionId === correctOption.id
-        ) {
-          score += question.marks;
-        }
-      }
-    }
+    const { score, totalMarks } = scoreAttempt(
+      test.sections.flatMap((section) => section.questions),
+      new Map(answers.map((a) => [a.questionId, a.selectedOptionId])),
+      negativeRatioFor(test.targetExam)
+    );
 
     await prisma.testAttempt.update({
       where: { id: attemptId },

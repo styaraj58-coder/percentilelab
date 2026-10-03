@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { negativeRatioFor } from "@/lib/marking";
 import { prisma } from "@/lib/prisma";
 
 import { submitAttempt } from "./actions";
@@ -31,6 +32,7 @@ export default async function ExamPage({
     where: { id: attempt.testId },
     select: {
       title: true,
+      targetExam: true,
       durationMinutes: true,
       sections: {
         orderBy: { order: "asc" },
@@ -73,6 +75,7 @@ export default async function ExamPage({
     testTitle: test.title,
     studentName: session.user.name ?? "Student",
     durationMinutes: test.durationMinutes,
+    negativeRatio: negativeRatioFor(test.targetExam),
     startedAtMs: attempt.startedAt.getTime(),
     sections: test.sections,
     initialAnswers: Object.fromEntries(

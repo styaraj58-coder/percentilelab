@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { startAttempt } from "@/app/student/actions";
 import { StartTestButton } from "@/app/student/start-test-button";
+import { markingSummary } from "@/lib/marking";
 import { MBA_ENTRANCE_EXAMS } from "@/lib/validation";
 
 export type TestSummary = {
@@ -128,6 +129,7 @@ export function TestsBrowser({
                 <p className="mt-2 text-xs text-brand-ink/50">
                   {test.questionCount} questions · {test.sectionCount} sections
                   · {test.durationMinutes} min
+                  {markingSummary(test.targetExam) && " · negative marking"}
                 </p>
               </div>
 
