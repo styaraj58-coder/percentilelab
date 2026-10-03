@@ -9,31 +9,13 @@ export const metadata: Metadata = {
     "Exam-specific prep courses for MAH-CET, CAT, MAT, ATMA and UG BMS CET - live lectures, recordings, full-length mocks, sectional tests and doubt solving.",
 };
 
-const inclusions = [
-  {
-    title: "Live lectures",
-    description: "Concept and strategy sessions taught live, with room to ask questions.",
-  },
-  {
-    title: "Session recordings",
-    description: "Every class is recorded so you can revisit a topic or catch up on a missed one.",
-  },
-  {
-    title: "15+ full-length mocks",
-    description: "Exam-pattern mocks with percentile, section-wise and time-per-question analysis.",
-  },
-  {
-    title: "20+ sectional tests",
-    description: "Targeted practice to fix your weakest section without sitting a full paper.",
-  },
-  {
-    title: "Personalized doubt solving",
-    description: "Get stuck questions explained instead of guessing at the solution.",
-  },
-  {
-    title: "Detailed answer review",
-    description: "Correct answer and explanation for every question after you submit.",
-  },
+const included = [
+  "Live lectures",
+  "Recordings of every session",
+  "15+ full-length mocks",
+  "20+ sectional tests",
+  "Personalized doubt solving",
+  "Percentile and section-wise analysis",
 ];
 
 export default function CoursesPage() {
@@ -67,62 +49,34 @@ export default function CoursesPage() {
             </h2>
             <p className="mt-1 text-sm text-brand-ink/60">{exam.fullName}</p>
 
-            <dl className="mt-5 space-y-2 text-sm">
-              <div className="flex justify-between gap-4">
-                <dt className="text-brand-ink/60">Exam duration</dt>
-                <dd className="text-right font-medium text-brand-navy">
-                  {exam.pattern.duration}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-4">
-                <dt className="text-brand-ink/60">Questions</dt>
-                <dd className="text-right font-medium text-brand-navy">
-                  {exam.pattern.totalQuestions}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-4">
-                <dt className="text-brand-ink/60">Sections</dt>
-                <dd className="text-right font-medium text-brand-navy">
-                  {exam.pattern.sections.length}
-                </dd>
-              </div>
-            </dl>
+            <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-brand-ink/50">
+              What you get
+            </p>
+            <ul className="mt-3 space-y-2 text-sm">
+              {included.map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <span className="text-brand-gold">✓</span>
+                  <span className="text-brand-ink/80">{item}</span>
+                </li>
+              ))}
+            </ul>
 
             <div className="mt-auto grid grid-cols-2 gap-3 pt-6">
               <Link
-                href="/tests"
+                href="/register"
                 className="flex items-center justify-center whitespace-nowrap rounded-md border border-brand-navy bg-brand-navy px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
               >
-                Mock tests
+                Register now
               </Link>
               <Link
                 href={`/exams?exam=${exam.slug}`}
                 className="flex items-center justify-center whitespace-nowrap rounded-md border border-brand-navy/20 px-3 py-2.5 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-cream"
               >
-                Syllabus
+                More info
               </Link>
             </div>
           </div>
         ))}
-      </div>
-
-      <div className="mt-16 rounded-2xl border border-black/5 bg-brand-cream p-8">
-        <h2 className="text-xl font-bold text-brand-navy">
-          What every course includes
-        </h2>
-        <ul className="mt-6 grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
-          {inclusions.map((item) => (
-            <li key={item.title} className="flex items-start gap-3">
-              <span className="mt-0.5 text-brand-gold">✓</span>
-              <div>
-                <p className="font-semibold text-brand-navy">{item.title}</p>
-                <p className="mt-0.5 text-sm text-brand-ink/70">
-                  {item.description}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
       </div>
 
       <div className="mt-12 text-center">

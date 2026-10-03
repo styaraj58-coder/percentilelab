@@ -10,10 +10,10 @@ import { exams } from "@/lib/exam-data";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
+  { href: "/courses", label: "Courses" },
   { href: "/tests", label: "Tests" },
   { href: "/pricing", label: "Pricing" },
   { href: "/resources", label: "Resources" },
-  { href: "/courses", label: "Courses" },
 ];
 
 const navLinkClass =
@@ -34,7 +34,7 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
         <Logo />
 
         <nav className="hidden items-center gap-6 lg:flex">
-          {navLinks.slice(0, 4).map((link) => (
+          {navLinks.slice(0, 5).map((link) => (
             <Link key={link.href} href={link.href} className={navLinkClass}>
               {link.label}
             </Link>
@@ -72,7 +72,7 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
             </div>
           </div>
 
-          {navLinks.slice(4).map((link) => (
+          {navLinks.slice(5).map((link) => (
             <Link key={link.href} href={link.href} className={navLinkClass}>
               {link.label}
             </Link>
@@ -280,7 +280,7 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
       {open && (
         <div className="border-t border-black/5 bg-white px-4 py-4 lg:hidden">
           <nav className="flex flex-col gap-3">
-            {navLinks.slice(0, 4).map((link) => (
+            {navLinks.slice(0, 5).map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -297,7 +297,7 @@ export function SiteHeaderClient({ session }: { session: SessionInfo }) {
             >
               Exams
             </Link>
-            {navLinks.slice(4).map((link) => (
+            {navLinks.slice(5).map((link) => (
               <Link
                 key={link.href}
                 href={link.href}

@@ -29,6 +29,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/courses" className="hover:text-brand-gold">
+                  Courses
+                </Link>
+              </li>
+              <li>
                 <Link href="/tests" className="hover:text-brand-gold">
                   Tests
                 </Link>
@@ -41,11 +46,6 @@ export function SiteFooter() {
               <li>
                 <Link href="/exams" className="hover:text-brand-gold">
                   Exams
-                </Link>
-              </li>
-              <li>
-                <Link href="/courses" className="hover:text-brand-gold">
-                  Courses
                 </Link>
               </li>
               <li>
