@@ -139,6 +139,36 @@ const heroHighlightsBase = [
   },
 ];
 
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+  dark = false,
+}: {
+  eyebrow: string;
+  title: string;
+  description?: string;
+  dark?: boolean;
+}) {
+  return (
+    <>
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-gold">
+        {eyebrow}
+      </p>
+      <h2
+        className={`mt-3 text-3xl font-bold ${
+          dark ? "text-white" : "text-brand-navy"
+        }`}
+      >
+        {title}
+      </h2>
+      {description && (
+        <p className="mx-auto mt-3 max-w-2xl text-brand-ink/70">{description}</p>
+      )}
+    </>
+  );
+}
+
 export default async function HomePage() {
   const [tests, explainedQuestionCount, submittedAttemptCount] = await Promise.all([
     getPublishedTests(),
@@ -293,30 +323,29 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
         <Reveal className="text-center">
-          <h2 className="text-3xl font-bold text-brand-navy">
-            Everything you need to prep with intent
-          </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-brand-ink/70">
-            Every mock test comes with the analysis to back it up.
-          </p>
+          <SectionHeading
+            eyebrow="What you get"
+            title="Everything you need to prep with intent"
+            description="Every mock test comes with the analysis to back it up."
+          />
         </Reveal>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
             <Reveal key={feature.title} delay={(index % 3) * 100} className="h-full">
               <div
                 id={feature.id}
-                className="scroll-mt-24 h-full rounded-xl bg-brand-navy p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:bg-brand-navy-light hover:shadow-lg"
+                className="group scroll-mt-24 h-full rounded-2xl border border-black/[0.06] bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-gold/50 hover:shadow-xl hover:shadow-brand-navy/10"
               >
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-brand-gold">
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-brand-navy text-brand-gold ring-4 ring-brand-gold/15 transition-transform duration-300 group-hover:scale-105">
                   {feature.icon}
                 </div>
-                <h3 className="text-lg font-semibold text-white">
+                <h3 className="text-lg font-semibold text-brand-navy">
                   {feature.title}
                 </h3>
-                <p className="mt-2 text-sm text-white/70">
+                <p className="mt-2 text-sm leading-relaxed text-brand-ink/70">
                   {feature.description}
                 </p>
               </div>
@@ -325,7 +354,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6 sm:pb-24">
         <div className="grid gap-10 sm:grid-cols-2">
           <Reveal>
             <div className="group overflow-hidden rounded-2xl bg-brand-cream transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
@@ -374,19 +403,23 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="bg-brand-navy py-16 text-white">
+      <section className="bg-brand-navy py-20 text-white sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <Reveal>
-            <h2 className="text-center text-3xl font-bold">How it works</h2>
+          <Reveal className="text-center">
+            <SectionHeading eyebrow="Simple by design" title="How it works" dark />
           </Reveal>
-          <div className="mt-12 grid gap-10 md:grid-cols-3">
+          <div className="relative mt-14 grid gap-12 md:grid-cols-3">
+            <div
+              aria-hidden="true"
+              className="absolute left-[16.66%] right-[16.66%] top-6 hidden border-t border-dashed border-brand-gold/40 md:block"
+            />
             {steps.map((item, index) => (
-              <Reveal key={item.step} delay={index * 150} className="text-center">
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-gold text-lg font-bold text-brand-navy">
+              <Reveal key={item.step} delay={index * 150} className="relative text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-gold text-lg font-bold text-brand-navy ring-8 ring-brand-navy">
                   {item.step}
                 </div>
-                <h3 className="mt-4 text-lg font-semibold">{item.title}</h3>
-                <p className="mt-2 text-sm text-white/70">
+                <h3 className="mt-5 text-lg font-semibold">{item.title}</h3>
+                <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-white/70">
                   {item.description}
                 </p>
               </Reveal>
@@ -395,20 +428,40 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16 text-center sm:px-6">
+      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
         <Reveal>
-          <h2 className="text-3xl font-bold text-brand-navy">
-            Ready to find your percentile?
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-brand-ink/70">
-            Create a free account and take your first mock test today.
-          </p>
-          <Link
-            href="/register"
-            className="mt-8 inline-block rounded-md bg-brand-gold px-8 py-3 text-sm font-semibold text-brand-navy transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-gold-light hover:shadow-lg"
-          >
-            Get started free
-          </Link>
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-navy to-brand-navy-light px-6 py-14 text-center text-white shadow-xl shadow-brand-navy/20 sm:px-12 sm:py-16">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-brand-gold/15 blur-3xl"
+            />
+            <p className="relative text-xs font-semibold uppercase tracking-[0.2em] text-brand-gold">
+              Start today
+            </p>
+            <h2 className="relative mt-3 text-3xl font-bold">
+              Ready to find your percentile?
+            </h2>
+            <p className="relative mx-auto mt-3 max-w-xl text-white/75">
+              Create a free account and take your first mock test today.
+            </p>
+            <div className="relative mt-8 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/register"
+                className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-8 py-3.5 text-sm font-semibold text-brand-navy transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-gold-light hover:shadow-lg"
+              >
+                Get started free
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </Link>
+              <Link
+                href="/sample-test"
+                className="inline-flex items-center rounded-full border border-white/30 px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/10"
+              >
+                Try 10 free questions
+              </Link>
+            </div>
+          </div>
         </Reveal>
       </section>
     </div>
