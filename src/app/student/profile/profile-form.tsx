@@ -109,25 +109,42 @@ export function ProfileForm({ initial }: { initial: Initial }) {
         <label htmlFor="targetExam" className="block text-sm font-medium text-brand-ink">
           MBA entrance exam
         </label>
-        <select
-          id="targetExam"
-          name="targetExam"
-          required
-          defaultValue={initial.targetExam}
-          className={inputClass}
-        >
-          <option value="" disabled>
-            Select an exam
-          </option>
-          {MBA_ENTRANCE_EXAMS.map((exam) => (
-            <option key={exam} value={exam}>
-              {exam}
-            </option>
-          ))}
-        </select>
-        <p className="mt-1 text-xs text-brand-ink/50">
-          This controls which tests show up on your dashboard.
-        </p>
+        {initial.targetExam ? (
+          <>
+            <input
+              id="targetExam"
+              type="text"
+              value={initial.targetExam}
+              disabled
+              className={`${inputClass} bg-black/5 text-brand-ink/50`}
+            />
+            <p className="mt-1 text-xs text-brand-ink/50">
+              You only see tests for this exam. To switch exams, contact us.
+            </p>
+          </>
+        ) : (
+          <>
+            <select
+              id="targetExam"
+              name="targetExam"
+              required
+              defaultValue=""
+              className={inputClass}
+            >
+              <option value="" disabled>
+                Select an exam
+              </option>
+              {MBA_ENTRANCE_EXAMS.map((exam) => (
+                <option key={exam} value={exam}>
+                  {exam}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs text-brand-ink/50">
+              This controls which tests show up on your dashboard.
+            </p>
+          </>
+        )}
       </div>
 
       <button

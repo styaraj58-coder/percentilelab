@@ -23,10 +23,14 @@ export function TestsBrowser({
   tests,
   isAuthenticated,
   hasPremiumAccess,
+  lockedExam,
 }: {
   tests: TestSummary[];
   isAuthenticated: boolean;
   hasPremiumAccess: boolean;
+  // Set for signed-in students: they only see their registered exam's tests,
+  // so the exam dropdown is replaced by a note.
+  lockedExam: string | null;
 }) {
   const [selectedExam, setSelectedExam] = useState<string>("All");
   const [selectedType, setSelectedType] = useState<"All" | "Sectional" | "Full-length">("All");
@@ -48,27 +52,36 @@ export function TestsBrowser({
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex flex-wrap gap-4">
-          <div>
-            <label
-              htmlFor="exam-filter"
-              className="block text-xs font-medium text-brand-ink/70"
-            >
-              Entrance exam
-            </label>
-            <select
-              id="exam-filter"
-              value={selectedExam}
-              onChange={(e) => setSelectedExam(e.target.value)}
-              className="mt-1 w-64 max-w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
-            >
-              <option value="All">All exams ({tests.length})</option>
-              {examsWithCounts.map(({ exam, count }) => (
-                <option key={exam} value={exam}>
-                  {exam} ({count})
-                </option>
-              ))}
-            </select>
-          </div>
+          {lockedExam ? (
+            <div>
+              <p className="block text-xs font-medium text-brand-ink/70">Your exam</p>
+              <p className="mt-1 rounded-md border border-black/10 bg-brand-cream/60 px-3 py-2 text-sm font-semibold text-brand-navy">
+                {lockedExam}
+              </p>
+            </div>
+          ) : (
+            <div>
+              <label
+                htmlFor="exam-filter"
+                className="block text-xs font-medium text-brand-ink/70"
+              >
+                Entrance exam
+              </label>
+              <select
+                id="exam-filter"
+                value={selectedExam}
+                onChange={(e) => setSelectedExam(e.target.value)}
+                className="mt-1 w-64 max-w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy"
+              >
+                <option value="All">All exams ({tests.length})</option>
+                {examsWithCounts.map(({ exam, count }) => (
+                  <option key={exam} value={exam}>
+                    {exam} ({count})
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <div>
             <label

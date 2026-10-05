@@ -17,12 +17,20 @@ export async function updateProfile(
     return { error: "You must be signed in to update your profile." };
   }
 
+  // The registered exam decides which tests a student sees, so once it's set
+  // only an admin can change it (see /admin/users). Students who registered
+  // before this rule and never picked one can still choose.
+  const current = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { targetExam: true },
+  });
+
   const parsed = profileSchema.safeParse({
     name: formData.get("name"),
     phone: formData.get("phone"),
     college: formData.get("college"),
     course: formData.get("course"),
-    targetExam: formData.get("targetExam"),
+    targetExam: current?.targetExam ?? formData.get("targetExam"),
   });
 
   if (!parsed.success) {

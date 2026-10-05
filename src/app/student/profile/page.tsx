@@ -23,7 +23,7 @@ export default async function StudentProfilePage() {
     <div>
       <h1 className="text-2xl font-bold text-brand-navy">Edit profile</h1>
       <p className="mt-1 text-sm text-brand-ink/60">
-        Keep your details up to date - your target exam controls which tests you see.
+        Keep your details up to date - your registered exam controls which tests you see.
       </p>
 
       <div className="mt-8 max-w-lg rounded-xl border border-black/5 bg-white p-6">

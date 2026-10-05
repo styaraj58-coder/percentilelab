@@ -17,19 +17,23 @@ export default async function TestsPage() {
   // A fresh lookup (not the JWT session) so a just-granted premium upgrade
   // shows up immediately instead of waiting for the session to re-issue.
   let hasPremiumAccess = false;
+  // Students only see the tests for the exam they registered for.
+  let lockedExam: string | null = null;
   if (session?.user) {
     if (session.user.role === "ADMIN") {
       hasPremiumAccess = true;
     } else {
       const user = await prisma.user.findUnique({
         where: { id: session.user.id },
-        select: { isPremium: true },
+        select: { isPremium: true, targetExam: true },
       });
       hasPremiumAccess = user?.isPremium ?? false;
+      lockedExam = user?.targetExam ?? null;
     }
   }
 
-  const tests = await getPublishedTests();
+  const allTests = await getPublishedTests();
+  const tests = lockedExam ? allTests.filter((t) => t.targetExam === lockedExam) : allTests;
 
   const testSummaries: TestSummary[] = tests.map((test) => ({
     id: test.id,
@@ -51,8 +55,9 @@ export default async function TestsPage() {
         Pick your exam. Start practicing.
       </h1>
       <p className="mt-3 max-w-2xl text-brand-ink/70">
-        Every mock and sectional test on Percentile Lab, filterable by
-        entrance exam - pick yours from the dropdown below.
+        {lockedExam
+          ? `Every ${lockedExam} mock and sectional test, ready when you are.`
+          : "Every mock and sectional test on Percentile Lab, filterable by entrance exam - pick yours from the dropdown below."}
       </p>
 
       <div className="mt-10">
@@ -60,6 +65,7 @@ export default async function TestsPage() {
           tests={testSummaries}
           isAuthenticated={!!session?.user}
           hasPremiumAccess={hasPremiumAccess}
+          lockedExam={lockedExam}
         />
       </div>
     </div>

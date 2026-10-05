@@ -1,9 +1,12 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { MBA_ENTRANCE_EXAMS } from "@/lib/validation";
 
 async function requireAdmin() {
   const session = await auth();
@@ -21,6 +24,17 @@ export async function setUserRole(userId: string, role: "ADMIN" | "STUDENT") {
   }
 
   await prisma.user.update({ where: { id: userId }, data: { role } });
+}
+
+export async function setUserExam(userId: string, targetExam: string) {
+  await requireAdmin();
+
+  const parsed = z.enum(MBA_ENTRANCE_EXAMS).safeParse(targetExam);
+  if (!parsed.success) throw new Error("Pick a valid exam.");
+
+  await prisma.user.update({ where: { id: userId }, data: { targetExam: parsed.data } });
+  revalidatePath("/student");
+  revalidatePath("/tests");
 }
 
 export async function setUserPremium(userId: string, isPremium: boolean) {

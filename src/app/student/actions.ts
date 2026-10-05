@@ -14,12 +14,17 @@ export async function startAttempt(testId: string) {
     throw new Error("Test not available");
   }
 
-  if (!test.isFreePreview && session.user.role !== "ADMIN") {
+  if (session.user.role !== "ADMIN") {
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { isPremium: true },
+      select: { isPremium: true, targetExam: true },
     });
-    if (!user?.isPremium) {
+
+    // Students only get the tests for the exam they registered for.
+    if (user?.targetExam && user.targetExam !== test.targetExam) {
+      throw new Error(`This test is for ${test.targetExam}. You're registered for ${user.targetExam}.`);
+    }
+    if (!test.isFreePreview && !user?.isPremium) {
       throw new Error("This test requires a Premium account. Upgrade on the Pricing page to unlock it.");
     }
   }

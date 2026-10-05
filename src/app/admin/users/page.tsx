@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
+import { ExamSelect } from "./exam-select";
 import { PremiumToggle } from "./premium-toggle";
 import { RoleToggle } from "./role-toggle";
 
@@ -40,13 +41,14 @@ export default async function AdminUsersPage() {
       </p>
 
       <div className="mt-8 overflow-x-auto rounded-xl border border-black/5 bg-white">
-        <table className="w-full min-w-[720px] text-left text-sm">
+        <table className="w-full min-w-[860px] text-left text-sm">
           <thead className="border-b border-black/5 bg-brand-cream/60 text-xs uppercase tracking-wide text-brand-ink/50">
             <tr>
               <th className="px-5 py-3 font-medium">Name</th>
               <th className="px-5 py-3 font-medium">Email</th>
               <th className="px-5 py-3 font-medium">Contact number</th>
               <th className="px-5 py-3 font-medium">Role</th>
+              <th className="px-5 py-3 font-medium">Exam</th>
               <th className="px-5 py-3 font-medium">Premium</th>
               <th className="px-5 py-3 font-medium">College / Course</th>
               <th className="px-5 py-3 font-medium">Attempts</th>
@@ -72,6 +74,13 @@ export default async function AdminUsersPage() {
                   >
                     {user.role}
                   </span>
+                </td>
+                <td className="px-5 py-4">
+                  {user.role === "ADMIN" ? (
+                    <span className="text-brand-ink/30">-</span>
+                  ) : (
+                    <ExamSelect userId={user.id} targetExam={user.targetExam} />
+                  )}
                 </td>
                 <td className="px-5 py-4">
                   <PremiumToggle userId={user.id} isPremium={user.isPremium} />
