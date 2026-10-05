@@ -10,10 +10,26 @@ export function EnquireNow() {
 
   return (
     <>
+      {/* Phones: a small round button stacked above the WhatsApp button, so
+          nothing sits over the page text. */}
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed right-0 top-1/2 z-40 -translate-y-1/2 rounded-l-lg bg-brand-gold px-3 py-4 text-sm font-semibold text-brand-navy shadow-lg transition-colors hover:bg-brand-gold-light [writing-mode:vertical-rl]"
+        aria-label="Enquire now"
+        title="Enquire now"
+        className="fixed bottom-[5.5rem] right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-brand-gold text-brand-navy shadow-lg shadow-black/20 transition-colors hover:bg-brand-gold-light sm:hidden"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.9} aria-hidden="true" className="h-6 w-6">
+          <rect x="3" y="5" width="18" height="14" rx="2.5" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="m4 7.5 8 5.5 8-5.5" />
+        </svg>
+      </button>
+
+      {/* Tablets and desktops: the vertical tab on the right edge. */}
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="fixed right-0 top-1/2 z-40 hidden -translate-y-1/2 rounded-l-lg bg-brand-gold px-3 py-4 text-sm font-semibold text-brand-navy shadow-lg transition-colors hover:bg-brand-gold-light [writing-mode:vertical-rl] sm:block"
       >
         Enquire Now
       </button>
