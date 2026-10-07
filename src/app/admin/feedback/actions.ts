@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
@@ -10,6 +10,15 @@ import { prisma } from "@/lib/prisma";
 async function requireAdmin() {
   const session = await auth();
   if (!session?.user || session.user.role !== "ADMIN") redirect("/login");
+}
+
+// Approval changes must show up on the public pages straight away - and a
+// removed or deleted testimonial must disappear straight away too.
+function refreshPublicTestimonials() {
+  revalidateTag("testimonials");
+  revalidatePath("/admin/feedback");
+  revalidatePath("/");
+  revalidatePath("/courses");
 }
 
 // Marks a response as cleared for the public site. Only possible when the
@@ -28,11 +37,11 @@ export async function setFeedbackApproved(id: string, approved: boolean) {
   }
 
   await prisma.feedback.update({ where: { id }, data: { approved } });
-  revalidatePath("/admin/feedback");
+  refreshPublicTestimonials();
 }
 
 export async function deleteFeedback(id: string) {
   await requireAdmin();
   await prisma.feedback.delete({ where: { id } });
-  revalidatePath("/admin/feedback");
+  refreshPublicTestimonials();
 }

@@ -12,7 +12,7 @@ export default async function AdminFeedbackPage() {
 
   const average = items.length ? items.reduce((s, f) => s + f.rating, 0) / items.length : null;
   const consenting = items.filter((f) => canPublish(f)).length;
-  const approved = items.filter((f) => f.approved).length;
+  const approved = items.filter((f) => f.approved && canPublish(f)).length;
 
   return (
     <div>
@@ -67,14 +67,14 @@ export default async function AdminFeedbackPage() {
                     </span>
                     <span
                       className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                        fb.approved
+                        fb.approved && publishable
                           ? "bg-green-100 text-green-700"
                           : publishable
                             ? "bg-blue-100 text-blue-700"
                             : "bg-black/5 text-brand-ink/55"
                       }`}
                     >
-                      {fb.approved ? "Approved" : publishable ? "Agreed to publish" : "Private"}
+                      {fb.approved && publishable ? "Approved" : publishable ? "Agreed to publish" : "Private"}
                     </span>
                   </div>
                 </div>

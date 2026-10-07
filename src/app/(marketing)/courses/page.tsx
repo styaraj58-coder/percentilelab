@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { JsonLd } from "@/components/json-ld";
+import { Testimonials } from "@/components/testimonials";
 import { exams } from "@/lib/exam-data";
 import { coursePrices, formatPrice, freeAccountFeatures, testSeries } from "@/lib/plans";
 import { EXAM_TARGET_EXAM } from "@/lib/site";
 import { getPublishedTests } from "@/lib/tests-data";
+import { getTestimonials } from "@/lib/testimonials-data";
 
 export const metadata: Metadata = {
   title: "Courses & Pricing | Percentile Lab",
@@ -29,7 +31,7 @@ function joinList(items: string[]) {
 }
 
 export default async function CoursesPage() {
-  const tests = await getPublishedTests();
+  const [tests, testimonials] = await Promise.all([getPublishedTests(), getTestimonials()]);
   const liveExamNames = exams
     .filter((exam) => tests.some((t) => t.targetExam === EXAM_TARGET_EXAM[exam.slug]))
     .map((exam) => exam.shortName);
@@ -218,6 +220,8 @@ export default async function CoursesPage() {
           </div>
         </div>
       </div>
+
+      <Testimonials items={testimonials} className="mt-20" />
 
       <section className="mx-auto mt-20 max-w-3xl">
         <h2 className="text-center text-2xl font-bold text-brand-navy">Frequently asked questions</h2>

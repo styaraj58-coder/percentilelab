@@ -4,10 +4,12 @@ import Link from "next/link";
 import { MockTestPopup } from "@/components/mock-test-popup";
 import { EnquireNow } from "@/components/enquire-now";
 import { Reveal } from "@/components/reveal";
+import { Testimonials } from "@/components/testimonials";
 import { AnimatedCounter } from "@/components/animated-counter";
 import { exams } from "@/lib/exam-data";
 import { prisma } from "@/lib/prisma";
 import { getPublishedTests } from "@/lib/tests-data";
+import { getTestimonials } from "@/lib/testimonials-data";
 
 const features: { title: string; id?: string; description: string; icon: React.ReactNode }[] = [
   {
@@ -170,8 +172,9 @@ function SectionHeading({
 }
 
 export default async function HomePage() {
-  const [tests, explainedQuestionCount, submittedAttemptCount] = await Promise.all([
+  const [tests, testimonials, explainedQuestionCount, submittedAttemptCount] = await Promise.all([
     getPublishedTests(),
+    getTestimonials(),
     prisma.question.count({
       where: { explanation: { not: null }, section: { test: { published: true } } },
     }),
@@ -427,6 +430,8 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      <Testimonials items={testimonials} className="mx-auto max-w-6xl px-4 pt-20 sm:px-6 sm:pt-24" />
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
         <Reveal>
