@@ -25,7 +25,7 @@ export async function startAttempt(testId: string) {
       throw new Error(`This test is for ${test.targetExam}. You're registered for ${user.targetExam}.`);
     }
     if (!test.isFreePreview && !user?.isPremium) {
-      throw new Error("This test requires a Premium account. Upgrade on the Pricing page to unlock it.");
+      throw new Error("This test requires a Premium account. See the Courses page to get access.");
     }
   }
 

@@ -3,14 +3,14 @@ import Link from "next/link";
 
 import { JsonLd } from "@/components/json-ld";
 import { exams } from "@/lib/exam-data";
-import { plans } from "@/lib/plans";
+import { coursePrices, formatPrice, freeAccountFeatures, testSeries } from "@/lib/plans";
 import { EXAM_TARGET_EXAM } from "@/lib/site";
 import { getPublishedTests } from "@/lib/tests-data";
 
 export const metadata: Metadata = {
-  title: "Courses | Percentile Lab",
+  title: "Courses & Pricing | Percentile Lab",
   description:
-    "Exam-specific prep courses for MAH-CET, CAT, MAT, ATMA and UG BMS CET - live lectures, recordings, full-length mocks, sectional tests and doubt solving.",
+    "Exam-specific prep courses for MAH-CET, CAT, MAT, ATMA and UG BMS CET with prices, plus a Test Series - live lectures, recordings, full-length mocks, sectional tests and doubt solving.",
   alternates: { canonical: "/courses" },
 };
 
@@ -37,8 +37,8 @@ export default async function CoursesPage() {
     .map((exam) => exam.shortName)
     .filter((name) => !liveExamNames.includes(name));
 
-  const free = plans[0];
-  const premium = plans[1];
+  const pricedCourses = exams.filter((exam) => coursePrices[exam.slug] != null);
+  const unpricedCourses = exams.filter((exam) => coursePrices[exam.slug] == null);
 
   const faqs = [
     {
@@ -48,12 +48,26 @@ export default async function CoursesPage() {
       }.`,
     },
     {
-      question: "What do I get for free?",
-      answer: `A free account includes: ${free.features.join(", ")}.`,
+      question: "How much do the courses cost?",
+      answer: `${joinList(
+        pricedCourses.map((exam) => `${exam.shortName} is ${formatPrice(coursePrices[exam.slug])}`)
+      )}${
+        unpricedCourses.length > 0
+          ? `. The ${joinList(unpricedCourses.map((exam) => exam.shortName))} course${
+              unpricedCourses.length > 1 ? "s are" : " is"
+            } not available yet`
+          : ""
+      }. The ${testSeries.name} is ${formatPrice(testSeries.price)}.`,
     },
     {
-      question: "What does Premium include?",
-      answer: `Premium is ${premium.price} and includes: ${premium.features.join(", ")}.`,
+      question: `What is the ${testSeries.name}?`,
+      answer: `The ${testSeries.name} (${formatPrice(testSeries.price)}) is for students who only want practice: ${testSeries.features
+        .join(", ")
+        .toLowerCase()}. It does not include live lectures, recordings or personalised doubt solving, which come with the courses.`,
+    },
+    {
+      question: "What do I get for free?",
+      answer: `Creating an account is free and includes: ${freeAccountFeatures.join(", ").toLowerCase()}.`,
     },
     {
       question: "How is my percentile calculated?",
@@ -118,6 +132,17 @@ export default async function CoursesPage() {
             </h2>
             <p className="mt-1 text-sm text-brand-ink/60">{exam.fullName}</p>
 
+            {coursePrices[exam.slug] != null ? (
+              <p className="mt-4 text-3xl font-bold text-brand-navy">
+                {formatPrice(coursePrices[exam.slug])}
+              </p>
+            ) : (
+              <div className="mt-4">
+                <p className="text-3xl font-bold text-brand-ink/35">N/A</p>
+                <p className="mt-0.5 text-xs text-brand-ink/50">Not available yet</p>
+              </div>
+            )}
+
             <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-brand-ink/50">
               What you get
             </p>
@@ -131,12 +156,21 @@ export default async function CoursesPage() {
             </ul>
 
             <div className="mt-auto grid grid-cols-2 gap-3 pt-6">
-              <Link
-                href="/register"
-                className="flex items-center justify-center whitespace-nowrap rounded-md border border-brand-navy bg-brand-navy px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
-              >
-                Register now
-              </Link>
+              {coursePrices[exam.slug] != null ? (
+                <Link
+                  href="/register"
+                  className="flex items-center justify-center whitespace-nowrap rounded-md border border-brand-navy bg-brand-navy px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
+                >
+                  Register now
+                </Link>
+              ) : (
+                <span
+                  aria-disabled="true"
+                  className="flex cursor-not-allowed items-center justify-center whitespace-nowrap rounded-md border border-black/10 bg-black/5 px-3 py-2.5 text-sm font-semibold text-brand-ink/40"
+                >
+                  Register now
+                </span>
+              )}
               <Link
                 href={`/exams/${exam.slug}`}
                 className="flex items-center justify-center whitespace-nowrap rounded-md border border-brand-navy/20 px-3 py-2.5 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-cream"
@@ -146,56 +180,44 @@ export default async function CoursesPage() {
             </div>
           </div>
         ))}
-      </div>
 
-      <section className="mt-20">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-brand-navy">Start free, upgrade when you are ready</h2>
-          <p className="mx-auto mt-2 max-w-xl text-sm text-brand-ink/70">
-            One plan covers every exam above.
+        <div className="flex flex-col rounded-2xl border border-brand-gold bg-brand-navy p-6 text-white transition-all duration-200 hover:-translate-y-1 hover:shadow-xl">
+          <p className="text-xs font-semibold uppercase tracking-wide text-brand-gold">
+            Test Series
           </p>
-        </div>
-        <div className="mx-auto mt-8 grid max-w-4xl gap-6 sm:grid-cols-2">
-          {plans.map((plan) => (
-            <div
-              key={plan.name}
-              className={`flex flex-col rounded-2xl border p-6 ${
-                plan.highlight ? "border-brand-gold bg-brand-navy text-white" : "border-black/10 bg-white"
-              }`}
+          <h2 className="mt-1 text-lg font-semibold">{testSeries.name}</h2>
+          <p className="mt-1 text-sm text-white/65">{testSeries.tagline}</p>
+
+          <p className="mt-4 text-3xl font-bold text-brand-gold">{formatPrice(testSeries.price)}</p>
+
+          <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-white/50">
+            What you get
+          </p>
+          <ul className="mt-3 space-y-2 text-sm">
+            {testSeries.features.map((item) => (
+              <li key={item} className="flex items-start gap-2">
+                <span className="text-brand-gold">✓</span>
+                <span className="text-white/90">{item}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-auto grid grid-cols-2 gap-3 pt-6">
+            <Link
+              href="/register"
+              className="flex items-center justify-center whitespace-nowrap rounded-md bg-brand-gold px-3 py-2.5 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-gold-light"
             >
-              <h3 className={`text-lg font-semibold ${plan.highlight ? "text-brand-gold" : "text-brand-navy"}`}>
-                {plan.name}
-              </h3>
-              <p className="mt-1 text-3xl font-bold">
-                {plan.price}
-                {plan.period && (
-                  <span className={`ml-1 text-sm font-normal ${plan.highlight ? "text-white/60" : "text-brand-ink/50"}`}>
-                    / {plan.period}
-                  </span>
-                )}
-              </p>
-              <ul className="mt-4 flex-1 space-y-2 text-sm">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2">
-                    <span className={plan.highlight ? "text-brand-gold" : "text-brand-navy"}>✓</span>
-                    <span className={plan.highlight ? "text-white/90" : "text-brand-ink/80"}>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href={plan.cta.href}
-                className={`mt-6 block rounded-md px-4 py-2.5 text-center text-sm font-semibold transition-colors ${
-                  plan.highlight
-                    ? "bg-brand-gold text-brand-navy hover:bg-brand-gold-light"
-                    : "bg-brand-navy text-white hover:bg-brand-navy-light"
-                }`}
-              >
-                {plan.cta.label}
-              </Link>
-            </div>
-          ))}
+              Register now
+            </Link>
+            <Link
+              href="/tests"
+              className="flex items-center justify-center whitespace-nowrap rounded-md border border-white/25 px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+            >
+              Browse tests
+            </Link>
+          </div>
         </div>
-      </section>
+      </div>
 
       <section className="mx-auto mt-20 max-w-3xl">
         <h2 className="text-center text-2xl font-bold text-brand-navy">Frequently asked questions</h2>

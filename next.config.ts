@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // The standalone pricing page was folded into the Courses page.
+  async redirects() {
+    return [{ source: "/pricing", destination: "/courses", permanent: true }];
+  },
 };
 
 export default nextConfig;

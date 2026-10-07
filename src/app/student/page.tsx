@@ -102,10 +102,10 @@ export default async function StudentDashboardPage() {
                     </form>
                   ) : (
                     <Link
-                      href="/pricing"
+                      href="/courses"
                       className="shrink-0 rounded-md border border-brand-gold px-5 py-2.5 text-sm font-semibold text-brand-gold transition-colors hover:bg-brand-gold/10"
                     >
-                      Upgrade to unlock
+                      Get access
                     </Link>
                   )}
                 </div>
