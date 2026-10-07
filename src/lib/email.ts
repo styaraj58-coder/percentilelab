@@ -112,3 +112,42 @@ export async function sendPasswordResetEmail(user: {
     console.error("Failed to send password reset email:", error);
   }
 }
+
+export async function sendFeedbackNotification(fb: {
+  name: string;
+  email: string;
+  exam: string;
+  rating: number;
+  publishAs: string;
+  quote?: string | null;
+}) {
+  const notifyEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+  if (!resend || !notifyEmail) {
+    console.warn("Skipping feedback notification email: RESEND_API_KEY or ADMIN_NOTIFICATION_EMAIL not set.");
+    return;
+  }
+
+  try {
+    await resend.emails.send({
+      from: process.env.RESEND_FROM_EMAIL || "Percentile Lab <onboarding@resend.dev>",
+      to: notifyEmail,
+      subject: `New beta feedback: ${fb.rating}/5 from ${fb.name}`,
+      text: [
+        "A student submitted feedback.",
+        "",
+        `Name: ${fb.name}`,
+        `Email: ${fb.email}`,
+        `Exam: ${fb.exam}`,
+        `Rating: ${fb.rating}/5`,
+        `Publishing: ${fb.publishAs === "PRIVATE" ? "keep private" : fb.publishAs}`,
+        fb.quote ? `Testimonial: ${fb.quote}` : null,
+        "",
+        "Review it in the admin under Feedback.",
+      ]
+        .filter((l) => l !== null)
+        .join("\n"),
+    });
+  } catch (error) {
+    console.error("Failed to send feedback notification email:", error);
+  }
+}

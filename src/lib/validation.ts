@@ -192,3 +192,44 @@ export const generateMockSchema = z.object({
 });
 
 export type GenerateMockInput = z.infer<typeof generateMockSchema>;
+
+const optionalPercentile = z.preprocess(
+  (v) => (v === "" || v === null || v === undefined ? undefined : Number(v)),
+  z
+    .number({ message: "Percentile must be a number between 0 and 100" })
+    .min(0, "Percentile must be between 0 and 100")
+    .max(100, "Percentile must be between 0 and 100")
+    .optional()
+);
+
+export const feedbackSchema = z
+  .object({
+    exam: z.enum(MBA_ENTRANCE_EXAMS, { message: "Select the exam you are preparing for" }),
+    rating: z.coerce
+      .number({ message: "Choose a rating from 1 to 5" })
+      .int()
+      .min(1, "Choose a rating from 1 to 5")
+      .max(5, "Choose a rating from 1 to 5"),
+    liked: z.string().trim().max(1000, "Keep each answer under 1000 characters").optional(),
+    improve: z.string().trim().max(1000, "Keep each answer under 1000 characters").optional(),
+    quote: z.string().trim().max(600, "Keep your testimonial under 600 characters").optional(),
+    firstPercentile: optionalPercentile,
+    latestPercentile: optionalPercentile,
+    publishAs: z.enum(["FULL_NAME", "FIRST_NAME", "ANONYMOUS", "PRIVATE"], {
+      message: "Choose whether we may publish your feedback",
+    }),
+    ageConfirmed: z.boolean(),
+  })
+  .superRefine((data, ctx) => {
+    if (!data.liked && !data.improve && !data.quote) {
+      ctx.addIssue({ code: "custom", path: ["liked"], message: "Please write something in at least one of the feedback boxes." });
+    }
+    if (data.publishAs !== "PRIVATE") {
+      if (!data.quote) {
+        ctx.addIssue({ code: "custom", path: ["quote"], message: "Write a sentence or two for us to publish, or choose to keep your feedback private." });
+      }
+      if (!data.ageConfirmed) {
+        ctx.addIssue({ code: "custom", path: ["ageConfirmed"], message: "Please confirm you are 18 or older, or that a parent or guardian agrees." });
+      }
+    }
+  });

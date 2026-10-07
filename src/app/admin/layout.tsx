@@ -58,6 +58,12 @@ export default async function AdminLayout({
               >
                 Blog
               </Link>
+              <Link
+                href="/admin/feedback"
+                className="text-sm font-medium text-brand-ink/80 hover:text-brand-navy"
+              >
+                Feedback
+              </Link>
             </nav>
           </div>
           <div className="flex items-center gap-4">

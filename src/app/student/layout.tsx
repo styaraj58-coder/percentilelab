@@ -24,6 +24,12 @@ export default async function StudentLayout({
               {session.user.name}
             </span>
             <Link
+              href="/student/feedback"
+              className="text-sm font-medium text-brand-navy hover:text-brand-gold"
+            >
+              Feedback
+            </Link>
+            <Link
               href="/student/profile"
               className="text-sm font-medium text-brand-navy hover:text-brand-gold"
             >
