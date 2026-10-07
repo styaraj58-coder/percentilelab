@@ -21,3 +21,19 @@ export const getPublishedTests = unstable_cache(
   ["published-tests"],
   { revalidate: 60, tags: ["tests"] }
 );
+
+// What the public site says about an exam's tests: counts only, never the
+// individual tests - those are listed and started inside the student portal.
+export function summariseTests(
+  tests: { targetExam: string; isFreePreview: boolean; sections: unknown[] }[],
+  targetExam: string
+) {
+  const forExam = tests.filter((t) => t.targetExam === targetExam);
+  const sectional = forExam.filter((t) => t.sections.length === 1).length;
+  return {
+    total: forExam.length,
+    sectional,
+    fullLength: forExam.length - sectional,
+    free: forExam.filter((t) => t.isFreePreview).length,
+  };
+}

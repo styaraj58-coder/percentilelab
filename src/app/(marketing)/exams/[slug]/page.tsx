@@ -6,7 +6,7 @@ import { JsonLd } from "@/components/json-ld";
 import { exams } from "@/lib/exam-data";
 import { prisma } from "@/lib/prisma";
 import { EXAM_TARGET_EXAM, SITE_NAME, SITE_URL } from "@/lib/site";
-import { getPublishedTests } from "@/lib/tests-data";
+import { getPublishedTests, summariseTests } from "@/lib/tests-data";
 
 import { ExamDetails } from "../exam-details";
 
@@ -45,17 +45,7 @@ export default async function ExamLandingPage({ params }: Props) {
       select: { slug: true, title: true },
     }),
   ]);
-  const tests = allTests
-    .filter((t) => t.targetExam === targetExam)
-    .map((t) => ({
-      id: t.id,
-      title: t.title,
-      durationMinutes: t.durationMinutes,
-      isFreePreview: t.isFreePreview,
-      questionCount: t.sections.reduce((sum, s) => sum + s._count.questions, 0),
-      sectionCount: t.sections.length,
-    }));
-  const freeCount = tests.filter((t) => t.isFreePreview).length;
+  const summary = summariseTests(allTests, targetExam);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
@@ -101,50 +91,35 @@ export default async function ExamLandingPage({ params }: Props) {
           {exam.shortName} mock tests
         </h2>
 
-        {tests.length > 0 ? (
+        {summary.total > 0 ? (
           <>
             <p className="mt-1 text-sm text-brand-ink/70">
-              {tests.length} {tests.length === 1 ? "test" : "tests"} available
-              {freeCount > 0 ? `, ${freeCount} of them free to start.` : "."}
+              {summary.total} {summary.total === 1 ? "test" : "tests"} live
+              {summary.fullLength > 0 ? `: ${summary.fullLength} full-length` : ""}
+              {summary.sectional > 0
+                ? `${summary.fullLength > 0 ? " and " : ": "}${summary.sectional} sectional`
+                : ""}
+              {summary.free > 0 ? `, ${summary.free} of them free to start.` : "."}
             </p>
-            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-              {tests.slice(0, 6).map((test) => (
-                <li
-                  key={test.id}
-                  className="flex items-start justify-between gap-3 rounded-xl border border-black/5 bg-white p-4"
-                >
-                  <div>
-                    <p className="font-medium text-brand-navy">{test.title}</p>
-                    <p className="mt-1 text-xs text-brand-ink/50">
-                      {test.questionCount} questions · {test.sectionCount}{" "}
-                      {test.sectionCount === 1 ? "section" : "sections"} ·{" "}
-                      {test.durationMinutes} min
-                    </p>
-                  </div>
-                  <span
-                    className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                      test.isFreePreview
-                        ? "bg-green-100 text-green-700"
-                        : "bg-brand-gold/15 text-brand-gold"
-                    }`}
-                  >
-                    {test.isFreePreview ? "Free" : "Premium"}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <p className="mt-3 max-w-2xl text-sm text-brand-ink/70">
+              Full-length mocks follow the real {exam.shortName} format
+              ({exam.pattern.totalQuestions} in {exam.pattern.duration};{" "}
+              {exam.pattern.markingScheme.toLowerCase()}). The tests themselves
+              are taken inside your student portal - register, choose{" "}
+              {exam.shortName} as your exam, and they are listed there.
+            </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href="/tests"
+                href="/register"
                 className="rounded-md bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
               >
-                See all {exam.shortName} tests
+                Create free account
               </Link>
               <Link
-                href="/register"
+                href="/student"
                 className="rounded-md border border-brand-navy/20 px-6 py-3 text-sm font-semibold text-brand-navy transition-colors hover:bg-white"
               >
-                Create free account
+                Open student portal
               </Link>
             </div>
           </>

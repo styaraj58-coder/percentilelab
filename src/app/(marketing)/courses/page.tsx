@@ -213,7 +213,7 @@ export default async function CoursesPage() {
               href="/tests"
               className="flex items-center justify-center whitespace-nowrap rounded-md border border-white/25 px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
             >
-              Browse tests
+              Test details
             </Link>
           </div>
         </div>
