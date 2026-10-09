@@ -161,3 +161,39 @@ export function getAnswerKey(testId: string) {
     { revalidate: 120, tags: ["tests"] }
   )();
 }
+
+// A slim copy of the paper for the results page's SUMMARY (scores, sections,
+// topics, difficulty): ids, marks, topics and which option is correct - no
+// question text, passages or explanations. The full text is only loaded on
+// demand when a student opens the answer review.
+export function getTestForResultsSummary(testId: string) {
+  return unstable_cache(
+    () =>
+      prisma.test.findUnique({
+        where: { id: testId },
+        select: {
+          id: true,
+          title: true,
+          targetExam: true,
+          sections: {
+            orderBy: { order: "asc" },
+            select: {
+              id: true,
+              name: true,
+              questions: {
+                orderBy: { order: "asc" },
+                select: {
+                  id: true,
+                  marks: true,
+                  topic: true,
+                  options: { orderBy: { order: "asc" }, select: { id: true, isCorrect: true } },
+                },
+              },
+            },
+          },
+        },
+      }),
+    ["test-for-results-summary", testId],
+    { revalidate: 120, tags: ["tests"] }
+  )();
+}

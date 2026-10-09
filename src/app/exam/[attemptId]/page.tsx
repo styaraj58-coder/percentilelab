@@ -62,7 +62,8 @@ export default async function ExamPage({
 
   const deadline = attempt.startedAt.getTime() + test.durationMinutes * 60_000;
   if (Date.now() > deadline) {
-    await submitAttempt(attemptId);
+    const { redirectTo } = await submitAttempt(attemptId);
+    redirect(redirectTo);
   }
 
   const existingAnswers = await prisma.answer.findMany({

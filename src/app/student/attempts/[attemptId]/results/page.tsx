@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/auth";
-import { MathText } from "@/components/math-text";
 import {
   formatMarks,
   markingSummary,
@@ -15,15 +14,13 @@ import {
   difficultyByQuestion as computeDifficulty,
   getLeaderboardTop,
   getQuestionStats,
-  getTestForResults,
+  getTestForResultsSummary,
   queryLeaderboardTop,
   queryStanding,
 } from "@/lib/test-stats";
 
-import {
-  QuestionSummaryTable,
-  type ReviewRow,
-} from "./question-summary-table";
+import { QuestionSummaryTable, type ReviewRow } from "./question-summary-table";
+import { ReviewSection } from "./review-section";
 
 export const metadata: Metadata = { title: "Test results | Percentile Lab" };
 
@@ -50,7 +47,7 @@ export default async function AttemptResultsPage({
   }
 
   const [test, answers] = await Promise.all([
-    getTestForResults(attempt.testId),
+    getTestForResultsSummary(attempt.testId),
     prisma.answer.findMany({ where: { attemptId } }),
   ]);
 
@@ -209,7 +206,6 @@ export default async function AttemptResultsPage({
     const entry: ReviewRow = {
       index,
       id: question.id,
-      text: question.text,
       difficulty: difficultyByQuestion.get(question.id) ?? null,
       seconds: answer?.timeSpentSeconds ?? 0,
     };
@@ -465,138 +461,8 @@ export default async function AttemptResultsPage({
         </div>
       </section>
 
-      {/* Answer review */}
-      <section className="mt-10">
-        <h2 className="text-lg font-semibold text-brand-navy">Answer review</h2>
-        <div className="mt-4 space-y-4">
-          {(() => {
-            let lastPassageId: string | null = null;
-            return allQuestions.map((question, index) => {
-              const answer = answerByQuestion.get(question.id);
-              const correctOption = question.options.find((o) => o.isCorrect);
-              const isCorrect =
-                !!answer?.selectedOptionId &&
-                answer.selectedOptionId === correctOption?.id;
-              const isSkipped = !answer?.selectedOptionId;
-              const showPassage =
-                question.passage && question.passage.id !== lastPassageId;
-              lastPassageId = question.passage?.id ?? null;
-
-              return (
-                <div key={question.id}>
-                  {showPassage && question.passage && (
-                    <div className="mb-3 rounded-xl border border-brand-gold/30 bg-brand-cream/40 p-4">
-                      {question.passage.title && (
-                        <p className="mb-1 font-semibold text-brand-navy">
-                          {question.passage.title}
-                        </p>
-                      )}
-                      <MathText
-                        text={question.passage.text}
-                        className="text-sm text-brand-ink/80"
-                      />
-                    </div>
-                  )}
-                  <div
-                    id={`q-${question.id}`}
-                    className="scroll-mt-24 rounded-xl border border-black/5 bg-white p-5"
-                  >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="text-sm font-medium text-brand-ink">
-                    <span>Q{index + 1}. </span>
-                    <MathText text={question.text} />
-                    {question.imageUrl && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={question.imageUrl}
-                        alt="Question illustration"
-                        className="mt-2 max-h-72 rounded-md border border-black/10 object-contain"
-                      />
-                    )}
-                  </div>
-                  <div className="flex shrink-0 flex-col items-end gap-1.5">
-                    <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                        isSkipped
-                          ? "bg-black/5 text-brand-ink/50"
-                          : isCorrect
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {isSkipped ? "Skipped" : isCorrect ? "Correct" : "Incorrect"}
-                    </span>
-                    <span className="text-xs text-brand-ink/50">
-                      Difficulty:{" "}
-                      {(() => {
-                        const difficulty = difficultyByQuestion.get(question.id);
-                        return difficulty === null || difficulty === undefined
-                          ? "-"
-                          : `${difficulty}%`;
-                      })()}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="mt-3 space-y-2">
-                  {question.options.map((option, oIndex) => {
-                    const isSelected = answer?.selectedOptionId === option.id;
-                    const isTheCorrectOne = option.isCorrect;
-                    return (
-                      <div
-                        key={option.id}
-                        className={`flex items-center gap-2 rounded-md border px-3 py-2 text-sm ${
-                          isTheCorrectOne
-                            ? "border-green-300 bg-green-50"
-                            : isSelected
-                              ? "border-red-300 bg-red-50"
-                              : "border-black/10"
-                        }`}
-                      >
-                        <span className="text-brand-ink/50">
-                          {String.fromCharCode(65 + oIndex)}.
-                        </span>
-                        <span className="flex-1">
-                          <MathText text={option.text} />
-                          {option.imageUrl && (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                              src={option.imageUrl}
-                              alt="Option illustration"
-                              className="mt-2 max-h-40 rounded-md border border-black/10 object-contain"
-                            />
-                          )}
-                        </span>
-                        {isTheCorrectOne && (
-                          <span className="ml-auto text-xs font-semibold text-green-700">
-                            Correct answer
-                          </span>
-                        )}
-                        {isSelected && !isTheCorrectOne && (
-                          <span className="ml-auto text-xs font-semibold text-red-700">
-                            Your answer
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {question.explanation && (
-                  <p className="mt-3 rounded-md bg-brand-cream p-3 text-sm text-brand-ink/80">
-                    <span className="font-semibold text-brand-navy">
-                      Explanation:{" "}
-                    </span>
-                    <MathText text={question.explanation} />
-                  </p>
-                )}
-                  </div>
-                </div>
-              );
-            });
-          })()}
-        </div>
-      </section>
+      {/* Answer review - fetched on demand, drawn in the student's browser */}
+      <ReviewSection attemptId={attempt.id} questionCount={allQuestions.length} />
     </div>
   );
 }

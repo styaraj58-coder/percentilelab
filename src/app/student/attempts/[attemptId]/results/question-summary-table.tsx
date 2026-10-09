@@ -5,7 +5,6 @@ import { useState } from "react";
 export type ReviewRow = {
   index: number;
   id: string;
-  text: string;
   difficulty: number | null;
   seconds: number;
 };
@@ -51,7 +50,15 @@ export function QuestionSummaryTable({
               {visibleRows.map((row) => (
                 <tr key={row.id} className="border-b border-black/5 last:border-0">
                   <td className="px-3 py-2.5 font-medium text-brand-navy">
-                    <a href={`#q-${row.id}`} className="hover:underline">
+                    <a
+                      href={`#q-${row.id}`}
+                      onClick={(event) => {
+                        // the review loads on demand; ask it to open at this question
+                        event.preventDefault();
+                        window.dispatchEvent(new CustomEvent("open-review", { detail: { questionId: row.id } }));
+                      }}
+                      className="hover:underline"
+                    >
                       Q{row.index + 1}
                     </a>
                   </td>

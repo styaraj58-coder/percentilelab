@@ -51,6 +51,10 @@ export async function saveAnswer(
   });
 }
 
+// Grades the attempt (once) and says where the results are. It no longer
+// redirects: a redirect made the server build the whole results page before
+// answering, which is what made submitting slow when many students finished
+// together. The browser opens the results page itself instead.
 export async function submitAttempt(attemptId: string) {
   const attempt = await requireOwnedAttempt(attemptId);
 
@@ -75,5 +79,5 @@ export async function submitAttempt(attemptId: string) {
     });
   }
 
-  redirect(`/student/attempts/${attemptId}/results`);
+  return { redirectTo: `/student/attempts/${attemptId}/results` };
 }

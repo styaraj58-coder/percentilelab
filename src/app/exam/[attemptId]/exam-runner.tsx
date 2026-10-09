@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 
 import { MathText } from "@/components/math-text";
@@ -97,6 +98,7 @@ export function ExamRunner({ data }: { data: ExamData }) {
     data.initialTimeSpent
   );
   const [confirmingSubmit, setConfirmingSubmit] = useState(false);
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const submittedRef = useRef(false);
   const activeSinceRef = useRef(Date.now());
@@ -143,7 +145,8 @@ export function ExamRunner({ data }: { data: ExamData }) {
       // Wait for the last question's time/answer to actually persist before
       // grading reads it back — otherwise a race could silently drop it.
       await flushTime();
-      await submitAttempt(data.attemptId);
+      const { redirectTo } = await submitAttempt(data.attemptId);
+      router.push(redirectTo);
     });
   }
 
