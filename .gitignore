@@ -47,3 +47,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# load test: real staging credentials and generated seed data
+/loadtest/.env.staging
+/loadtest/data.json
