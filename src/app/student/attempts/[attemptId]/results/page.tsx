@@ -11,6 +11,14 @@ import {
   roundMarks,
 } from "@/lib/marking";
 import { prisma } from "@/lib/prisma";
+import {
+  difficultyByQuestion as computeDifficulty,
+  getLeaderboardTop,
+  getQuestionStats,
+  getTestForResults,
+  queryLeaderboardTop,
+  queryStanding,
+} from "@/lib/test-stats";
 
 import {
   QuestionSummaryTable,
@@ -30,6 +38,7 @@ export default async function AttemptResultsPage({
 
   const attempt = await prisma.testAttempt.findUnique({
     where: { id: attemptId },
+    include: { student: { select: { name: true } } },
   });
 
   if (!attempt || attempt.studentId !== session.user.id) {
@@ -41,23 +50,7 @@ export default async function AttemptResultsPage({
   }
 
   const [test, answers] = await Promise.all([
-    prisma.test.findUnique({
-      where: { id: attempt.testId },
-      include: {
-        sections: {
-          orderBy: { order: "asc" },
-          include: {
-            questions: {
-              orderBy: { order: "asc" },
-              include: {
-                options: { orderBy: { order: "asc" } },
-                passage: { select: { id: true, title: true, text: true } },
-              },
-            },
-          },
-        },
-      },
-    }),
+    getTestForResults(attempt.testId),
     prisma.answer.findMany({ where: { attemptId } }),
   ]);
 
@@ -110,74 +103,41 @@ export default async function AttemptResultsPage({
   );
   const avgTime = allQuestions.length > 0 ? totalSeconds / allQuestions.length : 0;
 
-  // Difficulty % per question, across every submitted attempt on this test
-  // (this attempt included): wrong answers ÷ attempts that answered it —
-  // higher % means more students who tried it got it wrong.
+  // Difficulty %, percentile, rank and the leaderboard come from database
+  // aggregates (cached briefly) instead of loading every student's answers
+  // and scores on every view - see src/lib/test-stats.ts.
   const correctOptionIdByQuestion = new Map(
     allQuestions.map((q) => [q.id, q.options.find((o) => o.isCorrect)?.id])
   );
-  const [otherAttempts, allAnswersForTest] = await Promise.all([
-    prisma.testAttempt.findMany({
-      where: { testId: test.id, submittedAt: { not: null } },
-      select: {
-        id: true,
-        score: true,
-        studentId: true,
-        submittedAt: true,
-        student: { select: { name: true } },
-      },
-      orderBy: [{ score: "desc" }, { submittedAt: "asc" }],
-    }),
-    prisma.answer.findMany({
-      where: {
-        questionId: { in: allQuestions.map((q) => q.id) },
-        selectedOptionId: { not: null },
-        attempt: { submittedAt: { not: null } },
-      },
-      select: { questionId: true, selectedOptionId: true },
-    }),
-  ]);
-  const allScores = otherAttempts.map((a) => a.score ?? 0);
   const myScore = attempt.score ?? 0;
-  const below = allScores.filter((s) => s < myScore).length;
-  const percentile = allScores.length
-    ? Math.round((below / allScores.length) * 1000) / 10
-    : 0;
-  const attemptedCountByQuestion = new Map<string, number>();
-  const correctCountByQuestion = new Map<string, number>();
-  for (const a of allAnswersForTest) {
-    attemptedCountByQuestion.set(
-      a.questionId,
-      (attemptedCountByQuestion.get(a.questionId) ?? 0) + 1
-    );
-    if (a.selectedOptionId === correctOptionIdByQuestion.get(a.questionId)) {
-      correctCountByQuestion.set(
-        a.questionId,
-        (correctCountByQuestion.get(a.questionId) ?? 0) + 1
-      );
-    }
-  }
-  const difficultyByQuestion = new Map<string, number | null>(
-    allQuestions.map((q) => {
-      const attempted = attemptedCountByQuestion.get(q.id) ?? 0;
-      const correct = correctCountByQuestion.get(q.id) ?? 0;
-      const incorrect = attempted - correct;
-      return [q.id, attempted > 0 ? Math.round((incorrect / attempted) * 100) : null];
-    })
+  const [questionStats, cachedTop, standing] = await Promise.all([
+    getQuestionStats(test.id),
+    getLeaderboardTop(test.id),
+    queryStanding(prisma, test.id, myScore, attempt.submittedAt),
+  ]);
+  const percentile = standing.percentile;
+  const myRank = standing.rank;
+  const leaderboardCount = standing.total;
+  const myName = attempt.student.name;
+  const difficultyByQuestion = computeDifficulty(
+    questionStats,
+    correctOptionIdByQuestion,
+    allQuestions.map((q) => q.id)
   );
 
-  // Leaderboard — every submitted attempt on this test, ranked by score
-  // (ties broken by who submitted first). otherAttempts is already sorted
-  // that way by the query above.
-  const leaderboardRows = otherAttempts.map((a, index) => ({
+  // Leaderboard top 10 (cached for 30 s). If this student belongs in it but
+  // the cached copy predates their submission, read it fresh instead.
+  let topRows = cachedTop;
+  if (myRank <= 10 && !topRows.some((r) => r.attemptId === attempt.id)) {
+    topRows = await queryLeaderboardTop(prisma, test.id);
+  }
+  const leaderboardTop = topRows.map((r, index) => ({
     rank: index + 1,
-    attemptId: a.id,
-    name: a.student.name,
-    score: a.score ?? 0,
-    isMe: a.studentId === session.user.id,
+    attemptId: r.attemptId,
+    name: r.name,
+    score: r.score,
+    isMe: r.studentId === session.user.id,
   }));
-  const myRank = leaderboardRows.find((r) => r.isMe)?.rank ?? null;
-  const leaderboardTop = leaderboardRows.slice(0, 10);
   const meInTop = leaderboardTop.some((r) => r.isMe);
 
   // Weak topics — only meaningful for tests whose questions carry topic tags
@@ -419,7 +379,7 @@ export default async function AttemptResultsPage({
         <h2 className="text-lg font-semibold text-brand-navy">Leaderboard</h2>
         <p className="mt-1 text-sm text-brand-ink/60">
           Ranked by score among everyone who has taken this test
-          {myRank ? ` - you're ranked #${myRank} of ${leaderboardRows.length}.` : "."}
+          {myRank ? ` - you're ranked #${myRank} of ${leaderboardCount}.` : "."}
         </p>
         <div className="mt-4 overflow-x-auto rounded-xl border border-black/5 bg-white">
           <table className="w-full min-w-[380px] text-left text-sm">
@@ -460,13 +420,13 @@ export default async function AttemptResultsPage({
                     #{myRank}
                   </td>
                   <td className="px-5 py-3 text-brand-ink/70">
-                    {leaderboardRows.find((r) => r.isMe)?.name}
+                    {myName}
                     <span className="ml-2 rounded-full bg-brand-navy px-2 py-0.5 text-[10px] font-semibold text-white">
                       You
                     </span>
                   </td>
                   <td className="px-5 py-3 text-brand-ink/70">
-                    {formatMarks(leaderboardRows.find((r) => r.isMe)?.score ?? 0)}/{attempt.totalMarks}
+                    {formatMarks(myScore)}/{attempt.totalMarks}
                   </td>
                 </tr>
               )}

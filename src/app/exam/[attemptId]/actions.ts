@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { negativeRatioFor, scoreAttempt } from "@/lib/marking";
 import { prisma } from "@/lib/prisma";
+import { getAnswerKey } from "@/lib/test-stats";
 
 async function requireOwnedAttempt(attemptId: string) {
   const session = await auth();
@@ -55,23 +56,7 @@ export async function submitAttempt(attemptId: string) {
 
   if (!attempt.submittedAt) {
     const [test, answers] = await Promise.all([
-      prisma.test.findUnique({
-        where: { id: attempt.testId },
-        select: {
-          targetExam: true,
-          sections: {
-            select: {
-              questions: {
-                select: {
-                  id: true,
-                  marks: true,
-                  options: { select: { id: true, isCorrect: true } },
-                },
-              },
-            },
-          },
-        },
-      }),
+      getAnswerKey(attempt.testId),
       prisma.answer.findMany({
         where: { attemptId },
         select: { questionId: true, selectedOptionId: true },
