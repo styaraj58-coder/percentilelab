@@ -1,4 +1,4 @@
-import type { ExamInfo } from "@/lib/exam-data";
+import { examDisplayName, type ExamInfo } from "@/lib/exam-data";
 
 // The full detail view for one exam (about, pattern, syllabus, colleges,
 // dates). Shared by the tabbed /exams page and the per-exam /exams/[slug] pages.
@@ -115,7 +115,7 @@ export function ExamDetails({ exam }: { exam: ExamInfo }) {
       <div className="mt-10 grid gap-6 sm:grid-cols-2">
         <div>
           <h3 className="text-lg font-semibold text-brand-navy">
-            Top colleges accepting {exam.shortName}
+            Top colleges accepting {examDisplayName(exam)}
           </h3>
           <ol className="mt-4 space-y-2 rounded-xl border border-black/5 bg-white p-5 text-sm text-brand-ink/80">
             {exam.topColleges.map((college, index) => (

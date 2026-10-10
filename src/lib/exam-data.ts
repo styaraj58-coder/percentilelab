@@ -17,6 +17,10 @@ export type TentativeDate = {
 export type ExamInfo = {
   slug: string;
   shortName: string;
+  // The name students search for, when it differs from the official short
+  // name (MAH-CET is searched as "MBA CET"). Used in the exam page's heading
+  // and metadata; shortName stays the compact label used elsewhere.
+  seoName?: string;
   fullName: string;
   conductedBy: string;
   about: string;
@@ -36,6 +40,7 @@ export const exams: ExamInfo[] = [
   {
     slug: "mah-cet",
     shortName: "MAH-CET",
+    seoName: "MBA CET (MAH-CET)",
     fullName: "Maharashtra Common Entrance Test (MBA/MMS)",
     conductedBy: "State CET Cell, Maharashtra",
     about:
@@ -376,3 +381,8 @@ export const exams: ExamInfo[] = [
     ],
   },
 ];
+
+// The name to show in headings and metadata: what students actually search for.
+export function examDisplayName(exam: ExamInfo) {
+  return exam.seoName ?? exam.shortName;
+}
