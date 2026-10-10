@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 // Renders a blog post's light-markdown body as React elements (never as raw
@@ -8,9 +9,11 @@ import type { ReactNode } from "react";
 //   | a | b |  then  |---|---|  then rows: a table
 //   ![alt text](https://image-url)   (on its own line)
 //   **bold**, *italic*, [link text](https://url) inside any text
+//   [link text](/courses) links to a page on this site (opens in the same tab)
 // Blank lines separate blocks.
 
-const INLINE_PATTERN = /(\*\*[^*]+\*\*|\*[^*\n]+\*|\[[^\]]+\]\(https?:\/\/[^)\s]+\))/g;
+const INLINE_PATTERN =
+  /(\*\*[^*]+\*\*|\*[^*\n]+\*|\[[^\]]+\]\((?:https?:\/\/[^)\s]+|\/(?!\/)[^)\s]*)\))/g;
 
 function renderInline(text: string): ReactNode[] {
   return text.split(INLINE_PATTERN).map((part, i) => {
@@ -20,16 +23,19 @@ function renderInline(text: string): ReactNode[] {
     if (part.startsWith("*") && part.endsWith("*") && part.length > 2) {
       return <em key={i}>{part.slice(1, -1)}</em>;
     }
-    const link = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)$/);
+    const link = part.match(/^\[([^\]]+)\]\(((?:https?:\/\/|\/(?!\/))[^)\s]*)\)$/);
     if (link) {
+      const linkClass =
+        "font-medium text-brand-navy underline decoration-brand-gold underline-offset-2 hover:text-brand-gold";
+      if (link[2].startsWith("/")) {
+        return (
+          <Link key={i} href={link[2]} className={linkClass}>
+            {link[1]}
+          </Link>
+        );
+      }
       return (
-        <a
-          key={i}
-          href={link[2]}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-medium text-brand-navy underline decoration-brand-gold underline-offset-2 hover:text-brand-gold"
-        >
+        <a key={i} href={link[2]} target="_blank" rel="noopener noreferrer" className={linkClass}>
           {link[1]}
         </a>
       );

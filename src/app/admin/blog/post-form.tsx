@@ -197,7 +197,8 @@ export function PostForm({
         <p className="mt-2 text-xs leading-relaxed text-brand-ink/50">
           Formatting: <code>## Heading</code>, <code>### Subheading</code>,{" "}
           <code>- bullet</code> (one per line), <code>**bold**</code>,{" "}
-          <code>*italic*</code>, <code>[link text](https://...)</code>. Blank
+          <code>*italic*</code>, <code>[link text](https://...)</code>, or{" "}
+          <code>[link text](/courses)</code> for a page on this site. Blank
           line = new paragraph.
         </p>
       </div>
