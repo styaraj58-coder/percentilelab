@@ -107,14 +107,14 @@ export default async function CoursesPage() {
         }}
       />
 
-      <div className="text-center">
+      <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-brand-gold">
           Courses
         </p>
         <h1 className="mt-2 text-3xl font-bold text-brand-navy sm:text-4xl">
           Prep built around your exam
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-brand-ink/70">
+        <p className="mt-3 max-w-2xl text-brand-ink/70">
           Every course is built around the real exam&apos;s sections and duration,
           so practice feels like the actual test.
         </p>

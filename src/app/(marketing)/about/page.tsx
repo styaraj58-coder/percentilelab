@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "About | Percentile Lab" };
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 [&>*]:max-w-3xl">
       <p className="text-xs font-semibold uppercase tracking-wide text-brand-gold">
         About us
       </p>

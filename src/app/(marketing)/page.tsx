@@ -240,7 +240,7 @@ export default async function HomePage() {
               <div className="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start">
                 <Link
                   href="/tests"
-                  className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-6 py-3.5 text-sm font-semibold text-brand-navy transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-gold-light hover:shadow-lg"
+                  className="inline-flex items-center gap-2 rounded-md bg-brand-gold px-6 py-3.5 text-sm font-semibold text-brand-navy transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-gold-light hover:shadow-lg"
                 >
                   Start practicing free
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">
@@ -249,7 +249,7 @@ export default async function HomePage() {
                 </Link>
                 <Link
                   href="/about"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/30 px-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/10"
+                  className="inline-flex items-center gap-2 rounded-md border border-white/30 px-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/10"
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-4 w-4">
                     <circle cx="12" cy="12" r="8.5" />
@@ -271,7 +271,7 @@ export default async function HomePage() {
           </div>
         </div>
 
-        <div className="relative z-10 mx-auto max-w-5xl px-4 pb-14 pt-10 sm:px-6 sm:pt-14">
+        <div className="relative z-10 mx-auto max-w-6xl px-4 pb-14 pt-10 sm:px-6 sm:pt-14">
           <Reveal delay={500}>
             <div className="grid grid-cols-2 gap-6 rounded-2xl bg-brand-navy p-6 shadow-lg sm:grid-cols-4 sm:p-7">
               {heroHighlights.map((item) => (
@@ -371,10 +371,10 @@ export default async function HomePage() {
                 />
               </div>
               <div className="p-6">
-                <h3 className="text-center text-lg font-semibold text-brand-navy">
+                <h3 className="text-lg font-semibold text-brand-navy">
                   Real exam pressure, right at home
                 </h3>
-                <p className="mt-1 text-center text-sm text-brand-ink/70">
+                <p className="mt-1 text-sm text-brand-ink/70">
                   One running clock, no pausing - practice the way you&apos;ll
                   actually be tested.
                 </p>
@@ -393,10 +393,10 @@ export default async function HomePage() {
                 />
               </div>
               <div className="p-6">
-                <h3 className="text-center text-lg font-semibold text-brand-navy">
+                <h3 className="text-lg font-semibold text-brand-navy">
                   Think it through, then check yourself
                 </h3>
-                <p className="mt-1 text-center text-sm text-brand-ink/70">
+                <p className="mt-1 text-sm text-brand-ink/70">
                   Every question gets a full explanation afterward - not just a
                   right or wrong.
                 </p>
@@ -452,7 +452,7 @@ export default async function HomePage() {
             <div className="relative mt-8 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/register"
-                className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-8 py-3.5 text-sm font-semibold text-brand-navy transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-gold-light hover:shadow-lg"
+                className="inline-flex items-center gap-2 rounded-md bg-brand-gold px-8 py-3.5 text-sm font-semibold text-brand-navy transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-gold-light hover:shadow-lg"
               >
                 Get started free
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">
@@ -461,7 +461,7 @@ export default async function HomePage() {
               </Link>
               <Link
                 href="/sample-test"
-                className="inline-flex items-center rounded-full border border-white/30 px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/10"
+                className="inline-flex items-center rounded-md border border-white/30 px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/10"
               >
                 Try 10 free questions
               </Link>

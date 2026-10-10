@@ -17,7 +17,7 @@ export function EnquireNow() {
         onClick={() => setOpen(true)}
         aria-label="Enquire now"
         title="Enquire now"
-        className="fixed bottom-[5.5rem] right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-brand-gold text-brand-navy shadow-lg shadow-black/20 transition-colors hover:bg-brand-gold-light sm:hidden"
+        className="fixed bottom-[5.5rem] right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-brand-gold text-brand-navy shadow-lg shadow-black/20 transition-colors hover:bg-brand-gold-light sm:hidden"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.9} aria-hidden="true" className="h-6 w-6">
           <rect x="3" y="5" width="18" height="14" rx="2.5" />
@@ -73,7 +73,7 @@ export function EnquireNow() {
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
+                  className="mt-5 inline-flex w-full items-center justify-center rounded-md bg-brand-navy px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light"
                 >
                   Close
                 </button>

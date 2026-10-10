@@ -6,7 +6,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-black/5 bg-brand-navy text-white/80">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-5">
+        <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.5fr]">
           <div>
             <p className="text-lg font-semibold text-white">
               Percentile <span className="text-brand-gold">Lab</span>
@@ -94,7 +94,7 @@ export function SiteFooter() {
 
           <div>
             <p className="text-sm font-semibold text-white">Contact</p>
-            <p className="mt-3 text-sm text-white/60">
+            <p className="mt-3 break-words text-sm text-white/60">
               <a
                 href="mailto:percentilelab61@gmail.com"
                 className="hover:text-brand-gold"

@@ -58,20 +58,20 @@ export default async function BlogPage({ searchParams }: Props) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-      <div className="text-center">
+      <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-brand-gold">
           Blog
         </p>
         <h1 className="mt-2 text-3xl font-bold text-brand-navy sm:text-4xl">
           Prep smarter, one article at a time
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-brand-ink/70">
+        <p className="mt-3 max-w-2xl text-brand-ink/70">
           Exam strategy, preparation tips and updates for MBA and undergraduate
           management entrance exams.
         </p>
       </div>
 
-      <form action="/blog" method="get" role="search" className="mx-auto mt-8 flex max-w-xl gap-2">
+      <form action="/blog" method="get" role="search" className="mt-8 flex max-w-xl gap-2">
         <label htmlFor="blog-search" className="sr-only">
           Search articles
         </label>

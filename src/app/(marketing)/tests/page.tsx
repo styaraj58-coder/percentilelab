@@ -29,7 +29,7 @@ export default async function TestsPage() {
     : null;
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <p className="text-xs font-semibold uppercase tracking-wide text-brand-gold">
         Mock Tests
       </p>

@@ -70,7 +70,7 @@ export default async function SampleTestPage() {
   const questions = await pickQuestions();
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 [&>*]:max-w-3xl">
       <p className="text-xs font-semibold uppercase tracking-wide text-brand-gold">
         Free sample test
       </p>
