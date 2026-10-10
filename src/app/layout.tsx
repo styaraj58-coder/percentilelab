@@ -4,7 +4,7 @@ import "./globals.css";
 
 import { JsonLd } from "@/components/json-ld";
 import { RegisterServiceWorker } from "@/components/register-service-worker";
-import { SITE_EMAIL, SITE_INSTAGRAM, SITE_NAME, SITE_PHONE, SITE_URL } from "@/lib/site";
+import { SITE_EMAIL, SITE_INSTAGRAM, SITE_LINKEDIN, SITE_NAME, SITE_PHONE, SITE_URL } from "@/lib/site";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -69,7 +69,7 @@ export default function RootLayout({
                 logo: `${SITE_URL}/logo.png`,
                 email: SITE_EMAIL,
                 telephone: SITE_PHONE,
-                sameAs: [SITE_INSTAGRAM],
+                sameAs: [SITE_INSTAGRAM, SITE_LINKEDIN],
                 founder: { "@type": "Person", name: "Satya Raj" },
               },
               {

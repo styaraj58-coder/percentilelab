@@ -3,6 +3,7 @@ export const SITE_NAME = "Percentile Lab";
 export const SITE_EMAIL = "percentilelab61@gmail.com";
 export const SITE_PHONE = "+918053134016";
 export const SITE_INSTAGRAM = "https://www.instagram.com/percentile.lab";
+export const SITE_LINKEDIN = "https://www.linkedin.com/company/percentile-lab";
 
 // Each exam's slug (see exam-data.ts) mapped to the targetExam value stored
 // on Test rows (see MBA_ENTRANCE_EXAMS in validation.ts).
