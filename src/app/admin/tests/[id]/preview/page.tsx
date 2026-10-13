@@ -38,7 +38,7 @@ export default async function PreviewTestPage({
 
   return (
     <div className="mx-auto max-w-4xl">
-      <Link href="/admin" className="text-sm text-brand-navy hover:underline">
+      <Link href="/admin/tests" className="text-sm text-brand-navy hover:underline">
         ← Back to all tests
       </Link>
 

@@ -39,7 +39,7 @@ export default async function TestResultsPage({
 
   return (
     <div>
-      <Link href="/admin" className="text-sm text-brand-navy hover:underline">
+      <Link href="/admin/tests" className="text-sm text-brand-navy hover:underline">
         ← Back to tests
       </Link>
       <h1 className="mt-2 text-2xl font-bold text-brand-navy">{test.title}</h1>

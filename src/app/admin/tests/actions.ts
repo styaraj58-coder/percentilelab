@@ -177,7 +177,7 @@ export async function createTest(
     return { error: "Could not save this test. Please try again." };
   }
   revalidateTag("tests");
-  redirect("/admin");
+  redirect("/admin/tests");
 }
 
 export async function updateTest(
@@ -199,7 +199,7 @@ export async function updateTest(
     return { error: "Could not update this test." };
   }
   revalidateTag("tests");
-  redirect("/admin");
+  redirect("/admin/tests");
 }
 
 export async function setTestPublished(testId: string, published: boolean) {
