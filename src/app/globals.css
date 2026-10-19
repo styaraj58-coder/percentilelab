@@ -67,3 +67,13 @@ summary:focus-visible {
     transform: translateY(0);
   }
 }
+
+/* iOS Safari zooms the whole page when a field under 16px gets focus, so on
+   phones every text field is at least 16px. */
+@media (max-width: 767px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}

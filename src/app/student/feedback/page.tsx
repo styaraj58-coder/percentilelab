@@ -17,7 +17,7 @@ export default async function StudentFeedbackPage() {
 
   return (
     <div>
-      <Link href="/student" className="text-sm text-brand-ink/60 hover:text-brand-navy">
+      <Link href="/student" className="inline-flex min-h-11 items-center text-sm text-brand-ink/60 hover:text-brand-navy">
         &larr; Back to your tests
       </Link>
       <h1 className="mt-3 text-2xl font-bold text-brand-navy">Share your feedback</h1>

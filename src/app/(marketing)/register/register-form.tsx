@@ -216,7 +216,7 @@ export function RegisterForm() {
 
       <p className="text-center text-sm text-brand-ink/70">
         Already have an account?{" "}
-        <Link href="/login" className="font-medium text-brand-navy hover:text-brand-gold">
+        <Link href="/login" className="inline-block py-2 font-medium text-brand-navy hover:text-brand-gold">
           Log in
         </Link>
       </p>

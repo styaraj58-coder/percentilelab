@@ -54,7 +54,7 @@ export function LoginForm({
           </label>
           <Link
             href="/forgot-password"
-            className="text-xs font-medium text-brand-navy hover:text-brand-gold"
+            className="-my-2 inline-block py-2 text-xs font-medium text-brand-navy hover:text-brand-gold"
           >
             Forgot password?
           </Link>
@@ -88,7 +88,7 @@ export function LoginForm({
 
       <p className="text-center text-sm text-brand-ink/70">
         New here?{" "}
-        <Link href="/register" className="font-medium text-brand-navy hover:text-brand-gold">
+        <Link href="/register" className="inline-block py-2 font-medium text-brand-navy hover:text-brand-gold">
           Create an account
         </Link>
       </p>

@@ -20,34 +20,34 @@ export function SiteFooter() {
 
           <div>
             <p className="text-sm font-semibold text-white">Explore</p>
-            <ul className="mt-3 space-y-2 text-sm">
+            <ul className="mt-3 space-y-0.5 text-sm">
               <li>
-                <Link href="/" className="hover:text-brand-gold">
+                <Link href="/" className="inline-block py-1 hover:text-brand-gold">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-brand-gold">
+                <Link href="/about" className="inline-block py-1 hover:text-brand-gold">
                   About
                 </Link>
               </li>
               <li>
-                <Link href="/courses" className="hover:text-brand-gold">
+                <Link href="/courses" className="inline-block py-1 hover:text-brand-gold">
                   Courses
                 </Link>
               </li>
               <li>
-                <Link href="/tests" className="hover:text-brand-gold">
+                <Link href="/tests" className="inline-block py-1 hover:text-brand-gold">
                   Tests
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="hover:text-brand-gold">
+                <Link href="/blog" className="inline-block py-1 hover:text-brand-gold">
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href="/resources" className="hover:text-brand-gold">
+                <Link href="/resources" className="inline-block py-1 hover:text-brand-gold">
                   Resources
                 </Link>
               </li>
@@ -56,21 +56,21 @@ export function SiteFooter() {
 
           <div>
             <p className="text-sm font-semibold text-white">Exams</p>
-            <ul className="mt-3 space-y-2 text-sm">
+            <ul className="mt-3 space-y-0.5 text-sm">
               {exams.map((exam) => (
                 <li key={exam.slug}>
-                  <Link href={`/exams/${exam.slug}`} className="hover:text-brand-gold">
+                  <Link href={`/exams/${exam.slug}`} className="inline-block py-1 hover:text-brand-gold">
                     {exam.shortName}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link href="/tools/score-calculator" className="hover:text-brand-gold">
+                <Link href="/tools/score-calculator" className="inline-block py-1 hover:text-brand-gold">
                   Score Calculator
                 </Link>
               </li>
               <li>
-                <Link href="/sample-test" className="hover:text-brand-gold">
+                <Link href="/sample-test" className="inline-block py-1 hover:text-brand-gold">
                   Free Sample Test
                 </Link>
               </li>
@@ -79,14 +79,14 @@ export function SiteFooter() {
 
           <div>
             <p className="text-sm font-semibold text-white">Account</p>
-            <ul className="mt-3 space-y-2 text-sm">
+            <ul className="mt-3 space-y-0.5 text-sm">
               <li>
-                <Link href="/login" className="hover:text-brand-gold">
+                <Link href="/login" className="inline-block py-1 hover:text-brand-gold">
                   Log in
                 </Link>
               </li>
               <li>
-                <Link href="/register" className="hover:text-brand-gold">
+                <Link href="/register" className="inline-block py-1 hover:text-brand-gold">
                   Create an account
                 </Link>
               </li>
@@ -98,13 +98,13 @@ export function SiteFooter() {
             <p className="mt-3 break-words text-sm text-white/60">
               <a
                 href="mailto:percentilelab61@gmail.com"
-                className="hover:text-brand-gold"
+                className="inline-block py-1 hover:text-brand-gold"
               >
                 percentilelab61@gmail.com
               </a>
             </p>
             <p className="mt-1 text-sm text-white/60">
-              <a href="tel:+918053134016" className="hover:text-brand-gold">
+              <a href="tel:+918053134016" className="inline-block py-1 hover:text-brand-gold">
                 +91 80531 34016
               </a>
             </p>
