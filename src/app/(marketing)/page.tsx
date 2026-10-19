@@ -173,13 +173,14 @@ function SectionHeading({
 }
 
 export default async function HomePage() {
-  const [tests, testimonials, explainedQuestionCount, submittedAttemptCount] = await Promise.all([
+  const [tests, testimonials, explainedQuestionCount, submittedAttemptCount, studentCount] = await Promise.all([
     getPublishedTests(),
     getTestimonials(),
     prisma.question.count({
       where: { explanation: { not: null }, section: { test: { published: true } } },
     }),
     prisma.testAttempt.count({ where: { submittedAt: { not: null } } }),
+    prisma.user.count({ where: { role: "STUDENT" } }),
   ]);
 
   const heroHighlights = [
@@ -210,17 +211,28 @@ export default async function HomePage() {
     (sum, test) => sum + test.sections.reduce((n, section) => n + section._count.questions, 0),
     0
   );
-  const examsWithMocks = new Set(tests.map((test) => test.targetExam)).size;
+  // Shown as a round "N+" that is always at or below the real figure.
+  const roundedQuestions = Math.floor(practiceQuestions / 100) * 100;
+  // The student count only appears once it is big enough to be worth showing.
+  const STUDENT_STAT_MIN = 100;
+  const roundedStudents = studentCount >= 1000 ? Math.floor(studentCount / 100) * 100 : Math.floor(studentCount / 10) * 10;
   const lastUpdatedMs = tests.reduce((latest, test) => Math.max(latest, new Date(test.updatedAt).getTime()), 0);
   const lastUpdated = lastUpdatedMs
     ? new Intl.DateTimeFormat("en-IN", { month: "short", year: "numeric", timeZone: "Asia/Kolkata" }).format(lastUpdatedMs)
     : null;
-  const glance: { value: React.ReactNode; label: string }[] = [
-    { value: <AnimatedCounter value={practiceQuestions} />, label: "Practice questions" },
-    { value: <AnimatedCounter value={examsWithMocks} />, label: examsWithMocks === 1 ? "Exam with live mocks" : "Exams with live mocks" },
+  type GlanceItem = { value: React.ReactNode; label: string };
+  const glance = ([
+    roundedQuestions > 0
+      ? { value: <AnimatedCounter value={roundedQuestions} suffix="+" />, label: "Practice questions" }
+      : { value: <AnimatedCounter value={practiceQuestions} />, label: "Practice questions" },
+    { value: <AnimatedCounter value={tests.length} />, label: tests.length === 1 ? "Full-length mock" : "Full-length mocks" },
     { value: "Free", label: "To start" },
-    ...(lastUpdated ? [{ value: lastUpdated, label: "Last updated" }] : []),
-  ];
+    studentCount >= STUDENT_STAT_MIN
+      ? { value: <AnimatedCounter value={roundedStudents} suffix="+" />, label: "Students registered" }
+      : lastUpdated
+        ? { value: lastUpdated, label: "Last updated" }
+        : null,
+  ] as (GlanceItem | null)[]).filter((item): item is GlanceItem => item !== null);
 
   return (
     <div>

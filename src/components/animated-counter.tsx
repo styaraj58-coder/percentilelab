@@ -5,9 +5,11 @@ import { useEffect, useRef, useState } from "react";
 export function AnimatedCounter({
   value,
   duration = 1200,
+  suffix = "",
 }: {
   value: number;
   duration?: number;
+  suffix?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   // Starts at the real value so the server-rendered HTML (search engines,
@@ -50,5 +52,10 @@ export function AnimatedCounter({
     return () => observer.disconnect();
   }, [value, duration]);
 
-  return <span ref={ref}>{display.toLocaleString()}</span>;
+  return (
+    <span ref={ref}>
+      {display.toLocaleString()}
+      {suffix}
+    </span>
+  );
 }
