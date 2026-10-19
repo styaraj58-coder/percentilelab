@@ -205,6 +205,23 @@ export default async function HomePage() {
     },
   ];
 
+  // At-a-glance numbers: all taken from the live, published tests (cached list), never typed in by hand.
+  const practiceQuestions = tests.reduce(
+    (sum, test) => sum + test.sections.reduce((n, section) => n + section._count.questions, 0),
+    0
+  );
+  const examsWithMocks = new Set(tests.map((test) => test.targetExam)).size;
+  const lastUpdatedMs = tests.reduce((latest, test) => Math.max(latest, new Date(test.updatedAt).getTime()), 0);
+  const lastUpdated = lastUpdatedMs
+    ? new Intl.DateTimeFormat("en-IN", { month: "short", year: "numeric", timeZone: "Asia/Kolkata" }).format(lastUpdatedMs)
+    : null;
+  const glance: { value: React.ReactNode; label: string }[] = [
+    { value: <AnimatedCounter value={practiceQuestions} />, label: "Practice questions" },
+    { value: <AnimatedCounter value={examsWithMocks} />, label: examsWithMocks === 1 ? "Exam with live mocks" : "Exams with live mocks" },
+    { value: "Free", label: "To start" },
+    ...(lastUpdated ? [{ value: lastUpdated, label: "Last updated" }] : []),
+  ];
+
   return (
     <div>
       <MockTestPopup />
@@ -316,6 +333,27 @@ export default async function HomePage() {
                 className="absolute bottom-[10%] right-[7%] w-[6%] aspect-square object-contain"
               />
             </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section aria-label="Percentile Lab at a glance" className="border-b border-black/5 bg-white">
+        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
+          <Reveal>
+            <dl
+              className={`grid grid-cols-2 gap-x-4 gap-y-9 text-center ${
+                glance.length === 4 ? "sm:grid-cols-4" : "sm:grid-cols-3"
+              } sm:gap-y-0 sm:divide-x sm:divide-black/10`}
+            >
+              {glance.map((item) => (
+                <div key={item.label} className="flex flex-col-reverse justify-end px-3">
+                  <dt className="mt-1.5 text-sm text-brand-ink/60">{item.label}</dt>
+                  <dd className="text-3xl font-bold tabular-nums tracking-tight text-brand-navy sm:text-4xl">
+                    {item.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </Reveal>
         </div>
       </section>
