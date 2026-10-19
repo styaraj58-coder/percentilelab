@@ -157,9 +157,9 @@ export default async function AdminUsersPage({
         </div>
       ) : (
         <div className="mt-6 overflow-hidden rounded-xl border border-black/5 bg-white">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[60rem] text-left text-sm">
-              <thead className="border-b border-black/5 bg-brand-cream/60 text-xs uppercase tracking-wide text-brand-ink/60">
+          <div className="lg:overflow-x-auto">
+            <table className="block w-full text-left text-sm lg:table lg:min-w-[60rem]">
+              <thead className="hidden border-b border-black/5 bg-brand-cream/60 text-xs uppercase tracking-wide text-brand-ink/60 lg:table-header-group">
                 <tr>
                   <th className="px-3 py-3 font-semibold">Student</th>
                   <th className="px-3 py-3 font-semibold">Phone</th>
@@ -172,14 +172,14 @@ export default async function AdminUsersPage({
                   <th className="px-3 py-3 font-semibold">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-black/5">
+              <tbody className="block divide-y divide-black/5 lg:table-row-group">
                 {students.map((s) => {
                   const last = s.attempts[0]?.startedAt;
                   const wa = whatsappNumber(s.phone);
                   return (
-                    <tr key={s.id} className="align-top">
-                      <td className="px-3 py-3">
-                        <p className="font-medium text-brand-ink">{s.name}</p>
+                    <tr key={s.id} className="block px-4 py-4 align-top lg:table-row lg:px-0 lg:py-0">
+                      <td className="block px-0 py-1 lg:table-cell lg:px-3 lg:py-3">
+                        <p className="text-base font-medium text-brand-ink lg:text-sm">{s.name}</p>
                         <a
                           href={`mailto:${s.email}`}
                           className="text-xs text-brand-ink/60 hover:text-brand-navy hover:underline"
@@ -187,7 +187,7 @@ export default async function AdminUsersPage({
                           {s.email}
                         </a>
                       </td>
-                      <td className="whitespace-nowrap px-3 py-3">
+                      <td className="block px-0 py-1 lg:table-cell lg:px-3 lg:py-3 lg:whitespace-nowrap">
                         {s.phone ? (
                           <div className="flex items-center gap-2">
                             <a
@@ -216,33 +216,35 @@ export default async function AdminUsersPage({
                           <span className="text-brand-ink/40">-</span>
                         )}
                       </td>
-                      <td className="px-3 py-3">
-                        <p className="text-brand-ink">{s.college ?? "-"}</p>
-                        <p className="text-xs text-brand-ink/60">{s.course ?? "-"}</p>
+                      <td data-label="College" className="block px-0 py-1 lg:table-cell lg:px-3 lg:py-3 before:mr-2 before:text-xs before:uppercase before:tracking-wide before:text-brand-ink/45 before:content-[attr(data-label)] lg:before:content-none">
+                        <p className="inline text-brand-ink lg:block">{s.college ?? "-"}</p>
+                        <p className="inline text-xs text-brand-ink/60 before:content-['·'] before:mx-1.5 lg:block lg:before:content-none">{s.course ?? "-"}</p>
                       </td>
-                      <td className="px-3 py-3">
+                      <td data-label="Exam" className="block px-0 py-1 lg:table-cell lg:px-3 lg:py-3 before:mr-2 before:text-xs before:uppercase before:tracking-wide before:text-brand-ink/45 before:content-[attr(data-label)] lg:before:content-none">
                         <ExamSelect userId={s.id} targetExam={s.targetExam} />
                       </td>
-                      <td className="px-3 py-3">
+                      <td data-label="Plan" className="block px-0 py-1 lg:table-cell lg:px-3 lg:py-3 before:mr-2 before:text-xs before:uppercase before:tracking-wide before:text-brand-ink/45 before:content-[attr(data-label)] lg:before:content-none">
                         <PremiumToggle userId={s.id} isPremium={s.isPremium} />
                       </td>
                       <td
-                        className="whitespace-nowrap px-3 py-3 text-brand-ink/80"
+                        data-label="Joined"
+                        className="block px-0 py-1 lg:table-cell lg:px-3 lg:py-3 text-brand-ink/80 before:mr-2 before:text-xs before:uppercase before:tracking-wide before:text-brand-ink/45 before:content-[attr(data-label)] lg:before:content-none lg:whitespace-nowrap"
                         title={istDateTime.format(s.createdAt)}
                       >
                         {istDate.format(s.createdAt)}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-3 text-right">
+                      <td data-label="Tests" className="block px-0 py-1 lg:table-cell lg:px-3 lg:py-3 before:mr-2 before:text-xs before:uppercase before:tracking-wide before:text-brand-ink/45 before:content-[attr(data-label)] lg:before:content-none lg:whitespace-nowrap lg:text-right">
                         <span className="font-semibold text-brand-navy">{submitted.get(s.id) ?? 0}</span>
                         <span className="text-brand-ink/50"> / {s._count.attempts}</span>
                       </td>
                       <td
-                        className="whitespace-nowrap px-3 py-3 text-brand-ink/80"
+                        data-label="Last active"
+                        className="block px-0 py-1 lg:table-cell lg:px-3 lg:py-3 text-brand-ink/80 before:mr-2 before:text-xs before:uppercase before:tracking-wide before:text-brand-ink/45 before:content-[attr(data-label)] lg:before:content-none lg:whitespace-nowrap"
                         title={last ? istDateTime.format(last) : undefined}
                       >
                         {last ? istDate.format(last) : <span className="text-brand-ink/40">Never</span>}
                       </td>
-                      <td className="px-3 py-3">
+                      <td className="block px-0 py-1 lg:table-cell lg:px-3 lg:py-3 pt-2 lg:py-3">
                         <RoleToggle userId={s.id} role="STUDENT" isSelf={false} />
                       </td>
                     </tr>

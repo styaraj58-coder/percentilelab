@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { HeroVideo } from "@/components/hero-video";
 import { MockTestPopup } from "@/components/mock-test-popup";
 import { EnquireNow } from "@/components/enquire-now";
 import { Reveal } from "@/components/reveal";
@@ -307,14 +308,7 @@ export default async function HomePage() {
         <div className="relative z-10 mx-auto max-w-4xl px-4 pb-14 sm:px-6">
           <Reveal delay={150}>
             <div className="relative aspect-video w-full overflow-hidden rounded-3xl bg-black shadow-xl shadow-brand-navy/10">
-              <video
-                src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/47177fc5-2b48-4232-bf03-f5938c108529.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="h-full w-full object-cover"
-              />
+              <HeroVideo src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/47177fc5-2b48-4232-bf03-f5938c108529.mp4" />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://vnjmcqyuoqbnxnpjbsod.supabase.co/storage/v1/object/public/uploads/f6412b1f-059b-474b-82d8-9b471806e475.png"

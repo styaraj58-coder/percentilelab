@@ -219,8 +219,8 @@ export default async function AttemptResultsPage({
   });
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
-      <Link href="/student" className="text-sm text-brand-navy hover:underline">
+    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-16">
+      <Link href="/student" className="inline-flex min-h-11 items-center text-sm text-brand-navy hover:underline">
         ← Back to dashboard
       </Link>
       <h1 className="mt-2 text-2xl font-bold text-brand-navy">{test.title}</h1>
@@ -229,26 +229,26 @@ export default async function AttemptResultsPage({
       </p>
 
       {/* Overview */}
-      <div className="mt-6 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-black/5 bg-white p-5">
+      <div className="mt-2 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-4">
+        <div className="rounded-xl border border-black/5 bg-white p-3 sm:p-5">
           <p className="text-xs uppercase tracking-wide text-brand-ink/50">Score</p>
-          <p className="mt-1 text-2xl font-bold text-brand-navy">
+          <p className="mt-1 text-lg sm:text-2xl font-bold text-brand-navy">
             {formatMarks(attempt.score ?? 0)} / {attempt.totalMarks}
           </p>
         </div>
-        <div className="rounded-xl border border-black/5 bg-white p-5">
+        <div className="rounded-xl border border-black/5 bg-white p-3 sm:p-5">
           <p className="text-xs uppercase tracking-wide text-brand-ink/50">
             Percentile
           </p>
-          <p className="mt-1 text-2xl font-bold text-brand-gold">
+          <p className="mt-1 text-lg sm:text-2xl font-bold text-brand-gold">
             {percentile}th
           </p>
         </div>
-        <div className="rounded-xl border border-black/5 bg-white p-5">
+        <div className="rounded-xl border border-black/5 bg-white p-3 sm:p-5">
           <p className="text-xs uppercase tracking-wide text-brand-ink/50">
             Accuracy
           </p>
-          <p className="mt-1 text-2xl font-bold text-brand-navy">
+          <p className="mt-1 text-lg sm:text-2xl font-bold text-brand-navy">
             {allQuestions.length > 0
               ? Math.round(
                   (sectionStats.reduce((s, sec) => s + sec.correctCount, 0) /

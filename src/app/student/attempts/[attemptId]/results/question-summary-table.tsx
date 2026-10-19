@@ -57,7 +57,7 @@ export function QuestionSummaryTable({
                         event.preventDefault();
                         window.dispatchEvent(new CustomEvent("open-review", { detail: { questionId: row.id } }));
                       }}
-                      className="hover:underline"
+                      className="-mx-3 -my-2.5 block px-3 py-2.5 hover:underline"
                     >
                       Q{row.index + 1}
                     </a>

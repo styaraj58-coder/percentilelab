@@ -56,14 +56,14 @@ export function TestListByExam({ tests }: { tests: TestRow[] }) {
       <div
         role="tablist"
         aria-label="Filter tests by entrance exam"
-        className="mt-6 flex flex-wrap gap-2 border-b border-black/10 pb-4"
+        className="mt-6 flex gap-2 overflow-x-auto border-b border-black/10 pb-4 sm:flex-wrap"
       >
         <button
           type="button"
           role="tab"
           aria-selected={activeExam === "All"}
           onClick={() => setActiveExam("All")}
-          className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+          className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-semibold transition-colors sm:py-2 ${
             activeExam === "All"
               ? "bg-brand-navy text-white"
               : "bg-brand-cream text-brand-ink/70 hover:bg-brand-navy/10"
@@ -78,7 +78,7 @@ export function TestListByExam({ tests }: { tests: TestRow[] }) {
             role="tab"
             aria-selected={activeExam === exam}
             onClick={() => setActiveExam(exam)}
-            className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+            className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-semibold transition-colors sm:py-2 ${
               activeExam === exam
                 ? "bg-brand-navy text-white"
                 : "bg-brand-cream text-brand-ink/70 hover:bg-brand-navy/10"
@@ -106,9 +106,9 @@ export function TestListByExam({ tests }: { tests: TestRow[] }) {
           </Link>
         </div>
       ) : (
-        <div className="mt-8 overflow-x-auto rounded-xl border border-black/5 bg-white">
-          <table className="w-full min-w-[720px] text-left text-sm">
-            <thead className="border-b border-black/5 bg-brand-cream/60 text-xs uppercase tracking-wide text-brand-ink/50">
+        <div className="mt-8 rounded-xl border border-black/5 bg-white sm:overflow-x-auto">
+          <table className="block w-full text-left text-sm sm:table sm:min-w-[720px]">
+            <thead className="hidden border-b border-black/5 bg-brand-cream/60 text-xs uppercase tracking-wide text-brand-ink/50 sm:table-header-group">
               <tr>
                 <th className="px-5 py-3 font-medium">Title</th>
                 <th className="px-5 py-3 font-medium">Exam</th>
@@ -120,21 +120,21 @@ export function TestListByExam({ tests }: { tests: TestRow[] }) {
                 <th className="px-5 py-3 font-medium">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="block sm:table-row-group">
               {visibleTests.map((test) => (
-                <tr key={test.id} className="border-b border-black/5 last:border-0">
-                  <td className="px-5 py-4 font-medium text-brand-navy">
+                <tr key={test.id} className="block border-b border-black/5 px-4 py-4 last:border-0 sm:table-row sm:px-0 sm:py-0">
+                  <td className="block px-0 py-1 sm:table-cell sm:px-5 sm:py-4 text-base font-medium text-brand-navy sm:text-sm">
                     {test.title}
                   </td>
-                  <td className="px-5 py-4 text-brand-ink/70">{test.targetExam}</td>
-                  <td className="px-5 py-4 text-brand-ink/70">{test.createdByName}</td>
-                  <td className="px-5 py-4 text-brand-ink/70">
+                  <td data-label="Exam" className="block px-0 py-1 sm:table-cell sm:px-5 sm:py-4 text-brand-ink/70 before:mr-2 before:text-xs before:uppercase before:tracking-wide before:text-brand-ink/45 before:content-[attr(data-label)] sm:before:content-none">{test.targetExam}</td>
+                  <td data-label="Created by" className="block px-0 py-1 sm:table-cell sm:px-5 sm:py-4 text-brand-ink/70 before:mr-2 before:text-xs before:uppercase before:tracking-wide before:text-brand-ink/45 before:content-[attr(data-label)] sm:before:content-none">{test.createdByName}</td>
+                  <td data-label="Questions" className="block px-0 py-1 sm:table-cell sm:px-5 sm:py-4 text-brand-ink/70 before:mr-2 before:text-xs before:uppercase before:tracking-wide before:text-brand-ink/45 before:content-[attr(data-label)] sm:before:content-none">
                     {test.questionCount} ({test.sectionCount} sections)
                   </td>
-                  <td className="px-5 py-4 text-brand-ink/70">
+                  <td data-label="Duration" className="block px-0 py-1 sm:table-cell sm:px-5 sm:py-4 text-brand-ink/70 before:mr-2 before:text-xs before:uppercase before:tracking-wide before:text-brand-ink/45 before:content-[attr(data-label)] sm:before:content-none">
                     {test.durationMinutes} min
                   </td>
-                  <td className="px-5 py-4 text-brand-ink/70">
+                  <td data-label="Attempts" className="block px-0 py-1 sm:table-cell sm:px-5 sm:py-4 text-brand-ink/70 before:mr-2 before:text-xs before:uppercase before:tracking-wide before:text-brand-ink/45 before:content-[attr(data-label)] sm:before:content-none">
                     <Link
                       href={`/admin/tests/${test.id}/results`}
                       className="text-brand-navy hover:text-brand-gold hover:underline"
@@ -142,7 +142,7 @@ export function TestListByExam({ tests }: { tests: TestRow[] }) {
                       {test.attemptCount}
                     </Link>
                   </td>
-                  <td className="px-5 py-4">
+                  <td className="block px-0 py-1 sm:table-cell sm:px-5 sm:py-4 sm:py-4">
                     <div className="flex flex-wrap gap-1.5">
                       <span
                         className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
@@ -164,8 +164,8 @@ export function TestListByExam({ tests }: { tests: TestRow[] }) {
                       </span>
                     </div>
                   </td>
-                  <td className="px-5 py-4">
-                    <div className="flex flex-wrap items-center gap-3">
+                  <td className="block px-0 py-1 sm:table-cell sm:px-5 sm:py-4 pt-3 sm:py-4">
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 [&_a]:py-2 [&_button]:py-2 sm:gap-3 sm:[&_a]:py-0 sm:[&_button]:py-0">
                       <Link
                         href={`/admin/tests/${test.id}/preview`}
                         className="text-brand-navy hover:text-brand-gold hover:underline"
