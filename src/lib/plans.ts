@@ -3,10 +3,10 @@
 // Course price in rupees per exam slug (see exam-data.ts). null = not
 // available yet, shown as "N/A".
 export const coursePrices: Record<string, number | null> = {
-  "mah-cet": 7999,
+  "mah-cet": 4999,
   cat: 14999,
-  mat: null,
-  atma: null,
+  mat: 1999,
+  atma: 1999,
   "ug-bms-cet": 4999,
 };
 
