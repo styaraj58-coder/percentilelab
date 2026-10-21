@@ -144,6 +144,7 @@ export function getAnswerKey(testId: string) {
         where: { id: testId },
         select: {
           targetExam: true,
+          noNegativeMarking: true,
           sections: {
             select: {
               questions: {
@@ -175,6 +176,7 @@ export function getTestForResultsSummary(testId: string) {
           id: true,
           title: true,
           targetExam: true,
+          noNegativeMarking: true,
           sections: {
             orderBy: { order: "asc" },
             select: {

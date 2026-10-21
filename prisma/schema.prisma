@@ -70,6 +70,9 @@ model Test {
   // created tests are premium-gated unless an admin opts them into the
   // free tier (see /admin/tests and the bank mock generator).
   isFreePreview   Boolean       @default(false)
+  // Overrides the exam's usual negative marking (see src/lib/marking.ts) for
+  // this one test, e.g. a sectional practice test with no penalty.
+  noNegativeMarking Boolean     @default(false)
   createdById     String
   createdBy       User          @relation("TestCreatedBy", fields: [createdById], references: [id])
   sections        Section[]

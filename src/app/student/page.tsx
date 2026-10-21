@@ -90,7 +90,7 @@ export default async function StudentDashboardPage() {
                     <p className="mt-2 text-xs text-brand-ink/50">
                       {questionCount} questions · {test.sections.length}{" "}
                       sections · {test.durationMinutes} min
-                      {markingSummary(test.targetExam) && " · negative marking"}
+                      {markingSummary(test.targetExam, 1, test.noNegativeMarking) && " · negative marking"}
                     </p>
                   </div>
 

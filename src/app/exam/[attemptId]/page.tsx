@@ -33,6 +33,7 @@ export default async function ExamPage({
     select: {
       title: true,
       targetExam: true,
+      noNegativeMarking: true,
       durationMinutes: true,
       sections: {
         orderBy: { order: "asc" },
@@ -76,7 +77,7 @@ export default async function ExamPage({
     testTitle: test.title,
     studentName: session.user.name ?? "Student",
     durationMinutes: test.durationMinutes,
-    negativeRatio: negativeRatioFor(test.targetExam),
+    negativeRatio: negativeRatioFor(test.targetExam, test.noNegativeMarking),
     startedAtMs: attempt.startedAt.getTime(),
     sections: test.sections,
     initialAnswers: Object.fromEntries(

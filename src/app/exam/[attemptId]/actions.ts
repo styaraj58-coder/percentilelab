@@ -70,7 +70,7 @@ export async function submitAttempt(attemptId: string) {
     const { score, totalMarks } = scoreAttempt(
       test.sections.flatMap((section) => section.questions),
       new Map(answers.map((a) => [a.questionId, a.selectedOptionId])),
-      negativeRatioFor(test.targetExam)
+      negativeRatioFor(test.targetExam, test.noNegativeMarking)
     );
 
     await prisma.testAttempt.update({

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Test" ADD COLUMN IF NOT EXISTS "noNegativeMarking" BOOLEAN NOT NULL DEFAULT false;

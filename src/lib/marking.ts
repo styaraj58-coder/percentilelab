@@ -10,7 +10,10 @@ const NEGATIVE_MARK_RATIO: Record<string, number> = {
   ATMA: 0.25,
 };
 
-export function negativeRatioFor(targetExam: string) {
+// `noNegativeMarking` is the per-test override: a test can switch the exam's
+// usual penalty off.
+export function negativeRatioFor(targetExam: string, noNegativeMarking = false) {
+  if (noNegativeMarking) return 0;
   return NEGATIVE_MARK_RATIO[targetExam] ?? 0;
 }
 
@@ -29,8 +32,8 @@ export function penaltyFor(marks: number, ratio: number) {
 }
 
 // e.g. "+1 for each correct answer, -0.25 for each wrong answer"
-export function markingSummary(targetExam: string, marks = 1) {
-  const ratio = negativeRatioFor(targetExam);
+export function markingSummary(targetExam: string, marks = 1, noNegativeMarking = false) {
+  const ratio = negativeRatioFor(targetExam, noNegativeMarking);
   if (ratio === 0) return null;
   return `+${formatMarks(marks)} for each correct answer, -${formatMarks(
     penaltyFor(marks, ratio)

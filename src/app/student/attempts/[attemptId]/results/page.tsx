@@ -55,8 +55,8 @@ export default async function AttemptResultsPage({
 
   const answerByQuestion = new Map(answers.map((a) => [a.questionId, a]));
 
-  const negativeRatio = negativeRatioFor(test.targetExam);
-  const marking = markingSummary(test.targetExam);
+  const negativeRatio = negativeRatioFor(test.targetExam, test.noNegativeMarking);
+  const marking = markingSummary(test.targetExam, 1, test.noNegativeMarking);
 
   const sectionStats = test.sections.map((section) => {
     let correctMarks = 0;
