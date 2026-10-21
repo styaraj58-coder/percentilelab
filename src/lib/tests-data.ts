@@ -22,6 +22,40 @@ export const getPublishedTests = unstable_cache(
   { revalidate: 60, tags: ["tests"] }
 );
 
+// Sectional tests are open to every student, whichever exam they registered
+// for. A test counts as sectional when "sectional" is in its title.
+export function isSectionalTest(title: string) {
+  return /sectional/i.test(title);
+}
+
+// The same sectional paper is stored once per exam, titled "<exam> Verbal
+// Ability Sectional Test 01" (the MBA CET copy has no prefix). Stripping the
+// prefix gives the key that groups those copies.
+const EXAM_TITLE_PREFIX = /^(UG BMS CET|MH-CET \(MBA\)|MBA CET|MAT|ATMA|CAT)\s+/i;
+const DEFAULT_EXAM = "MH-CET (MBA)";
+
+// What the student dashboard lists: every test for the student's own exam,
+// plus the sectional tests of all other exams. A sectional paper that exists
+// as several per-exam copies is listed once - the student's own exam's copy,
+// else the MBA CET one, else the first found.
+export function testsForStudent<T extends { title: string; targetExam: string }>(
+  tests: T[],
+  myExam: string | null
+): T[] {
+  const chosen = new Map<string, T>();
+  const rank = (t: T) => (t.targetExam === myExam ? 0 : t.targetExam === DEFAULT_EXAM ? 1 : 2);
+  for (const t of tests) {
+    if (!isSectionalTest(t.title)) continue;
+    const key = t.title.replace(EXAM_TITLE_PREFIX, "").trim().toLowerCase();
+    const current = chosen.get(key);
+    if (!current || rank(t) < rank(current)) chosen.set(key, t);
+  }
+  return tests.filter((t) => {
+    if (isSectionalTest(t.title)) return chosen.get(t.title.replace(EXAM_TITLE_PREFIX, "").trim().toLowerCase()) === t;
+    return !myExam || t.targetExam === myExam;
+  });
+}
+
 // What the public site says about an exam's tests: counts only, never the
 // individual tests - those are listed and started inside the student portal.
 export function summariseTests(

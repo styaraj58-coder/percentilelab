@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { isSectionalTest } from "@/lib/tests-data";
 
 export async function startAttempt(testId: string) {
   const session = await auth();
@@ -20,8 +21,9 @@ export async function startAttempt(testId: string) {
       select: { isPremium: true, targetExam: true },
     });
 
-    // Students only get the tests for the exam they registered for.
-    if (user?.targetExam && user.targetExam !== test.targetExam) {
+    // Students get the tests for the exam they registered for, plus every
+    // sectional test.
+    if (user?.targetExam && user.targetExam !== test.targetExam && !isSectionalTest(test.title)) {
       throw new Error(`This test is for ${test.targetExam}. You're registered for ${user.targetExam}.`);
     }
     if (!test.isFreePreview && !user?.isPremium) {

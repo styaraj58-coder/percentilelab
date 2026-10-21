@@ -3,7 +3,7 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { formatMarks, markingSummary } from "@/lib/marking";
 import { prisma } from "@/lib/prisma";
-import { getPublishedTests } from "@/lib/tests-data";
+import { getPublishedTests, testsForStudent } from "@/lib/tests-data";
 
 import { startAttempt } from "./actions";
 import { StartTestButton } from "./start-test-button";
@@ -22,7 +22,7 @@ export default async function StudentDashboardPage() {
   const myExam = student?.targetExam ?? null;
   const hasPremiumAccess = session!.user.role === "ADMIN" || student?.isPremium === true;
 
-  const myExamTests = myExam ? tests.filter((t) => t.targetExam === myExam) : tests;
+  const myExamTests = testsForStudent(tests, myExam);
 
   const attempts = await prisma.testAttempt.findMany({
     where: { studentId, testId: { in: myExamTests.map((t) => t.id) } },
@@ -49,7 +49,7 @@ export default async function StudentDashboardPage() {
         <p className="mt-2 text-sm text-brand-ink/70">
           Showing tests for{" "}
           <span className="font-semibold text-brand-navy">{myExam}</span>,
-          the exam you registered for.
+          the exam you registered for, plus the sectional tests open to everyone.
         </p>
       )}
 
