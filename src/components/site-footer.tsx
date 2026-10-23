@@ -74,6 +74,11 @@ export function SiteFooter() {
                   Free Sample Test
                 </Link>
               </li>
+              <li>
+                <Link href="/practice-questions" className="inline-block py-1 hover:text-brand-gold">
+                  Free Practice Questions
+                </Link>
+              </li>
             </ul>
           </div>
 

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { exams } from "@/lib/exam-data";
+import { practiceCategories } from "@/lib/practice-questions";
 import { prisma } from "@/lib/prisma";
 
 const BASE_URL = "https://www.percentilelab.in";
@@ -17,6 +18,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/courses",
     "/exams",
     ...exams.map((exam) => `/exams/${exam.slug}`),
+    "/practice-questions",
+    ...practiceCategories.map((category) => `/practice-questions/${category.slug}`),
     "/resources",
     "/sample-test",
     "/tests",

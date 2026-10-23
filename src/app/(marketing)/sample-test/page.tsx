@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { prisma } from "@/lib/prisma";
 
@@ -82,6 +83,14 @@ export default async function SampleTestPage() {
         our free mock tests across quant, reasoning, English and general
         awareness. Submit to see your score, the correct answers and
         explanations. You get a fresh set every time you reload.
+      </p>
+
+      <p className="mt-3 text-sm text-brand-ink/70">
+        Prefer to read at your own pace?{" "}
+        <Link href="/practice-questions" className="font-semibold text-brand-navy underline hover:text-brand-gold">
+          Browse free practice questions with answers
+        </Link>
+        .
       </p>
 
       <div className="mt-10">
