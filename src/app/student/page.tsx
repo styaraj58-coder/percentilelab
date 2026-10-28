@@ -72,8 +72,8 @@ export default async function StudentDashboardPage() {
 
             return (
               <div key={test.id} className="rounded-xl border border-black/5 bg-white p-6">
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h2 className="text-lg font-semibold text-brand-navy">
                         {test.title}
@@ -95,7 +95,7 @@ export default async function StudentDashboardPage() {
                   </div>
 
                   {test.isFreePreview || hasPremiumAccess ? (
-                    <form action={startAttempt.bind(null, test.id)}>
+                    <form action={startAttempt.bind(null, test.id)} className="shrink-0">
                       <StartTestButton
                         label={inProgress ? "Resume test" : "Start test"}
                       />
